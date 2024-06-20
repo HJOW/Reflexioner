@@ -85,6 +85,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
+import com.hjow.game.reflexioner.browser.OldBrowser;
 import com.hjow.game.reflexioner.lang.English;
 import com.hjow.game.reflexioner.lang.Korean;
 import com.hjow.game.reflexioner.lang.Language;
@@ -98,8 +99,6 @@ import com.hjow.game.reflexioner.mainClasses.Uninstaller;
 import com.hjow.game.reflexioner.setting.Difficulty;
 import com.hjow.game.reflexioner.setting.Lint;
 import com.hjow.game.reflexioner.setting.Setting;
-
-import browser.OldBrowser;
 
 public class Reflexioner extends MouseDragCatcher implements Openable, WindowListener, ActionListener, MessageShowable, ListSelectionListener, ChangeListener, ItemListener
 {

@@ -1,4 +1,4 @@
-package browser;
+package com.hjow.game.reflexioner.browser;
 
 public interface BrowserFrame
 {

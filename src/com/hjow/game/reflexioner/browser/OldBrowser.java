@@ -1,4 +1,4 @@
-package browser;
+package com.hjow.game.reflexioner.browser;
 
 import java.awt.Component;
 import java.net.MalformedURLException;
