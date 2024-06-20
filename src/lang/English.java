@@ -142,6 +142,7 @@ public class English extends Language
 		whos = "\'s";
 		point = "point";
 		add = "Add";
+		standard = "Standard";
 		easy = "Easy";
 		normal = "Normal";
 		hard = "Hard";

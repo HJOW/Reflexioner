@@ -129,7 +129,7 @@ public class RunManager implements Serializable
 		System.gc();
 		System.out.print(".");
 		separator = System.getProperty("file.separator");
-		default_path = default_path + separator + "calc" + separator;
+		default_path = default_path + separator + ".reflexioner" + separator;
 		boolean loadComplete = false;
 		if(setting == null) setting = null;
 		else setting = setting.clone();

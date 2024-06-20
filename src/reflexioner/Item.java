@@ -162,7 +162,7 @@ public class Item extends OvalObject
 				default:
 					printFont = "D";
 			}
-			g.drawString(printFont, Arena.convertX(getX() - (int)(getR() / 3.7), a), Arena.convertY((int) (getY() + (getR() / 1.9)), a));
+			g.drawString(printFont, Arena.convertX(getX() - (int)(getR() / 3.7), a), Arena.convertY((int) (getY() + (getR() / 1.7)), a));
 		}
 		else
 		{

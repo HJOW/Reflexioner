@@ -25,7 +25,7 @@ public class Script_File implements Helpable
 		String default_path = System.getProperty("user.home");
 		String separator = System.getProperty("file.separator");		
 		separator = System.getProperty("file.separator");
-		default_path = default_path + separator + "calc" + separator;
+		default_path = default_path + separator + ".reflexioner" + separator;
 		if(fileName.endsWith("config.cfg") || fileName.endsWith("CONFIG.cfg") || fileName.endsWith("Config.cfg")
 				|| fileName.endsWith("config.CFG") || fileName.endsWith("CONFIG.CFG") || fileName.endsWith("Config.CFG"))
 		{
@@ -53,7 +53,7 @@ public class Script_File implements Helpable
 		String default_path = System.getProperty("user.home");
 		String separator = System.getProperty("file.separator");		
 		separator = System.getProperty("file.separator");
-		default_path = default_path + separator + "calc" + separator;
+		default_path = default_path + separator + ".reflexioner" + separator;
 		String readed = "";
 		String result = "";
 		int limit = 0;
@@ -129,12 +129,12 @@ public class Script_File implements Helpable
 			case 1:
 				console.message("===== file commands =====");
 				console.message();
-				console.message("read(_i) : 홈 폴더의 calc 폴더에 있는 _i 이름의 파일을 읽어 내용을 문자열로 반환합니다.");
-				console.message("write(_i, _j) : 홈 폴더의 calc 폴더에 _i 내용을 _j 파일 이름으로 저장합니다.");
+				console.message("read(_i) : 홈 폴더의 .reflexioner 폴더에 있는 _i 이름의 파일을 읽어 내용을 문자열로 반환합니다.");
+				console.message("write(_i, _j) : 홈 폴더의 .reflexioner 폴더에 _i 내용을 _j 파일 이름으로 저장합니다.");
 				console.message("fileIn(_i) : _i 파일 또는 _i 파일 경로에 대한 파일 InputStream을 만들어 반환합니다."
-						+ "\n\t 홈 폴더의 calc 폴더 안으로만 경로를 지정해야 하며, 그렇지 않으면 null 을 반환합니다.");
+						+ "\n\t 홈 폴더의 .reflexioner 폴더 안으로만 경로를 지정해야 하며, 그렇지 않으면 null 을 반환합니다.");
 				console.message("fileOut(_i) : _i 파일 또는 _i 파일 경로에 대한 파일 OutputStream을 만들어 반환합니다."
-						+ "\n\t 홈 폴더의 calc 폴더 안으로만 경로를 지정해야 하며, 그렇지 않으면 null 을 반환합니다.");
+						+ "\n\t 홈 폴더의 .reflexioner 폴더 안으로만 경로를 지정해야 하며, 그렇지 않으면 null 을 반환합니다.");
 				console.message("defaultPath() : 홈 폴더의 calc 폴더 경로를 문자열로 반환합니다.");
 				console.message("fileSeparator() : 폴더 구분 기호를 반환합니다. 운영체제에 따라 다릅니다.");
 				console.message();
@@ -143,9 +143,9 @@ public class Script_File implements Helpable
 			default:
 				console.message("===== file commands =====");
 				console.message();
-				console.message("read(_i) : Load texts at _i file and return. _i should be located at \"calc\" directory (in home directory).");
-				console.message("write(_i, _j) : Save _i as texts at file _j. _j should be located at \"calc\" directory (in home directory).");
-				console.message("defaultPath() : Return home - calc folder full path.");
+				console.message("read(_i) : Load texts at _i file and return. _i should be located at \".reflexioner\" directory (in home directory).");
+				console.message("write(_i, _j) : Save _i as texts at file _j. _j should be located at \".reflexioner\" directory (in home directory).");
+				console.message("defaultPath() : Return home - .reflexioner folder full path.");
 				console.message("fileSeparator() : Return directory separator simbol. This is belong to OS.");
 				console.message();
 				console.message_bar();

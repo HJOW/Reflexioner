@@ -316,6 +316,7 @@ public abstract class Language implements Serializable
 	public static final int REFLEX_CARRIER = 297;
 	
 	public static final int SHOOT = 298;
+	public static final int STANDARD = 299;
 	
 	public static final int HELP_CONTENT = 20000;
 	public static final int DESCRIPTIONS = 100000;
@@ -332,7 +333,7 @@ public abstract class Language implements Serializable
 	protected String notice_not_view_again, use_xml_setting, reset, now_player_card, left, user, new_user, bet, select, credit, add, remove, password, virtuals, script, engine;
 	protected String year, month, day, hour, minute, time, download, update, already_newest, doyouwantupdate, downloadfinish, checkreliability, mathconq, reflex;
 	protected String tracking, tracking_autosave, delay, notice_null, refresh, auto_pass, conquer, module, type, block, warn, warn_script, scenario, noscenario_description;
-	protected String easy, normal, hard, order, all, chat, to, counterparty, onlyBeta, event, homepage, address, web, management, uninstall, make, answer, mathq_simplehelp, mathq_help;
+	protected String standard, easy, normal, hard, order, all, chat, to, counterparty, onlyBeta, event, homepage, address, web, management, uninstall, make, answer, mathq_simplehelp, mathq_help;
 	protected String uninstall_askMessage, uninstall_deleted, uninstall_completed, uninstall_error, uninstall_after_askMessage, uninstall_after_deleted, uninstall_after_completed, uninstall_after_error;
 	protected String information, main, change_card, scrollBar, in_bar, basic_edition, professional, ultimate, master, ok, accept, restart, classic, copy_clipboard, desc_copy_clipboard;
 	protected String oneCard, modes, dir_center, dir_left, dir_right, dir_down, dir_up, accumulated, another_games, runs, oneCard_panelty, input_serial_agreement;
@@ -658,6 +659,8 @@ public abstract class Language implements Serializable
 				return in_bar;
 			case CONQUER:
 				return conquer;
+			case STANDARD:
+				return standard;
 			case EASY:
 				return easy;
 			case NORMAL:
@@ -1355,6 +1358,9 @@ public abstract class Language implements Serializable
 				break;
 			case ENGINE:
 				engine = str;
+				break;
+			case STANDARD:
+				standard = str;
 				break;
 			case EASY:
 				easy = str;
@@ -3470,6 +3476,14 @@ public abstract class Language implements Serializable
 	public String getEasy()
 	{
 		return easy;
+	}
+
+	public String getStandard() {
+		return standard;
+	}
+
+	public void setStandard(String standard) {
+		this.standard = standard;
 	}
 
 	public void setEasy(String easy)

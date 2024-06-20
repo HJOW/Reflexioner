@@ -152,6 +152,7 @@ public class Korean extends Language
 		dir_right = "오른쪽";
 		delay = "지연";
 		runs = "실행";
+		standard = "표준";
 		easy = "쉬움";
 		normal = "보통";
 		hard = "어려움";

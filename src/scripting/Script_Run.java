@@ -191,7 +191,7 @@ public class Script_Run implements Helpable
 				showable.message("\t파일의 확장자가 js 이어야 실행됩니다.");
 				showable.message("loadUrl(_i) : 웹 주소 _i 에서 스크립트를 불러와 그 내용을 스크립트로 실행합니다.");
 				showable.message("\t웹 주소가 가리키는 파일의 확장자가 js 이어야 실행됩니다.");
-				showable.message("load_js_files() : calc 폴더에 있는 파일들 중 js 확장자를 가진 파일들을 모두 스크립트로 실행합니다.");
+				showable.message("load_js_files() : .reflexioner 폴더에 있는 파일들 중 js 확장자를 가진 파일들을 모두 스크립트로 실행합니다.");
 				showable.message();
 				showable.message_bar();
 				break;
@@ -205,7 +205,7 @@ public class Script_Run implements Helpable
 				showable.message("\tFile type must be \'js\'.");
 				showable.message("loadUrl(_i) : Load file from URL _i and run contents as script.");
 				showable.message("\tFile type must be \'js\'.");
-				showable.message("load_js_files() : Find \'js\' files at calc directory and run all as script.");
+				showable.message("load_js_files() : Find \'js\' files at .reflexioner directory and run all as script.");
 				showable.message();
 				showable.message_bar();
 				break;

@@ -640,7 +640,7 @@ public class Setting implements CanBeClone, Objectable
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		separator = System.getProperty("file.separator");
-		default_path = default_path + separator + "calc" + separator;
+		default_path = default_path + separator + ".reflexioner" + separator;
 		
 		setting.version_aut = Reflexioner.version_auts();
 		setting.default_path = new String(default_path);

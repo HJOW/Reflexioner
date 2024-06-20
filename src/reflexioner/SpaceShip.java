@@ -284,12 +284,12 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 	
 	public boolean[] loadImages()
 	{
-		return loadImages(System.getProperty("user.home") + System.getProperty("file.separator") + "calc" + System.getProperty("file.separator"));
+		return loadImages(System.getProperty("user.home") + System.getProperty("file.separator") + ".reflexioner" + System.getProperty("file.separator"));
 	}
 	
 	public boolean loadImage(int ind)
 	{
-		return loadImage(System.getProperty("user.home") + System.getProperty("file.separator") + "calc" + System.getProperty("file.separator"), ind);
+		return loadImage(System.getProperty("user.home") + System.getProperty("file.separator") + ".reflexioner" + System.getProperty("file.separator"), ind);
 	}
 	public boolean loadImage(String path, int ind)
 	{

@@ -966,7 +966,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		start_notice_downPanel.setLayout(new FlowLayout());
 		
 		bt_exit4 = new JButton(sets.getLang().getText(Language.EXIT));
-		bt_next = new JButton(sets.getLang().getText(Language.NORMAL));
+		bt_next = new JButton(sets.getLang().getText(Language.STANDARD));
 		bt_scenario = new JButton(sets.getLang().getText(Language.SCENARIO));
 		bt_user_defined = new JButton(sets.getLang().getText(Language.USER_DEFINED));
 		
@@ -1040,7 +1040,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		start_standardPanel.add(start_downPanel, BorderLayout.SOUTH);
 		start_standardPanel.add(start_centerPanel, BorderLayout.CENTER);
 		
-		mainTab.add(sets.getLang().getText(Language.NORMAL), start_standardPanel);
+		mainTab.add(sets.getLang().getText(Language.STANDARD), start_standardPanel);
 		
 		start_userDefinedPanel = new JPanel();
 		start_userDefinedPanel.setBackground(sets.getSelected_back());
