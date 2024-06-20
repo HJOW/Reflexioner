@@ -291,7 +291,7 @@ public class RunManager implements Serializable
 			setting.setLocale(new String(lang));
 			setting.setSeparator(new String(separator));
 			setting.setScreenSize(screenSize);
-			setting.setNotice_url("http://netstorm.woobi.co.kr/calc/"); // TODO
+			setting.setNotice_url("http://hjow.github.io/Reflexioner/"); // TODO
 		}
 		
 		if(args != null)

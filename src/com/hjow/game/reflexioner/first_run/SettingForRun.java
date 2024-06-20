@@ -26,8 +26,8 @@ public class SettingForRun implements Serializable, Cloneable
 		separator = System.getProperty("file.separator");
 		default_path = default_path + separator + "reflexioner" + separator;
 		exec_path = default_path + "reflexioner.jar";
-		basic_url  = "http://netstorm.woobi.co.kr/calc/";
-		basic_url2 = "http://hjow.duckdns.org/netstorm/calc/";
+		basic_url  = "http://hjow.github.io/Reflexioner/";
+		basic_url2 = "http://netstorm.woobi.co.kr/calc/";
 		ver_main = new Integer(Reflexioner.version_main);
 		ver_sub1 = new Integer(Reflexioner.version_sub_1);
 		ver_sub2 = new Integer(Reflexioner.version_sub_2);

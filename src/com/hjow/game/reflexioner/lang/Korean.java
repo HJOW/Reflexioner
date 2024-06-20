@@ -353,7 +353,7 @@ public class Korean extends Language
 		
 		notice_null = "공지사항을 받아올 수 없었습니다.\n"
 				+ "\n"
-				+ "http://netstorm.woobi.co.kr/calc/\n"
+				+ "http://hjow.github.io/Reflexioner/\n"
 				+ "에서 공지사항과 최신 버전을 확인하실 수 있습니다.";
 		input_serial_agreement = "";
 		help_contents = "Calc\n"
@@ -397,7 +397,7 @@ public class Korean extends Language
 				+ "\n"
 				+ "Made by HJOW\n"
 				+ "hujinone22@naver.com\n"
-				+ "http://netstorm.woobi.co.kr/calc/";
+				+ "http://hjow.github.io/Reflexioner/";
 		
 		menu_file = "파일";
 		build_warn = "한 번 건설된 구역은 전력 부족으로만 파괴되며, 운영자가 직접 파괴할 수는 없습니다.\n"

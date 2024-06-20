@@ -349,7 +349,7 @@ public class English extends Language
 		on_start_cards = "Number of cards to players when the game start";
 		notice_null = "Cannot read notice online.\n"
 				+ "\n"
-				+ "Visit http://netstorm.woobi.co.kr/calc/\n"
+				+ "Visit http://hjow.github.io/Reflexioner/\n"
 				+ "to check newest version and notices.";
 		input_serial_agreement = "";
 		help_contents = "Calc\n"
@@ -388,7 +388,7 @@ public class English extends Language
 				+ "\n"
 				+ "Made by HJOW\n"
 				+ "hujinone22@naver.com\n"
-				+ "http://netstorm.woobi.co.kr/calc/";
+				+ "http://hjow.github.io/Reflexioner/";
 		
 		menu_file = "File";
 		build_warn = "You can\'t destroy sections if the power is enough."

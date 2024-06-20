@@ -630,8 +630,8 @@ public class Setting implements CanBeClone, Objectable
 		setting.locale = new String(lang);
 		setting.separator = new String(separator);
 		setting.screenSize = screenSize;
-		setting.notice_url = "http://netstorm.woobi.co.kr/calc/";		
-		setting.notice_url2 = "http://hjow.duckdns.org/netstorm/calc/";
+		setting.notice_url = "http://hjow.github.io/Reflexioner/";
+		setting.notice_url2 = "http://netstorm.woobi.co.kr/calc/";		
 		
 		setting.properties = new Hashtable<String, String>();
 		
@@ -710,7 +710,7 @@ public class Setting implements CanBeClone, Objectable
 			
 		}
 		
-		setting.notice_url = "http://netstorm.woobi.co.kr/calc/";
+		setting.notice_url = "http://hjow.github.io/Reflexioner/";
 		setting.ver_main = Reflexioner.version_main;
 		setting.ver_sub1 = Reflexioner.version_sub_1;
 		setting.ver_sub2 = Reflexioner.version_sub_2;
