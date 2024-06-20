@@ -1271,7 +1271,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				String[] splits = tuto.split(",");
 				for(int idx=0; idx<splits.length; idx++) 
 				{
-					g.drawString(splits[idx], convertX((maxWidth()/2 - 10), this), convertY((maxHeight()/4 + (idx * 30)), this));
+					g.drawString(splits[idx], convertX((maxWidth()/6 - 10), this), convertY((maxHeight()/6 + (idx * 35)), this));
 				}
 			}
 		}
