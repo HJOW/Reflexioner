@@ -12,8 +12,8 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
-import lang.Language;
-import setting.Setting;
+import com.hjow.game.reflexioner.lang.Language;
+import com.hjow.game.reflexioner.setting.Setting;
 
 public class OldBrowser extends JEditorPane implements IsBrowser, HyperlinkListener
 {

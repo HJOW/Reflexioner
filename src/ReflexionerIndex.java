@@ -1,8 +1,8 @@
 
 import javax.swing.JOptionPane;
 
-import mainClasses.MessageShowable;
-import mainClasses.RunManager;
+import com.hjow.game.reflexioner.mainClasses.MessageShowable;
+import com.hjow.game.reflexioner.mainClasses.RunManager;
 public class ReflexionerIndex 
 {		
 	public static final boolean TRY_CHECKVER = false;
