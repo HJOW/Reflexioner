@@ -67,7 +67,6 @@ public class Setting implements CanBeClone, Objectable
 	private SaveBoolean ob_user_selected = null;
 	private SaveBoolean ob_use_color = null;
 	private SaveBoolean ob_scrollBar = null;
-	private SaveBoolean ob_professional_contents_loaded = null;
 	private SaveBoolean ob_classic_mode = null;
 	private SaveBoolean ob_use_track = null;
 	private SaveBoolean ob_use_track_realtime = null;
@@ -338,8 +337,6 @@ public class Setting implements CanBeClone, Objectable
 				newOne.ob_user_selected = new SaveBoolean(ob_user_selected.booleanValue());
 			if(ob_scrollBar != null)
 				newOne.ob_scrollBar = new SaveBoolean(ob_scrollBar.booleanValue());
-			if(ob_professional_contents_loaded != null)
-				newOne.ob_professional_contents_loaded = new SaveBoolean(ob_professional_contents_loaded.booleanValue());
 			if(ob_classic_mode != null)
 				newOne.ob_classic_mode = new SaveBoolean(ob_classic_mode.booleanValue());
 			if(ob_use_track != null)
@@ -473,7 +470,6 @@ public class Setting implements CanBeClone, Objectable
 		if(ob_useAlertWindow != null) useAlertWindow = ob_useAlertWindow.booleanValue();
 		if(ob_user_selected != null) user_selected = ob_user_selected.booleanValue();
 		if(ob_scrollBar != null) scrollBar = ob_scrollBar.booleanValue();
-		if(ob_professional_contents_loaded != null) professional_contents_loaded = ob_professional_contents_loaded.booleanValue();
 		if(ob_classic_mode != null) classic_mode = ob_classic_mode.booleanValue();
 		if(ob_use_track != null) use_track = ob_use_track.booleanValue();
 		if(ob_use_track_realtime != null) use_track_realtime = ob_use_track_realtime.booleanValue();		
@@ -524,7 +520,6 @@ public class Setting implements CanBeClone, Objectable
 		ob_useAlertWindow = new SaveBoolean(useAlertWindow);
 		ob_user_selected = new SaveBoolean(user_selected);
 		ob_scrollBar = new SaveBoolean(scrollBar);
-		ob_professional_contents_loaded = new SaveBoolean(professional_contents_loaded);
 		ob_classic_mode = new SaveBoolean(classic_mode);
 		ob_use_track = new SaveBoolean(use_track);
 		ob_use_track_realtime = new SaveBoolean(use_track_realtime);
@@ -575,7 +570,6 @@ public class Setting implements CanBeClone, Objectable
 		ob_useAlertWindow = null;
 		ob_user_selected = null;
 		ob_scrollBar = null;
-		ob_professional_contents_loaded = null;
 		ob_classic_mode = null;
 		ob_use_track = null;
 		ob_use_track_realtime = null;
@@ -1415,18 +1409,6 @@ public class Setting implements CanBeClone, Objectable
 	{
 		this.scrollBar = scrollBar;
 	}
-	public boolean accepted()
-	{
-		return true;
-	}
-	public boolean isProfessional_contents_loaded()
-	{
-		return professional_contents_loaded;
-	}
-	public void setProfessional_contents_loaded(boolean professional_contents_loaded)
-	{
-		this.professional_contents_loaded = professional_contents_loaded;
-	}
 	public String getCharset()
 	{
 		return charset;
@@ -1434,15 +1416,6 @@ public class Setting implements CanBeClone, Objectable
 	public void setCharset(String charset)
 	{
 		this.charset = charset;
-	}
-	public SaveBoolean getOb_professional_contents_loaded()
-	{
-		return ob_professional_contents_loaded;
-	}
-	public void setOb_professional_contents_loaded(
-			SaveBoolean ob_professional_contents_loaded)
-	{
-		this.ob_professional_contents_loaded = ob_professional_contents_loaded;
 	}
 	public boolean isClassic_mode()
 	{

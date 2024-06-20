@@ -315,7 +315,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JPanel about_titleStringPanel;
 	private JLabel about_editionLabel;
 	private JMenuItem menu_file_start;
-	private int grade_mode;
+	private int grade_mode = 1;
 	private JDialog userDefinedDialog;
 	private JPanel userDefined_mainPanel;
 	private JPanel userDefined_upPanel;
@@ -435,8 +435,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JPanel start_notice_descPanel;
 	private JPanel start_notice_titlePanel;
 	private JLabel start_notice_titleLabel;
-	private JPanel start_notice_editionPanel;
-	private JLabel start_notice_editionLabel;
 	private JButton bt_runMacro;
 	private JButton bt_helpMacro;
 	private JDialog needfileDialog;
@@ -959,16 +957,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			start_notice_titleLabel.setFont(usingFontB);
 		start_notice_titlePanel.add(start_notice_titleLabel);
 		start_notice_upPanel.add(start_notice_titlePanel, BorderLayout.WEST);
-		start_notice_editionPanel = new JPanel();
-		start_notice_editionPanel.setBackground(sets.getSelected_inside_back());
-		start_notice_editionPanel.setLayout(new FlowLayout());
-		start_notice_editionLabel = new JLabel();
-		start_notice_editionLabel.addMouseListener(this);
-		start_notice_editionLabel.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-			start_notice_editionLabel.setFont(usingFont);
-		start_notice_editionPanel.add(start_notice_editionLabel);
-		start_notice_upPanel.add(start_notice_editionPanel, BorderLayout.CENTER);
 		
 		start_standardPanel = new JPanel();
 		start_standardPanel.setBackground(sets.getSelected_back());
@@ -1253,8 +1241,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		if(usingFont != null)
 			bt_exit.setFont(usingFont);
 		
-		grade_mode = getGrade(sets);
-				
 		String[] difficultyModes;
 		List<String> getShipNames = SpaceShip.spaceShipNameList(sets, grade_mode);
 		List<Integer> getShipKeys = SpaceShip.spaceShipKeyIntsList(grade_mode);
@@ -1911,15 +1897,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		about_titleStringPanel.setBackground(sets.getSelected_inside_back());
 		about_editionStringPanel.setBackground(sets.getSelected_inside_back());
 		about_titleStringPanel.add(about_centerLabel);
-		getGrade(sets);
 		about_editionLabel = new JLabel();
 		about_editionLabel.addMouseListener(this);
-		about_editionLabel.setText(getGradeString(sets));
-		start_notice_editionLabel.setText(getGradeString(sets));
-		about_editionLabel.setForeground(getGradeColor());
-		start_notice_editionLabel.setForeground(getGradeColor());
-		gradeColor = getGradeColor();
-		about_editionLabel.setFont(getGradeFont());
+		about_editionLabel.setText("BASIC");
+		about_editionLabel.setForeground(Color.GRAY);
 		about_editionStringPanel.add(about_editionLabel);
 		about_versionPanel = new JPanel();
 		about_versionPanel.setLayout(new FlowLayout());
@@ -3084,8 +3065,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		
 		scenarios.addAll(dups);
 
-		grade_mode = getGrade(sets);
-		
 		ReflexScenario loadScen;
 		File loads = null;
 		File[] lists = null;
@@ -5227,57 +5206,13 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	public void mouseEntered(MouseEvent e)
 	{
 		Object ob = e.getSource();
-		if(ob == about_editionLabel)
-		{				
-			int r, g, b;
-			r = gradeColor.getRed();
-			g = gradeColor.getGreen();
-			b = gradeColor.getBlue();
-			r = (int) (r / 1.3);
-			g = (int) (g / 1.3);
-			b = (int) (b / 1.3);
-			about_editionLabel.setForeground(new Color(r, g, b));
-		}
-		else if(ob == start_verLabel)
-		{			
-			int r, g, b;
-			r = gradeColor.getRed();
-			g = gradeColor.getGreen();
-			b = gradeColor.getBlue();
-			r = (int) (r / 1.1);
-			g = (int) (g / 1.1);
-			b = (int) (b / 1.1);
-			start_verLabel.setForeground(new Color(r, g, b));
-			
-		}
-		else if(ob == start_notice_editionLabel)
-		{
-			int r, g, b;
-			r = gradeColor.getRed();
-			g = gradeColor.getGreen();
-			b = gradeColor.getBlue();
-			r = (int) (r / 1.3);
-			g = (int) (g / 1.3);
-			b = (int) (b / 1.3);
-			start_notice_editionLabel.setForeground(new Color(r, g, b));
-		}
+		
 	}
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		Object ob = e.getSource();
-		if(ob == about_editionLabel)
-		{
-			about_editionLabel.setForeground(gradeColor);
-		}
-		else if(ob == start_verLabel)
-		{
-			start_verLabel.setForeground(sets.getSelected_fore());
-		}
-		else if(ob == start_notice_editionLabel)
-		{
-			start_notice_editionLabel.setForeground(gradeColor);
-		}
+		
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0)
@@ -6268,103 +6203,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			return results;
 		}
 	}
-	public static Color getGradeColor()
-	{
-		Color base_color;
-		int r, g, b;
-		switch(calc_grade)
-		{
-			case 3:
-				base_color = Color.CYAN;
-				r = (int) ((double) base_color.getRed() - (((double) base_color.getRed()) * 0.25));
-				g = (int) ((double) base_color.getGreen() - (((double) base_color.getGreen()) * 0.25));
-				b = (int) ((double) base_color.getBlue() - (((double) base_color.getBlue()) * 0.25));
-				break;
-			case 2:
-				base_color = Color.YELLOW;
-				r = (int) (base_color.getRed());
-				g = (int) (base_color.getGreen());
-				b = (int) (base_color.getBlue());
-				break;
-			case 1:
-				base_color = Color.RED;
-				r = (int) (base_color.getRed());
-				g = (int) (base_color.getGreen());
-				b = (int) (base_color.getBlue());
-				break;
-			default:
-				base_color = Color.WHITE;
-				r = (int) (base_color.getRed());
-				g = (int) (base_color.getGreen());
-				b = (int) (base_color.getBlue());
-		}
-		if(r < 0) r = 0;
-		if(g < 0) g = 0;
-		if(b < 0) b = 0;
-		return new Color(r, g, b);
-	}
-	public static String getGradeString(Setting sets)
-	{
-		if(calc_grade <= -1) 
-			return calc_grade_str;
-		switch(calc_grade)
-		{
-			case 3:
-				return sets.getLang().getText(Language.MASTER);
-			case 2:
-				return sets.getLang().getText(Language.ULTIMATE);
-			case 1:
-				return sets.getLang().getText(Language.PROFESSIONAL);
-			default:
-				return sets.getLang().getText(Language.BASIC_EDITION);
-		}
-	}
-	public static Font getGradeFont()
-	{
-		Font result;
-		String name;
-		int type = Font.PLAIN, size = 14;
-		if(usingFontName != null)
-			prepareFont();
-		if(usingFontName != null)
-			name = usingFontName;
-		else
-			name = "dialog";
-		switch(calc_grade)
-		{
-			case 3:
-				type = Font.BOLD;
-				break;
-			case 2:
-				type = Font.BOLD;
-				break;
-			case 1:
-				type = Font.BOLD;
-				break;
-			case 0:
-				type = Font.PLAIN;
-				break;
-		}
-		result = new Font(name, type, size);
-		return result;
-	}
-	public static int getGrade(Setting sets)
-	{
-		try
-		{
-			if(sets.accepted())
-			{
-				calc_grade = 1;
-				return 1;
-			}
-		} 
-		catch (Exception e)
-		{
-			
-		}
-		calc_grade = 0;
-		return 0;
-	}
+	
 	public static void save_sets(Setting sets, boolean xml) throws Exception
 	{		
 		FileOutputStream fout = null;
