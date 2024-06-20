@@ -31,18 +31,14 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import lang.Korean;
@@ -52,10 +48,6 @@ import lang.UserDefinedLang;
 import mainClasses.Openable;
 import mainClasses.RunManager;
 import reflexioner.Reflexioner;
-import scripting.BlockModule;
-import scripting.ModulePackage;
-import scripting.ScriptModule;
-import scripting.SpecialCardModule;
 
 public class SettingManager extends JFrame implements ActionListener, WindowListener, MouseListener, MouseMotionListener, ItemListener, Openable
 {
@@ -144,8 +136,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 	private JPanel[] helpContentDialog_tabs;
 	private JTextArea[] helpContentArea;
 	private JScrollPane[] helpContentAreaScroll;
-	private ModuleViewer moduleManager;
-	private JButton moduleViewer;
 	private FlowLayout[] southLayouts;
 	private FlowLayout[] northLayouts;
 	public SettingManager(Setting gets, Dimension screenSize, int ver_main, int ver_sub1, int ver_sub2, boolean independence, RunManager manager, boolean runAsFirst, String[] args)
@@ -182,8 +172,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 		this.setTitle(lang.getText(Language.TITLE) + " " + lang.getText(Language.SETTING));
 		if(gets.isUse_own_titleBar())	this.setUndecorated(true);
 		
-		moduleManager = new ModuleViewer(this, gets);
-		
 		centerPanel = new JPanel();
 		southPanel = new JPanel();
 		northPanel = new JPanel();	
@@ -209,7 +197,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 		helpOpen = new JButton(lang.getText(Language.HELP) + " " + lang.getText(Language.EDIT));
 		themeGen = new JButton(lang.getText(Language.THEME));
 		reset = new JButton(lang.getText(Language.RESET));	
-		moduleViewer = new JButton(lang.getText(Language.MODULE));
 		if(Reflexioner.usingFont != null)
 		{
 			save.setFont(Reflexioner.usingFont);
@@ -219,7 +206,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 			helpOpen.setFont(Reflexioner.usingFont);
 			themeGen.setFont(Reflexioner.usingFont);
 			reset.setFont(Reflexioner.usingFont);
-			moduleViewer.setFont(Reflexioner.usingFont);
 			
 		}
 		use_xml.setSelected(false);
@@ -229,13 +215,11 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 		helpOpen.addActionListener(this);
 		themeGen.addActionListener(this);
 		reset.addActionListener(this);
-		moduleViewer.addActionListener(this);
 		controlPanel.add(helpOpen);
 		//controlPanel.add(themeGen);
 		controlDownPanel.add(save);		
 		controlDownPanel.add(use_xml);
 		// controlPanel.add(ai_load);
-		controlPanel.add(moduleViewer);
 		controlPanel.add(ai_edit);		
 		controlDownPanel.add(reset);
 		controlDownPanel.add(restart);
@@ -594,7 +578,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 			bottomPanel.setBackground(setting.getSelected_back());
 			use_xml.setBackground(setting.getSelected_back());
 			use_xml.setForeground(setting.getSelected_fore());
-			moduleViewer.setForeground(setting.getSelected_fore());
 			save.setForeground(setting.getSelected_fore());
 			exit.setForeground(setting.getSelected_fore());
 			restart.setForeground(setting.getSelected_fore());
@@ -1191,10 +1174,6 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 		{
 			lookAndFeelDialog.setVisible(false);
 		}
-		else if(ob == moduleViewer)
-		{
-			moduleManager.setVisible(true);
-		}
 		else if(ob == ai_load)
 		{
 			ff1 = new FileFilter()
@@ -1349,507 +1328,4 @@ public class SettingManager extends JFrame implements ActionListener, WindowList
 			}
 		}
 	}
-
-}
-class ModuleViewer extends JFrame implements Openable, ListSelectionListener, ActionListener, MouseListener, MouseMotionListener
-{
-	private static final long serialVersionUID = -3801676859211082960L;
-	private SettingManager superContent;
-	private JPanel mainPanel;
-	private JPanel leftPanel;
-	private JPanel centerPanel;
-	private JPanel bottomPanel;
-	private JPanel upPanel;
-	private JPanel titlePanel;
-	private JLabel titleLabel;
-	private JList moduleList;
-	private JScrollPane moduleScroll;
-	private int mousex;
-	private int mousey;
-	private JPanel centerMainPanel;
-	private JPanel centerSubPanel;
-	private JTextArea centerDescriptionPanel;
-	private JScrollPane centerDescriptionScroll;
-	private JButton remove;
-	private JButton close;
-	private boolean selected = false;
-	private int selectedIndex = 0;
-	private Language lang;
-	private JButton load;
-	private JFileChooser cfd;
-	private ModulePackageViewer modulePackageViewer;
-	private ModulePackage loaded;
-
-	public ModuleViewer(SettingManager superContent, Setting sets)
-	{
-		this.superContent = superContent;
-		this.setSize(500, 400);
-		
-		if(sets.isUse_own_titleBar())
-		{
-			this.setUndecorated(true);
-		}
-		lang = sets.getLang().clone();
-		
-		this.setLocation((int)(sets.getScreenSize().getWidth()/2 - this.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - this.getHeight()/2));
-		
-		this.getContentPane().setLayout(new BorderLayout());
-		mainPanel = new JPanel();
-		mainPanel.setBorder(new EtchedBorder());
-		mainPanel.setBackground(sets.getSelected_back());
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-		mainPanel.setLayout(new BorderLayout());
-		
-		leftPanel = new JPanel();
-		centerPanel = new JPanel();
-		bottomPanel = new JPanel();
-		upPanel = new JPanel();
-		leftPanel.setBackground(sets.getSelected_back());
-		centerPanel.setBackground(sets.getSelected_back());
-		bottomPanel.setBackground(sets.getSelected_back());
-		upPanel.setBackground(sets.getSelected_back());
-		
-		mainPanel.add(leftPanel, BorderLayout.WEST);
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-		mainPanel.add(upPanel, BorderLayout.NORTH);
-		
-		upPanel.setLayout(new BorderLayout());
-		titlePanel = new JPanel();
-		titleLabel = new JLabel(sets.getLang().getText(Language.MODULE));
-		titlePanel.setBorder(new EtchedBorder());
-		titlePanel.setLayout(new FlowLayout());
-		titlePanel.setBackground(sets.getSelected_inside_back());
-		titlePanel.add(titleLabel);
-		titleLabel.setForeground(sets.getSelected_fore());
-		
-		if(sets.isUse_own_titleBar())
-		{
-			upPanel.add(titlePanel, BorderLayout.CENTER);
-			titlePanel.addMouseListener(this);
-			titlePanel.addMouseMotionListener(this);
-		}
-		
-		moduleList = new JList();
-		moduleScroll = new JScrollPane(moduleList);
-		moduleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		leftPanel.setLayout(new BorderLayout());
-		leftPanel.add(moduleScroll);
-		moduleList.setBackground(sets.getSelected_back());
-		moduleList.setForeground(sets.getSelected_fore());
-		moduleList.addListSelectionListener(this);
-		
-		centerPanel.setLayout(new BorderLayout());
-		centerMainPanel = new JPanel();
-		centerSubPanel = new JPanel();
-		centerPanel.add(centerMainPanel, BorderLayout.CENTER);
-		centerPanel.add(centerSubPanel, BorderLayout.SOUTH);
-		centerMainPanel.setBackground(sets.getSelected_back());
-		centerSubPanel.setBackground(sets.getSelected_back());		
-		centerDescriptionPanel = new JTextArea();
-		centerDescriptionScroll = new JScrollPane(centerDescriptionPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		centerDescriptionPanel.setEditable(false);
-		centerDescriptionPanel.setLineWrap(true);
-		centerMainPanel.setLayout(new BorderLayout());		
-		centerMainPanel.add(centerDescriptionScroll, BorderLayout.CENTER);
-		centerDescriptionPanel.setBackground(sets.getSelected_inside_back());
-		centerDescriptionPanel.setForeground(sets.getSelected_fore());
-		centerSubPanel.setLayout(new FlowLayout());
-		
-		remove = new JButton(sets.getLang().getText(Language.REMOVE));
-		remove.addActionListener(this);
-		remove.setForeground(sets.getSelected_fore());
-		centerSubPanel.add(remove);
-		
-		bottomPanel.setLayout(new FlowLayout());
-		load = new JButton(lang.getText(Language.LOAD));
-		load.addActionListener(this);
-		load.setForeground(sets.getSelected_fore());
-		close = new JButton(sets.getLang().getText(Language.CLOSE));
-		close.addActionListener(this);
-		close.setForeground(sets.getSelected_fore());
-		bottomPanel.add(load);
-		bottomPanel.add(close);
-		
-		modulePackageViewer = new ModulePackageViewer(this, sets);
-	}
-	public void refresh()
-	{
-		Vector<ScriptModule> modules = superContent.target.getModules();
-		String[] moduleNames = new String[modules.size()];
-		for(int i=0; i<moduleNames.length; i++)
-		{
-			moduleNames[i] = modules.get(i).getName();
-		}
-		moduleList.setListData(moduleNames);
-	}
-	public void loadOk()
-	{
-		for(int i=0; i<loaded.getModules().size(); i++)
-		{
-			superContent.target.getModules().add(loaded.getModules().get(i).clone());
-		}
-		refresh();
-	}
-	public void loadCancel()
-	{
-		loaded = null;
-	}
-	@Override
-	public void open()
-	{
-		refresh();
-		selected = false;
-		centerDescriptionPanel.setText("");
-		this.setVisible(true);
-	}
-
-	@Override
-	public void exit()
-	{
-		this.setVisible(false);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		Object ob = e.getSource();
-		if(ob == close)
-		{
-			this.setVisible(false);
-		}
-		else if(ob == remove)
-		{
-			if(selected)
-			{
-				superContent.target.getModules().remove(selectedIndex);
-				selected = false;
-				centerDescriptionPanel.setText("");
-				refresh();
-			}
-		}
-		else if(ob == load)
-		{
-			FileFilter ff1 = new FileFilter()
-			{
-				@Override
-				public boolean accept(File file1)
-				{
-					if(file1 != null)
-					{
-						if(file1.isDirectory()) return true;
-						if(file1.getAbsolutePath().endsWith(".cpack")) return true;
-					}
-					return false;
-				}
-				@Override
-				public String getDescription()
-				{					
-					return "Module Package (.cpack)";
-				}
-			};
-			if(cfd == null) 
-			{
-				cfd = new JFileChooser(superContent.target.getDefault_path());
-				cfd.setFileFilter(ff1);
-			}
-			int cfds = cfd.showOpenDialog(this);
-			if(cfds == JFileChooser.APPROVE_OPTION)
-			{
-				File newFile = cfd.getSelectedFile();
-				try
-				{
-					loaded = ModulePackage.load(newFile);
-					modulePackageViewer.input(loaded);
-					modulePackageViewer.setVisible(true);
-				} 
-				catch (Exception e1)
-				{
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(this, lang.getText(Language.ERROR) + " : " + e1.getMessage());
-				}
-			}	
-		}
-	}
-	
-	@Override
-	public void valueChanged(ListSelectionEvent e)
-	{
-		Object ob = e.getSource();
-		if(ob == moduleList)
-		{
-			selectedIndex = moduleList.getSelectedIndex();
-			selected = true;
-			String contents = lang.getText(Language.TYPE) + " : ";
-			if(superContent.target.getModules().get(selectedIndex) instanceof BlockModule)
-			{
-				contents = contents + lang.getText(Language.BLOCK) + "\n\n";
-			}
-			else if(superContent.target.getModules().get(selectedIndex) instanceof SpecialCardModule)
-			{
-				contents = contents + lang.getText(Language.CARD) + "\n\n";
-			}
-			else
-			{
-				selected = false;
-				centerDescriptionPanel.setText(lang.getText(Language.ERROR));
-				return;
-			}
-			contents = contents + lang.getText(Language.NAME) + " : " + superContent.target.getModules().get(selectedIndex).getName() + "\n\n";
-			contents = contents + superContent.target.getModules().get(selectedIndex).getDescription();
-			centerDescriptionPanel.setText(contents);
-		}
-		
-	}
-	
-	@Override
-	public void mouseDragged(MouseEvent e)
-	{
-		this.setLocation(e.getXOnScreen() - mousex, e.getYOnScreen() - mousey);
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		mousex = e.getX();
-		mousey = e.getY();
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}	
-}
-class ModulePackageViewer extends JDialog implements ActionListener, MouseListener, MouseMotionListener, WindowListener
-{
-	private static final long serialVersionUID = -2496185111634514568L;
-	private JPanel mainPanel;
-	private int mousex;
-	private int mousey;
-	private JPanel upPanel;
-	private JPanel centerPanel;
-	private JPanel downPanel;
-	private JLabel titleLabel;
-	private JButton cancel;
-	private JButton ok;
-	private ModuleViewer upper;
-	private JTextArea texts;
-	private JScrollPane textScroll;
-	private Language lang;
-
-	public ModulePackageViewer(ModuleViewer upper, Setting sets)
-	{
-		super(upper, true);
-		this.upper = upper;
-		this.setSize(500, 400);
-		
-		if(sets.isUse_own_titleBar())
-		{
-			this.setUndecorated(true);
-		}
-		lang = sets.getLang().clone();
-		
-		this.setLocation((int)(sets.getScreenSize().getWidth()/2 - this.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - this.getHeight()/2));
-		this.addWindowListener(this);
-		
-		this.getContentPane().setLayout(new BorderLayout());
-		mainPanel = new JPanel();
-		mainPanel.setBorder(new EtchedBorder());
-		mainPanel.setBackground(sets.getSelected_back());
-		this.getContentPane().add(mainPanel, BorderLayout.CENTER);
-		mainPanel.setLayout(new BorderLayout());
-		
-		upPanel = new JPanel();
-		centerPanel = new JPanel();
-		downPanel = new JPanel();
-		upPanel.setBackground(sets.getSelected_inside_back());
-		centerPanel.setBackground(sets.getSelected_back());
-		downPanel.setBackground(sets.getSelected_back());
-		
-		titleLabel = new JLabel(sets.getLang().getText(Language.LOAD) + " " + sets.getLang().getText(Language.MODULE));
-		titleLabel.setForeground(sets.getSelected_fore());
-		if(sets.isUse_own_titleBar())
-		{
-			mainPanel.add(upPanel, BorderLayout.NORTH);
-			upPanel.addMouseListener(this);
-			upPanel.addMouseMotionListener(this);
-			upPanel.setLayout(new FlowLayout());
-			upPanel.add(titleLabel);
-			upPanel.setBorder(new EtchedBorder());
-		}
-		mainPanel.add(downPanel, BorderLayout.SOUTH);
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		
-		downPanel.setLayout(new FlowLayout());
-		cancel = new JButton(sets.getLang().getText(Language.CANCEL));
-		cancel.addActionListener(this);
-		cancel.setForeground(sets.getSelected_fore());
-		ok = new JButton(sets.getLang().getText(Language.OK));
-		ok.addActionListener(this);
-		ok.setForeground(sets.getSelected_fore());
-		downPanel.add(ok);
-		downPanel.add(cancel);
-		
-		centerPanel.setLayout(new BorderLayout());
-		texts = new JTextArea();
-		textScroll = new JScrollPane(texts, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		texts.setLineWrap(true);
-		texts.setEditable(false);
-		texts.setBackground(sets.getSelected_inside_back());
-		texts.setForeground(sets.getSelected_fore());
-		centerPanel.add(textScroll);
-		
-	}
-	public void input(ModulePackage packs)
-	{
-		String contents = "";
-		contents = contents + lang.getText(Language.WARN) + " : " + lang.getText(Language.WARN_SCRIPT) + "\n\n";
-		contents = contents + lang.getText(Language.NAME) + " : " + packs.getName() + "\n\n";
-		contents = contents + packs.getDescription() + "\n\n";
-		for(int i=0; i<packs.getModules().size(); i++)
-		{
-			contents = contents + packs.getModules().get(i).getName() + "\n";
-		}
-		texts.setText(contents);
-	}
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		Object ob = e.getSource();
-		if(ob == ok)
-		{
-			upper.loadOk();
-			this.setVisible(false);
-		}
-		else if(ob == cancel)
-		{
-			upper.loadCancel();
-			this.setVisible(false);
-		}
-		
-	}
-	@Override
-	public void mouseDragged(MouseEvent e)
-	{
-		this.setLocation(e.getXOnScreen() - mousex, e.getYOnScreen() - mousey);
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		mousex = e.getX();
-		mousey = e.getY();
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowActivated(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowClosed(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowClosing(WindowEvent e)
-	{
-		upper.loadCancel();
-		this.setVisible(false);
-		
-	}
-	@Override
-	public void windowDeactivated(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowDeiconified(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowIconified(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowOpened(WindowEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}	
 }

@@ -13,7 +13,6 @@ import lang.English;
 import lang.Korean;
 import lang.Language;
 import reflexioner.Reflexioner;
-import scripting.ScriptModule;
 
 public class Setting implements CanBeClone, Objectable
 {
@@ -51,7 +50,6 @@ public class Setting implements CanBeClone, Objectable
 	
 	private String card_separator = "  ";
 	private String lookAndFeel = "";
-	private Vector<ScriptModule> modules;
 	
 	private Vector<String> otherObjects;
 	private Vector<String> reflexioner_ranks;
@@ -298,12 +296,6 @@ public class Setting implements CanBeClone, Objectable
 			{
 				if(otherObjects.get(i) != null)
 					newOne.otherObjects.add(new String(otherObjects.get(i)));
-			}
-			if(modules == null) modules = new Vector<ScriptModule>();
-			for(int i=0; i<modules.size(); i++)
-			{
-				if(modules.get(i) != null)
-					newOne.modules.add(modules.get(i).clone());
 			}
 			if(this.jarfile_path != null) newOne.jarfile_path = new String(this.jarfile_path);
 			if(this.next_execute_saved != null) newOne.next_execute_saved = (SaveBoolean) this.next_execute_saved.clone();
@@ -706,7 +698,6 @@ public class Setting implements CanBeClone, Objectable
 		}
 		setting.use_color = true;
 		setting.otherObjects = new Vector<String>();
-		setting.modules = new Vector<ScriptModule>();
 		
 		if(screenSize.getWidth() >= 1920)
 		{
@@ -1773,14 +1764,6 @@ public class Setting implements CanBeClone, Objectable
 	public void setScript_engine(String script_engine)
 	{
 		this.script_engine = script_engine;
-	}
-	public Vector<ScriptModule> getModules()
-	{
-		return modules;
-	}
-	public void setModules(Vector<ScriptModule> modules)
-	{
-		this.modules = modules;
 	}
 	public SaveBoolean getOb_scenario_open()
 	{

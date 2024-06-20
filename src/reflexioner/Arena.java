@@ -27,7 +27,6 @@ import mainClasses.ThreadAccumulate;
 import mainClasses.ThreadControl;
 import pack.InstalledPack;
 import pack.Pack;
-import scripting.ScriptActor;
 import setting.Difficulty;
 import setting.Lint;
 import setting.Setting;
@@ -68,7 +67,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private Setting sets;
 	private long difficulty_delay = 5000;
 	private long timeout = -1;
-	private ScriptActor scriptManager;
 	private String saved_script_5 = "", saved_script_6 = "", saved_script_7 = "";	
 	
 	private transient boolean authority_mode = false;
@@ -118,13 +116,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		catchEnemies = Lint.big(0);
 		catchItems = Lint.big(0);
 		file_path = sets.getDefault_path();
-		scriptManager = sp.getScriptManager();
 		
 		loadBackground();
-	}
-	public void setScriptManager(ScriptActor sc)
-	{
-		scriptManager = sc;
 	}
 	public void setStartItem(int[] items)
 	{
@@ -722,7 +715,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				{
 					try
 					{
-						scriptManager.actOnly(is.getStart_script());
+						// TODO : is.getStart_script()
 					} 
 					catch (Exception e)
 					{
@@ -956,7 +949,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 					{
 						if(((IReflexScenario) scenario).getFinish_script() != null  )
 						{
-							scriptManager.actOnly(((IReflexScenario) scenario).getFinish_script());
+							// TODO : ((IReflexScenario) scenario).getFinish_script()
 						}
 					}
 				}
@@ -1085,46 +1078,15 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		}
 		else if(getKeyCode == Reflexioner.KEY_5)
 		{
-			if(saved_script_5 != null && (! saved_script_5.trim().equalsIgnoreCase("")))
-			try
-			{
-				scriptManager.actOnly(saved_script_5);
-				if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-				authority_mode = false;
-				
-			}
-			catch (Exception e1)
-			{
-				sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-			}
+			
 		}
 		else if(getKeyCode == Reflexioner.KEY_6)
 		{
-			if(saved_script_6 != null && (! saved_script_6.trim().equalsIgnoreCase("")))
-			try
-			{
-				scriptManager.actOnly(saved_script_6);
-				if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-				authority_mode = false;
-			}
-			catch (Exception e1)
-			{
-				sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-			}
+			
 		}
 		else if(getKeyCode == Reflexioner.KEY_7)
 		{
-			if(saved_script_7 != null && (! saved_script_7.trim().equalsIgnoreCase("")))
-				try
-				{
-					scriptManager.actOnly(saved_script_7);
-					if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-					authority_mode = false;
-				}
-				catch (Exception e1)
-				{
-					sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-				}
+			
 		}
 		else if(getKeyCode == Reflexioner.KEY_8)
 		{
@@ -2341,7 +2303,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							{
 								try
 								{
-									arena.scriptManager.actOnly(((XReflexScenario) arena.scenario).getScript());
+									// TODO : ((XReflexScenario) arena.scenario).getScript()
 								}
 								catch(Exception e)
 								{
@@ -3206,48 +3168,15 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	}
 	public void control_5()
 	{
-		if(saved_script_5 != null && (! saved_script_5.trim().equalsIgnoreCase("")))
-			try
-			{
-				scriptManager.actOnly(saved_script_5);
-				if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-				authority_mode = false;
-				
-			}
-			catch (Exception e1)
-			{
-				sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-			}
+		
 	}
 	public void control_6()
 	{
-		if(saved_script_6 != null && (! saved_script_6.trim().equalsIgnoreCase("")))
-			try
-			{
-				scriptManager.actOnly(saved_script_6);
-				if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-				authority_mode = false;
-				
-			}
-			catch (Exception e1)
-			{
-				sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-			}
+		
 	}
 	public void control_7()
 	{
-		if(saved_script_7 != null && (! saved_script_7.trim().equalsIgnoreCase("")))
-			try
-			{
-				scriptManager.actOnly(saved_script_7);
-				if(authority_mode) sp.message(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE));
-				authority_mode = false;
-				
-			}
-			catch (Exception e1)
-			{
-				sp.message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-			}
+		
 	}
 	public void control_8()
 	{

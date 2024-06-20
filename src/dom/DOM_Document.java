@@ -3,8 +3,6 @@ package dom;
 import java.awt.Component;
 import java.util.Date;
 
-import scripting.ScriptActor;
-
 public class DOM_Document
 {
 	public String title = "";
@@ -30,18 +28,17 @@ public class DOM_Document
 	public String URL = "";
 	
 	
-	private ScriptActor actor;
-	public DOM_Document(ScriptActor actor, Component dialog)
+	public DOM_Document(Component dialog)
 	{
-		this.actor = actor;
+		
 	}
 	public void write(String str)
 	{
-		actor.message(str);
+		
 	}
 	public void writeln(String str)
 	{
-		actor.message(str);
+		
 	}
 	public void open()
 	{

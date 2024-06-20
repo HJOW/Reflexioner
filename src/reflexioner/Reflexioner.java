@@ -97,9 +97,6 @@ import mainClasses.Openable;
 import mainClasses.RunManager;
 import mainClasses.ThreadAccumulate;
 import mainClasses.Uninstaller;
-import scripting.ReflexScriptManager;
-import scripting.ScriptActor;
-import scripting.Script_Reflex;
 import setting.Difficulty;
 import setting.Key;
 import setting.KeyBlock;
@@ -429,7 +426,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JLabel[] autoUserDefined_labels;
 	private JTextField[] autoUserDefined_fields;
 	private JCheckBoxMenuItem menu_manage_autoControl;
-	private ReflexScriptManager scriptManager;
 	private JButton bt_continue;
 	private JDialog messageDialog;
 	private JPanel message_mainPanel;
@@ -439,9 +435,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JScrollPane message_textScroll;
 	private JPanel message_upPanel;
 	private JButton bt_close_message;
-	private JPanel message_scriptPanel;
-	private JTextField message_scriptField;
-	private JButton bt_message_script;
 	private JMenuItem menu_view_message;
 	private ReflexScenarioEditor scenarioEditor;
 	private JMenuItem menu_view_editor;
@@ -456,28 +449,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private String download_url1, download_url2;
 	private JButton bt_setUrl;
 	private JMenuItem menu_help_script;
-	private JDialog macroDialog;
-	private JPanel macro_mainPanel;
-	private JPanel macro_centerPanel;
-	private JPanel macro_downPanel;
-	private JTabbedPane macro_tab;
-	private JButton bt_closeMacro;
-	private JPanel macro_5;
-	private JPanel macro_6;
-	private JPanel macro_7;
-	private JTextArea macro_5_area;
-	private JTextArea macro_6_area;
-	private JTextArea macro_7_area;
-	private JScrollPane macro_5_scroll;
-	private JScrollPane macro_6_scroll;
-	private JScrollPane macro_7_scroll;
-	private JButton bt_acceptMacro;
-	private JMenuItem menu_view_macro;
-	private JPanel macro_upPanel;
-	private JPanel macro_titlePanel;
-	private JLabel macro_titleLabel;
-	private int macro_x;
-	private int macro_y;
 	private JComboBox start_scenario_selectShipCombo;
 	private String selected_scenario_ship;
 	private JPanel start_notice_descPanel;
@@ -675,31 +646,16 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		bt_close_message.addActionListener(this);
 		bt_close_message.setForeground(sets.getSelected_fore());		
 		message_upPanel.add(bt_close_message, BorderLayout.EAST);
-		message_scriptPanel = new JPanel();
-		message_scriptPanel.setLayout(new BorderLayout());
-		message_scriptPanel.setBackground(sets.getSelected_back());
-		message_mainPanel.add(message_scriptPanel, BorderLayout.SOUTH);
-		bt_message_script = new JButton(sets.getLang().getText(Language.INPUT));
-		bt_message_script.addActionListener(this);
-		bt_message_script.setForeground(sets.getSelected_fore());
-		message_scriptField = new JTextField();
-		message_scriptField.addActionListener(this);
-		message_scriptField.setBackground(sets.getSelected_inside_back());
-		message_scriptField.setForeground(sets.getSelected_fore());
-		message_scriptPanel.add(message_scriptField, BorderLayout.CENTER);
-		message_scriptPanel.add(bt_message_script, BorderLayout.EAST);
+		
 		if(sets.getSelected_button() != null)
 		{
 			bt_close_message.setBackground(sets.getSelected_button());
-			bt_message_script.setBackground(sets.getSelected_button());
 		}
 		if(usingFont != null)
 		{
 			message_titleLabel.setFont(usingFont);
 			message_textArea.setFont(usingFont);
 			bt_close_message.setFont(usingFont);
-			message_scriptField.setFont(usingFont);
-			bt_message_script.setFont(usingFont);
 		}
 		
 		mainPanel = new JPanel();
@@ -1699,17 +1655,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		menu_view.add(menu_view_check);
 		
-		menu_view_macro = new JMenuItem(sets.getLang().getText(Language.SCRIPT));
-		menu_view_macro.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, KeyEvent.CTRL_MASK));
-		menu_view_macro.addActionListener(this);
-		menu_view_macro.setBackground(sets.getSelected_back());
-		menu_view_macro.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-		{
-			menu_view_macro.setFont(usingFont);
-		}
-		menu_view.add(menu_view_macro);
-		
 		menu_help = new JMenu(sets.getLang().getText(Language.HELP));
 		menu_help.setBackground(sets.getSelected_back());
 		menu_help.setForeground(sets.getSelected_fore());
@@ -2205,48 +2150,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		userDefined_downPanel.add(bt_start_userDefined);
 		userDefined_downPanel.add(bt_close_userDefined);		
-		
-		macroDialog = new JDialog(startDialog);		
-		macroDialog.setUndecorated(true);
-		macroDialog.setSize(500, 400);
-		macroDialog.setLocation((int)(sets.getScreenSize().getWidth()/2 - macroDialog.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - macroDialog.getHeight()/2));
-		macroDialog.getContentPane().setLayout(new BorderLayout());
-		macro_mainPanel = new JPanel();
-		macroDialog.getContentPane().add(macro_mainPanel, BorderLayout.CENTER);
-		macro_mainPanel.setLayout(new BorderLayout());
-		macro_mainPanel.setBorder(new EtchedBorder());
-		macro_mainPanel.setBackground(sets.getSelected_back());
-		macro_upPanel = new JPanel();
-		macro_centerPanel = new JPanel();
-		macro_downPanel = new JPanel();
-		macro_mainPanel.add(macro_upPanel, BorderLayout.NORTH);
-		macro_mainPanel.add(macro_centerPanel, BorderLayout.CENTER);
-		macro_mainPanel.add(macro_downPanel, BorderLayout.SOUTH);
-		macro_upPanel.setBackground(sets.getSelected_back());
-		macro_centerPanel.setBackground(sets.getSelected_back());
-		macro_downPanel.setBackground(sets.getSelected_back());
-		macro_upPanel.setLayout(new BorderLayout());
-		macro_titlePanel = new JPanel();
-		macro_titlePanel.setBackground(sets.getSelected_inside_back());
-		macro_titlePanel.setBorder(new EtchedBorder());
-		macro_titlePanel.setLayout(new FlowLayout());
-		macro_titlePanel.addMouseListener(this);
-		macro_titlePanel.addMouseMotionListener(this);
-		macro_titleLabel = new JLabel(sets.getLang().getText(Language.SCRIPT));
-		macro_titleLabel.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-			macro_titleLabel.setFont(usingFont);
-		macro_titlePanel.add(macro_titleLabel);
-		macro_upPanel.add(macro_titlePanel, BorderLayout.NORTH);
-		macro_downPanel.setLayout(new FlowLayout());
-		bt_acceptMacro = new JButton(sets.getLang().getText(Language.ACCEPT));
-		bt_acceptMacro.addActionListener(this);
-		bt_acceptMacro.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-			bt_acceptMacro.setFont(usingFont);
-		if(sets.getSelected_button() != null)
-			bt_acceptMacro.setBackground(sets.getSelected_button());
-		macro_downPanel.add(bt_acceptMacro);			
+					
 		bt_runMacro = new JButton(sets.getLang().getText(Language.RUN));
 		bt_runMacro.addActionListener(this);
 		bt_runMacro.setForeground(sets.getSelected_fore());
@@ -2254,7 +2158,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			bt_runMacro.setFont(usingFont);
 		if(sets.getSelected_button() != null)
 			bt_runMacro.setBackground(sets.getSelected_button());
-		macro_downPanel.add(bt_runMacro);
 		
 		bt_helpMacro = new JButton(sets.getLang().getText(Language.HELP));
 		bt_helpMacro.addActionListener(this);
@@ -2263,61 +2166,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			bt_helpMacro.setFont(usingFont);
 		if(sets.getSelected_button() != null)
 			bt_helpMacro.setBackground(sets.getSelected_button());
-		macro_downPanel.add(bt_helpMacro);
-		
-		bt_closeMacro = new JButton(sets.getLang().getText(Language.CLOSE));
-		bt_closeMacro.addActionListener(this);
-		bt_closeMacro.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-			bt_closeMacro.setFont(usingFont);
-		if(sets.getSelected_button() != null)
-			bt_closeMacro.setBackground(sets.getSelected_button());
-		macro_downPanel.add(bt_closeMacro);
-		macro_centerPanel.setLayout(new BorderLayout());
-		macro_tab = new JTabbedPane();
-		macro_tab.setBackground(sets.getSelected_back());
-		macro_tab.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-		{
-			macro_tab.setFont(usingFont);
-		}
-		macro_centerPanel.add(macro_tab, BorderLayout.CENTER);
-		macro_5 = new JPanel();
-		macro_6 = new JPanel();
-		macro_7 = new JPanel();
-		macro_5.setBackground(sets.getSelected_back());
-		macro_6.setBackground(sets.getSelected_back());
-		macro_7.setBackground(sets.getSelected_back());
-		macro_5.setLayout(new BorderLayout());
-		macro_6.setLayout(new BorderLayout());
-		macro_7.setLayout(new BorderLayout());		
-		macro_5_area = new JTextArea();
-		macro_6_area = new JTextArea();
-		macro_7_area = new JTextArea();
-		macro_5_area.setLineWrap(true);
-		macro_6_area.setLineWrap(true);
-		macro_7_area.setLineWrap(true);
-		macro_5_area.setBackground(sets.getSelected_inside_back());
-		macro_6_area.setBackground(sets.getSelected_inside_back());
-		macro_7_area.setBackground(sets.getSelected_inside_back());
-		macro_5_area.setForeground(sets.getSelected_fore());
-		macro_6_area.setForeground(sets.getSelected_fore());
-		macro_7_area.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-		{
-			macro_5_area.setFont(usingFont);
-			macro_6_area.setFont(usingFont);
-			macro_7_area.setFont(usingFont);
-		}
-		macro_5_scroll = new JScrollPane(macro_5_area);
-		macro_6_scroll = new JScrollPane(macro_6_area);
-		macro_7_scroll = new JScrollPane(macro_7_area);
-		macro_5.add(macro_5_scroll);
-		macro_6.add(macro_6_scroll);
-		macro_7.add(macro_7_scroll);
-		macro_tab.add("5", macro_5);
-		macro_tab.add("6", macro_6);
-		macro_tab.add("7", macro_7);
 		
 		needfileDialog = new JDialog(startDialog, true);
 		needfileDialog.setUndecorated(true);
@@ -2519,10 +2367,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		autoUserDefined_labels[AUTO_WEAPON_3_HELPER_COUNT].setText(sets.getLang().getText(Language.WEAPON) + " 3 " + sets.getLang().getText(Language.COUNT_INTERCEPTOR));
 		autoUserDefined_labels[AUTO_WEAPON_3_SPEED].setText(sets.getLang().getText(Language.WEAPON) + " 3 " + sets.getLang().getText(Language.MISSILE_SPEED));
 		autoUserDefined_labels[AUTO_WEAPON_3_TYPE].setText(sets.getLang().getText(Language.WEAPON) + " 3 " + sets.getLang().getText(Language.KINDS) + "(" + sets.getLang().getText(Language.MISSILE_KIND) + ")");
-				
-		scriptManager = new ReflexScriptManager(this, sets);
-		arena.setScriptManager(scriptManager);
-		scriptManager.load_js_files(true);
 		
 		try_apply_properties();
 		try
@@ -3109,7 +2953,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		try_transparent(aboutDialog, value);
 		try_transparent(finishDialog, doubled);
 		try_transparent(startDialog, doubled);
-		try_transparent(macroDialog, doubled);
 		try_transparent(messageDialog, value);
 		try_transparent(serialDialog, doubled);
 		try_transparent(scenarioEditor, doubled);		
@@ -3785,7 +3628,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		arena.setTodayEvent(true);
 		arena.setName(name);
 		arena.setStartItem(items);
-		macroDialog.setVisible(false);
 		startDialog.setVisible(false);
 		arena.game_start();
 	}
@@ -3827,7 +3669,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		//System.out.println(arena.getDifficultyMode());// For TEST
 		arena.setAutoControlMode(menu_manage_autoControl);
-		macroDialog.setVisible(false);
 		startDialog.setVisible(false);
 		arena.game_start();
 	}
@@ -3848,7 +3689,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			arena.setAutoControlMode(menu_manage_autoControl);
 			arena.setTodayEvent(false);
 			arena.setStartItem(null);
-			macroDialog.setVisible(false);
 			startDialog.setVisible(false);
 			arena.game_start();
 		}
@@ -3873,20 +3713,17 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		arena.setAutoControlMode(menu_manage_autoControl);
 		arena.setTodayEvent(false);
 		arena.setStartItem(null);
-		macroDialog.setVisible(false);
 		startDialog.setVisible(false);		
 		arena.game_start();		
 	}
 	public void start(ReflexSave state)
 	{
 		arena.applyState(state);
-		macroDialog.setVisible(false);
 		startDialog.setVisible(false);
 	}
 	public void start(ReflexReplay replay, int index)
 	{
 		arena.applyState(replay, index);
-		macroDialog.setVisible(false);
 		startDialog.setVisible(false);
 	}
 	public void finish()
@@ -4093,31 +3930,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			start(today_ship, today_difficulty, startItem, start_today_nameField.getText());
 		}
-		else if(ob == bt_message_script || ob == message_scriptField)
-		{
-			Object results = null;
-			try
-			{				
-				message_textArea.append(script_symbol + message_scriptField.getText() + "\n");
-				if(arena.isActive())
-				{
-					if(arena.isAuthMode())
-						message_textArea.append(sets.getLang().getText(Language.AUTHORITY) + " " + sets.getLang().getText(Language.MAKE_DEACTIVE) + "\n");				
-				}
-				arena.disable_authmode();
-				results = scriptManager.actAndGet(message_scriptField.getText());
-				if(results != null)
-					message_textArea.append(String.valueOf(results) + "\n");				
-			} 
-			catch (Exception e1)
-			{
-				e1.printStackTrace();
-				message_textArea.append(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage() + "\n");
-			}
-			message_scriptField.setText("");
-			message_textArea.setCaretPosition(message_textArea.getDocument().getLength() - 1);
-			message_scriptField.requestFocus();
-		}
 		else if(ob == bt_viewOnEditor)
 		{
 			try
@@ -4161,55 +3973,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				}
 			});	
 			
-		}
-		else if(ob == menu_view_macro)
-		{
-			macro_5_area.setText(arena.getSaved_script_5());
-			macro_6_area.setText(arena.getSaved_script_5());
-			macro_7_area.setText(arena.getSaved_script_5());
-			
-			macroDialog.setVisible(true);
-			messageDialog.setVisible(true);
-		}
-		else if(ob == bt_acceptMacro)
-		{
-			arena.setSaved_script_5(macro_5_area.getText());
-			arena.setSaved_script_6(macro_6_area.getText());
-			arena.setSaved_script_7(macro_7_area.getText());
-			
-			macroDialog.setVisible(false);
-		}
-		else if(ob == bt_runMacro)
-		{
-			try
-			{
-				String runs = "";
-				if(macro_tab.getSelectedComponent() == macro_5)
-				{
-					runs = macro_5_area.getText();
-				}
-				else if(macro_tab.getSelectedComponent() == macro_6)
-				{
-					runs = macro_6_area.getText();
-				}
-				else if(macro_tab.getSelectedComponent() == macro_7)
-				{
-					runs = macro_7_area.getText();
-				}
-				Object results = scriptManager.actAndGet(runs);
-				message_textArea.append(String.valueOf(results) + "\n");
-				System.out.println(String.valueOf(results));
-				message_textArea.setCaretPosition(message_textArea.getDocument().getLength() - 1);
-			} 
-			catch (Exception e1)
-			{
-				message(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-				e1.printStackTrace();
-			}
-		}
-		else if(ob == bt_closeMacro)
-		{
-			macroDialog.setVisible(false);
 		}
 		else if(ob == menu_view_message)
 		{
@@ -4514,14 +4277,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			aboutDialog.setVisible(false);
 		}
-		else if(ob == menu_help_script)
-		{
-			scriptManager.getHelpWindow(startDialog).open();
-		}
-		else if(ob == bt_helpMacro)
-		{
-			scriptManager.getHelpWindow(macroDialog).open();
-		}
 		else if(ob == bt_next)
 		{
 			//mainTab.setSelectedIndex(1);
@@ -4580,17 +4335,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			startDialog.setVisible(false);
 			messageDialog.setVisible(false);
 			new SettingManager(sets.clone(), sets.getScreenSize(), version_main, version_sub_1, version_sub_2, true, manager, false, arguments).open();			
-		}
-		if(! (ob == bt_message_script || ob == message_scriptField))
-		{
-			try
-			{
-				arena.requestFocus();
-			}
-			catch(Exception e1)
-			{
-				
-			}
 		}
 	}	
 	private void update_needfiles()
@@ -5639,10 +5383,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			autoUserDefinedDialog.setLocation(e.getXOnScreen() - mouse_auto_x, e.getYOnScreen() - mouse_auto_y);
 		}
-		else if(ob == macro_titlePanel)
-		{
-			macroDialog.setLocation(e.getXOnScreen() - macro_x, e.getYOnScreen() - macro_y);
-		}
 		else if(ob == needfile_titlePanel)
 		{
 			needfileDialog.setLocation(e.getXOnScreen() - needfile_x, e.getYOnScreen() - needfile_y);
@@ -5717,11 +5457,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			mouse_auto_x = e.getX();
 			mouse_auto_y = e.getY();
-		}
-		else if(ob == macro_titlePanel)
-		{
-			macro_x = e.getX();
-			macro_y = e.getY();
 		}
 		else if(ob == needfile_titlePanel)
 		{
@@ -6476,45 +6211,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			}
 		}
 	}
-	public ScriptActor getScriptManager()
-	{
-		if(scriptManager == null) scriptManager = new ReflexScriptManager(this, sets);
-		return scriptManager;
-	}
-	public Script_Reflex getScriptModule()
-	{
-		Script_Reflex newModule = new Script_Reflex(arena, this, sets);
-		
-		return newModule;
-	}
-	
-	
-	/*
-	 public static Language lang = null;
-	public static String file_path = null;
-	public static int size_x = 500, size_y = 500;
-	public static int speed = 9, react_delay = 37, boss_delay = 5000, difficulty_delay = 5000, boss_beam_delay = 400;
-	public static int spaceShip_r = 50;
-	public static int enemy_r = 35;
-	public static Color color_spaceShip, color_spaceShip_missile, color_enemy_missile, color_enemy, color_bigenemy, color_item, color_item_text, color_useItem;
-	public static int KEY_1 = KeyEvent.VK_1;
-	public static int KEY_2 = KeyEvent.VK_2;
-	public static int KEY_3 = KeyEvent.VK_3;	
-	public static int KEY_SHIFT = KeyEvent.VK_SHIFT;
-	public static int KEY_SPACE = KeyEvent.VK_SPACE;
-	public static int KEY_K = KeyEvent.VK_K;
-	public static int KEY_L = KeyEvent.VK_L;
-	public static int KEY_LEFT = KeyEvent.VK_LEFT;
-	public static int KEY_RIGHT = KeyEvent.VK_RIGHT;
-	public static int KEY_UP = KeyEvent.VK_UP;
-	public static int KEY_DOWN = KeyEvent.VK_DOWN;
-	public static int KEY_W = KeyEvent.VK_W;
-	public static int KEY_A = KeyEvent.VK_A;
-	public static int KEY_S = KeyEvent.VK_S;
-	public static int KEY_D = KeyEvent.VK_D;
-	public static int max_enemies = 30;
-	public static int fire_delay = 5;
-	 * */
 	public static int getSpaceShip_r()
 	{
 		return spaceShip_r;

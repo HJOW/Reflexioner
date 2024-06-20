@@ -3,7 +3,6 @@ package mainClasses;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -37,7 +36,6 @@ import lang.Language;
 import lang.UserDefinedKor;
 import lang.UserDefinedLang;
 import reflexioner.Reflexioner;
-import scripting.ModuleCreator;
 import setting.Setting;
 import setting.VersionData;
 import tracking.TrackStorage;
@@ -50,7 +48,6 @@ public class RunManager implements Serializable
 	private static RunManager manager = null;
 	private static Openable window = null;
 	private static boolean classic_mode = false;
-	private static boolean moduleCreator = false;
 	private static boolean uninstall_mode = false;
 	private static boolean make_config = false;
 	private static boolean reflexoner = false;
@@ -111,10 +108,10 @@ public class RunManager implements Serializable
 		String os = System.getProperty("os.name");
 		String lang = System.getProperty("user.language");
 		String jar_path = run_path;
-		boolean isDesktopAble = Desktop.isDesktopSupported();
+		// boolean isDesktopAble = Desktop.isDesktopSupported();
+		
 		String separator = "";		
 		classic_mode = false;
-		moduleCreator = false;
 		uninstall_mode = false;
 		make_config = false;
 		reflexoner = false;
@@ -145,10 +142,6 @@ public class RunManager implements Serializable
 					if(args[i].equalsIgnoreCase("classic"))
 					{
 						classic_mode = true;
-					}
-					else if(args[i].equalsIgnoreCase("create_module"))
-					{
-						moduleCreator = true;
 					}
 					else if(args[i].equalsIgnoreCase("uninstall"))
 					{
@@ -925,12 +918,6 @@ public class RunManager implements Serializable
 				else if(make_config)
 				{
 					window = new ConfigMaker(true, setting);
-				}
-				else if(moduleCreator)
-				{
-					System.out.print(".");
-					window = new ModuleCreator(setting);
-					System.out.print(".");
 				}
 				else if(reflexoner)
 				{

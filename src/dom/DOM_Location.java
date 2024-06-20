@@ -3,8 +3,6 @@ package dom;
 
 import java.awt.Component;
 
-import scripting.ScriptActor;
-
 public class DOM_Location
 {
 	public String hash = "";
@@ -13,7 +11,7 @@ public class DOM_Location
 	public Object search = null;
 	
 	public String href = "";
-	public DOM_Location(ScriptActor actor, Component dialog)
+	public DOM_Location(Component dialog)
 	{
 		
 	}

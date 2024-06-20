@@ -5,7 +5,6 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 
 import reflexioner.Arena;
-import scripting.ScriptActor;
 
 public class DOM_Window
 {
@@ -31,16 +30,14 @@ public class DOM_Window
 	public Object statusbar = null;
 	public Object toolbar = null;
 		
-	protected ScriptActor actor;
 	protected Component dialog;
 	protected long timeouts;
 	protected boolean timeout_working = false;
-	public DOM_Window(ScriptActor actor, Component dialog)
+	public DOM_Window(Component dialog)
 	{
-		this.actor = actor;
 		this.dialog = dialog;
-		document = new DOM_Document(actor, dialog);
-		location = new DOM_Location(actor, dialog);
+		document = new DOM_Document(dialog);
+		location = new DOM_Location(dialog);
 	}
 	public void alert(Object ob)
 	{
