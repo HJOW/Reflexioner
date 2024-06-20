@@ -15,3 +15,11 @@ Copyright 2024 HJOW
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+   
+   
+# Third party usage
+
+Space Shooter graphics by Kenney Vleugels (www.kenney.nl)
+
+You may use these graphics in personal and commercial projects.
+Credit (www.kenney.nl) would be nice but is not mandatory.
