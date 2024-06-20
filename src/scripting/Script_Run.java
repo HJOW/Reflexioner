@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 
 public class Script_Run implements Helpable
 {

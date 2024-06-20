@@ -1,4 +1,4 @@
-package main_classes;
+package mainClasses;
 
 import java.awt.Color;
 import java.io.BufferedReader;

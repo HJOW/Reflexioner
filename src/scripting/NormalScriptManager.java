@@ -15,8 +15,8 @@ import javax.script.ScriptEngineManager;
 import javax.swing.JDialog;
 
 import lang.Language;
-import main_classes.MessageShowable;
-import main_classes.Openable;
+import mainClasses.MessageShowable;
+import mainClasses.Openable;
 import setting.Setting;
 
 public class NormalScriptManager implements ScriptActor, Openable

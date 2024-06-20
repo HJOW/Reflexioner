@@ -4,7 +4,7 @@ import java.awt.geom.Area;
 import java.util.List;
 
 import lang.Language;
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 import reflex.Arena;
 import reflex.ControllableShip;
 import reflex.Enemy;

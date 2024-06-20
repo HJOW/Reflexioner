@@ -2,7 +2,7 @@ package reflex;
 
 import java.math.BigInteger;
 
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import setting.Lint;
 
 public class AReflexReplay extends ReflexReplay

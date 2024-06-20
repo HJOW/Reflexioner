@@ -12,7 +12,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import setting.Setting;
 
 public class Missile extends RectObject

@@ -35,7 +35,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileFilter;
 
 import lang.Language;
-import main_classes.Openable;
+import mainClasses.Openable;
 import setting.Setting;
 
 public class ReflexScenarioEditor extends JDialog implements Openable, ActionListener, MouseListener, MouseMotionListener

@@ -25,7 +25,7 @@ import javax.swing.JProgressBar;
 import javax.swing.border.EtchedBorder;
 
 import lang.Language;
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import reflex.Reflexioner;
 import setting.Setting;
 import setting.VersionData;

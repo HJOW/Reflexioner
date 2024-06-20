@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import lang.Language;
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 import setting.Setting;
 
 public class Script_Terminal

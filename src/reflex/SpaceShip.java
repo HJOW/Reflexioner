@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import lang.Language;
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import setting.Lint;
 import setting.Setting;
 

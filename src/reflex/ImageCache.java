@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import setting.Setting;
 
 public class ImageCache

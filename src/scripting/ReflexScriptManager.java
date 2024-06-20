@@ -21,7 +21,7 @@ import dom.DOM_Window;
 import reflex.Reflexioner;
 import setting.Setting;
 import lang.Language;
-import main_classes.Openable;
+import mainClasses.Openable;
 
 public class ReflexScriptManager implements ScriptActor
 {

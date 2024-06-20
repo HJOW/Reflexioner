@@ -1,6 +1,6 @@
 package scripting;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 
 @Deprecated
 public class Script_Chat implements Helpable

@@ -1,6 +1,6 @@
 package scripting;
 
-import main_classes.ThreadControl;
+import mainClasses.ThreadControl;
 
 public class Script_Thread implements ThreadControl
 {

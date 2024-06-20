@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 
 public class Script_System implements Helpable
 {

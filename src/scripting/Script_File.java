@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 import setting.Setting;
 
 public class Script_File implements Helpable

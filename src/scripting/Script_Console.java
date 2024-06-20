@@ -1,6 +1,6 @@
 package scripting;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 import reflex.Reflexioner;
 
 public class Script_Console implements MessageShowable, Helpable

@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-import main_classes.Openable;
+import mainClasses.Openable;
 
 
 public class RunSettingManager extends Frame implements ActionListener, WindowListener, Openable

@@ -21,9 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import lang.Language;
-import main_classes.RunManager;
-import main_classes.ThreadAccumulate;
-import main_classes.ThreadControl;
+import mainClasses.RunManager;
+import mainClasses.ThreadAccumulate;
+import mainClasses.ThreadControl;
 import scripting.ScriptActor;
 import setting.Difficulty;
 import setting.Lint;

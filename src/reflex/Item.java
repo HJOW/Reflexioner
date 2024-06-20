@@ -11,7 +11,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import main_classes.RunManager;
+import mainClasses.RunManager;
 import setting.Setting;
 
 public class Item extends OvalObject

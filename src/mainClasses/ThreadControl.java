@@ -1,4 +1,4 @@
-package main_classes;
+package mainClasses;
 
 public interface ThreadControl extends Runnable
 {

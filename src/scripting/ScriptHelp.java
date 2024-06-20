@@ -28,8 +28,8 @@ import javax.swing.event.ListSelectionListener;
 import reflex.Reflexioner;
 import setting.Setting;
 import lang.Language;
-import main_classes.MessageShowable;
-import main_classes.Openable;
+import mainClasses.MessageShowable;
+import mainClasses.Openable;
 
 public class ScriptHelp implements Openable, ActionListener, ListSelectionListener, MessageShowable
 {

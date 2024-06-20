@@ -2,7 +2,7 @@ package reflex;
 
 import java.util.StringTokenizer;
 
-import main_classes.RunManager;
+import mainClasses.RunManager;
 
 public class IReflexScenario extends BReflexScenario
 {

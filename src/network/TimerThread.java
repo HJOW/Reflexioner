@@ -1,6 +1,6 @@
 package network;
 
-import main_classes.ThreadControl;
+import mainClasses.ThreadControl;
 
 public class TimerThread implements ThreadControl
 {

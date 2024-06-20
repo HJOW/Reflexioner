@@ -41,9 +41,9 @@ import javax.swing.filechooser.FileFilter;
 
 import lang.Korean;
 import lang.Language;
-import main_classes.MouseDragCatcher;
-import main_classes.Openable;
-import main_classes.RunManager;
+import mainClasses.MouseDragCatcher;
+import mainClasses.Openable;
+import mainClasses.RunManager;
 import setting.Difficulty;
 import setting.Setting;
 

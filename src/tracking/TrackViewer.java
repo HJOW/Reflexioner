@@ -28,7 +28,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileFilter;
 
 import lang.Language;
-import main_classes.Openable;
+import mainClasses.Openable;
 import setting.Setting;
 
 public class TrackViewer extends JFrame implements Openable, WindowListener, ActionListener

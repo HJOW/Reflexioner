@@ -14,8 +14,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import main_classes.Controllable;
-import main_classes.MessageShowable;
+import mainClasses.Controllable;
+import mainClasses.MessageShowable;
 import network.Downloader;
 import network.FinishMessage;
 import network.JoinListMessage;

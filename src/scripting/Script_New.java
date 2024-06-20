@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import main_classes.MessageShowable;
+import mainClasses.MessageShowable;
 import setting.Lint;
 import setting.Setting;
 

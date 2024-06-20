@@ -2,8 +2,8 @@ package scripting;
 
 import javax.swing.JDialog;
 
-import main_classes.MessageShowable;
-import main_classes.Openable;
+import mainClasses.MessageShowable;
+import mainClasses.Openable;
 
 public interface ScriptActor extends MessageShowable
 {

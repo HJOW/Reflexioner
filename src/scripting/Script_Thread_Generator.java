@@ -1,7 +1,7 @@
 package scripting;
 
-import main_classes.MessageShowable;
-import main_classes.ThreadAccumulate;
+import mainClasses.MessageShowable;
+import mainClasses.ThreadAccumulate;
 
 public class Script_Thread_Generator implements Helpable
 {

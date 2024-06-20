@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import setting.Setting;
-import main_classes.RunManager;
+import mainClasses.RunManager;
 
 public class SoundCache
 {

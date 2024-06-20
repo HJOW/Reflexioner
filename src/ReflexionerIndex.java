@@ -1,8 +1,8 @@
 
 import javax.swing.JOptionPane;
 
-import main_classes.MessageShowable;
-import main_classes.RunManager;
+import mainClasses.MessageShowable;
+import mainClasses.RunManager;
 public class ReflexionerIndex 
 {		
 	public static final boolean TRY_CHECKVER = false;

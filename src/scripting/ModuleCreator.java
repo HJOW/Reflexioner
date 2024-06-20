@@ -35,7 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import lang.Language;
-import main_classes.Openable;
+import mainClasses.Openable;
 import setting.Setting;
 
 public class ModuleCreator extends JFrame implements Openable, ActionListener, ItemListener, WindowListener, ListSelectionListener
