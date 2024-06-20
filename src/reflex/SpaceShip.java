@@ -74,6 +74,10 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		this.enemies = enemies;
 		point = Lint.big(0);
 	}
+	public void init() throws NullPointerException
+	{
+		
+	}
 	public static List<String> spaceShipKeyList()
 	{
 		return spaceShipKeyList(1000);

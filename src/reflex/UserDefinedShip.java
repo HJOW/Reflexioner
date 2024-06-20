@@ -606,6 +606,7 @@ public class UserDefinedShip extends SpaceShip
 		
 		return (calced_auth == target_auth);
 	}
+	@Override
 	public void init() throws NullPointerException
 	{
 		if(getVersion() != null) setVersion(new DetailedVersionData());

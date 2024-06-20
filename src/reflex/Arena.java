@@ -556,11 +556,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				default:
 					spaceShip = new SpaceShip(enemies);		
 			}
+			spaceShip.init();
 		}
 		else			
 		{
 			userDefinedShip.init();
-			//System.out.println(userDefinedShip.authorize(1937283 + 1001008, true));
 			spaceShip = userDefinedShip;
 			authority_mode = userDefinedShip.isAuthorized();
 		}
