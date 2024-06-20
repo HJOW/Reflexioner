@@ -1240,15 +1240,34 @@ public class ImageCache
 	}
 	private static void warship_prepare(String path)
 	{
-		// TODO
 		File target = null;
 		try
 		{
 			target = new File(RunManager.r65279(path + "warship" + "_w1.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "warship" + "_w1.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));			
-			img_warship_w1 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));
+			if(target.exists()) img_warship_w1 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_warship_w1 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_warship_w1 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1259,8 +1278,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "warship" + "_w2.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "warship" + "_w2.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));			
-			img_warship_w2 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));	
+			if(target.exists()) img_warship_w2 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_warship_w2 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_warship_w2 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1271,8 +1310,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "warship" + "_w3.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "warship" + "_w3.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));			
-			img_warship_w3 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));
+			if(target.exists()) img_warship_w3 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_warship_w3 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_warship_w3 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1287,8 +1346,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "chaser" + "_w1.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "chaser" + "_w1.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));			
-			img_chaser_w1 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));
+			if(target.exists()) img_chaser_w1 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_chaser_w1 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_chaser_w1 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1300,7 +1379,27 @@ public class ImageCache
 			if(! target.exists()) target = new File(RunManager.r65279(path + "chaser" + "_w2.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));			
-			img_chaser_w2 = ImageIO.read(target);
+			if(target.exists()) img_chaser_w2 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_chaser_w2 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_chaser_w2 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1312,7 +1411,27 @@ public class ImageCache
 			if(! target.exists()) target = new File(RunManager.r65279(path + "chaser" + "_w3.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));			
-			img_chaser_w3 = ImageIO.read(target);
+			if(target.exists()) img_chaser_w3 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_chaser_w3 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_chaser_w3 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1327,8 +1446,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "carrier" + "_w1.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "carrier" + "_w1.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));			
-			img_carrier_w1 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));
+			if(target.exists()) img_carrier_w1 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_carrier_w1 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_carrier_w1 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1339,8 +1478,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "carrier" + "_w2.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "carrier" + "_w2.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));			
-			img_carrier_w2 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));
+			if(target.exists()) img_carrier_w2 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_carrier_w2 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_carrier_w2 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1351,8 +1510,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "carrier" + "_w3.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "carrier" + "_w3.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));			
-			img_carrier_w3 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));
+			if(target.exists()) img_carrier_w3 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_carrier_w3 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_carrier_w3 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1367,8 +1546,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "satellite" + "_w1.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "satellite" + "_w1.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));			
-			img_satellite_w1 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w1.jpg"));
+			if(target.exists()) img_satellite_w1 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w1" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_satellite_w1 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_satellite_w1 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1379,8 +1578,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "satellite" + "_w2.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "satellite" + "_w2.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));			
-			img_satellite_w2 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));
+			if(target.exists()) img_satellite_w2 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w2" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_satellite_w2 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_satellite_w2 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
@@ -1391,8 +1610,28 @@ public class ImageCache
 			target = new File(RunManager.r65279(path + "satellite" + "_w3.png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "satellite" + "_w3.jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.png"));
-			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));			
-			img_satellite_w3 = ImageIO.read(target);
+			if(! target.exists()) target = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));		
+			if(target.exists()) img_satellite_w3 = ImageIO.read(target);
+			else
+			{
+				InputStream inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "default_space_w3" + ".png");
+				
+				if(inp != null) {
+					try 
+					{
+						img_satellite_w3 = ImageIO.read(inp);
+					} 
+					finally 
+					{
+						inp.close();
+					}
+				}
+				else
+				{
+					img_satellite_w3 = null;
+				}
+			}
 		}
 		catch(Exception e)
 		{
