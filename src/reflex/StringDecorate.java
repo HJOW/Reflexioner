@@ -44,7 +44,7 @@ public class StringDecorate extends ReflexDecorate
 	@Override
 	public void draw(Graphics g, JPanel a)
 	{
-		g.drawString(contents, getX(), getY());
+		g.drawString(contents, Arena.convertX(getX(), a), Arena.convertY(getY(), a));
 	}
 	@Override
 	public void update()

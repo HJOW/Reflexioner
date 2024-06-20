@@ -315,6 +315,7 @@ public abstract class Language implements Serializable
 	public static final int REFLEX_SATELLITE = 296;
 	public static final int REFLEX_CARRIER = 297;
 	
+	public static final int SHOOT = 298;
 	
 	public static final int HELP_CONTENT = 20000;
 	public static final int DESCRIPTIONS = 100000;
@@ -323,7 +324,7 @@ public abstract class Language implements Serializable
 	
 	//private SaveInt description_length;
 	
-	protected String title, x, is, are, deckLabel1, deckLabel2, deckLabel3, deckLabel4, get, start, exit, close, result, won, whos, point, pay, owns, paids, name, finish, sealed, none, player, ai;
+	protected String title, x, is, are, deckLabel1, deckLabel2, deckLabel3, deckLabel4, get, start, exit, close, result, won, whos, point, pay, owns, paids, name, finish, sealed, none, player, ai, shoot;
 	protected String menu_file, game_stop, background, foreground, inside_background, active, deactive, width, height, save, load, red, green, blue, setting, count, max, needRestart, self, titleBar, use;
 	protected String help_contents, help, on_start_cards, authority, replay, edit, view, maker, about, card, theme, alert, window, show, complete, fail, check, menu, input;
 	protected String single, multi, play, host, join, connect, ip, port, disconnect, hosting, connecting, ready, cancel, ranking, point_code, code_checker, error, view_on_web;
@@ -1894,6 +1895,9 @@ public abstract class Language implements Serializable
 				break;
 			case VIEW_ON_WEB:
 				view_on_web = str;
+				break;
+			case SHOOT:
+				shoot = str;
 				break;
 		}
 	}
@@ -4966,5 +4970,13 @@ public abstract class Language implements Serializable
 	public void setReflex_carrier(String reflex_carrier)
 	{
 		this.reflex_carrier = reflex_carrier;
+	}
+
+	public String getShoot() {
+		return shoot;
+	}
+
+	public void setShoot(String shoot) {
+		this.shoot = shoot;
 	}
 }

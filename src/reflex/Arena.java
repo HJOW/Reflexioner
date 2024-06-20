@@ -55,6 +55,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private int game_xspeed = 1;
 	private Boom newBoom;
 	private long pause_left = 0;
+	private int  simpleTuto = 0;
 	private boolean autoFire = false;
 	private boolean pause_printed = false;
 	private transient int getKeyCode;
@@ -526,6 +527,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		replay.setReplay_interval(new Integer(Reflexioner.replay_interval));
 		Reflexioner.replay_now_delay = 0;
 		autoControlDelay = 0;
+		simpleTuto = 80;
 				
 		prepareTest();
 		if(userDefinedShip == null)
@@ -1238,18 +1240,27 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			if(Reflexioner.usingFont2B != null) g.setFont(Reflexioner.usingFont2B.deriveFont((float) convertFontSize(Reflexioner.usingFont2B.getSize(), this)));
 			if(pause_left >= 1)
 			{				
-				g.drawString(sets.getLang().getText(Language.PAUSE), (this.getWidth()/2) - (sets.getLang().getText(Language.PAUSE).length() * 9), (this.getHeight()/2) - 30);
+				g.drawString(sets.getLang().getText(Language.PAUSE), convertX((maxWidth()/2) - (sets.getLang().getText(Language.PAUSE).length() * 9), this), convertY((maxHeight()/2) - 30, this));
 				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
-				g.drawString(String.valueOf(pause_left), (this.getWidth()/2) - (String.valueOf(pause_left).length() * 3), (this.getHeight()/2) + 30);
+				g.drawString(String.valueOf(pause_left), convertX((maxWidth()/2) - (String.valueOf(pause_left).length() * 3), this), convertY((maxHeight()/2) + 30, this));
 			}
 			else if(game_pause)
 			{
-				g.drawString(sets.getLang().getText(Language.PAUSE), (this.getWidth()/2) - (sets.getLang().getText(Language.PAUSE).length() * 9), (this.getHeight()/2));
+				g.drawString(sets.getLang().getText(Language.PAUSE), convertX((maxWidth()/2) - (sets.getLang().getText(Language.PAUSE).length() * 9), this), convertY((maxHeight()/2), this));
 			}
 			if(autoControl)
 			{
 				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
-				g.drawString(sets.getLang().getText(Language.AI), 5, Arena.maxHeight() - 10);
+				g.drawString(sets.getLang().getText(Language.AI), convertX(5, this), convertY(Arena.maxHeight() - 10, this));
+			}
+			if(simpleTuto >= 1)
+			{
+				String tuto = sets.getLang().getText(Language.REFLEX_SIMPLEHELP);
+				String[] splits = tuto.split(",");
+				for(int idx=0; idx<splits.length; idx++) 
+				{
+					g.drawString(splits[idx], convertX((maxWidth()/2 - 10), this), convertY((maxHeight()/4 + (idx * 30)), this));
+				}
 			}
 		}
 		catch (Exception e1)
@@ -1258,11 +1269,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		}
 		try
 		{
-			g.setColor(Color.MAGENTA);
+			g.setColor(Color.GREEN);
 			if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
 			for(int i=0; i<messages.size(); i++)
 			{
-				g.drawString(messages.get(i), 15 + (int)Math.round((g.getFont().getSize() / 16.0) * messages.get(i).length()), 15 + (10 * i));
+				g.drawString(messages.get(i), convertX((int) Math.round((g.getFont().getSize() / 16.0) * messages.get(i).length()), this), convertY((15 * i), this));
 			}
 		}
 		catch (Exception e1)
@@ -1272,22 +1283,24 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	}
 	public static int convertX(int x, JPanel a) 
 	{
-		return x;
+		return (int) (x * (((double) a.getWidth()) / maxWidth()));
 	}
 	public static int convertY(int y, JPanel a) 
 	{
-		return y;
+		return (int) (y * ((double) a.getHeight() / maxHeight()));
 	}
 	public static int convertWidth(int w, JPanel a) 
 	{
-		return w;
+		return (int) (w * (((double) a.getWidth()) / maxWidth()));
 	}
 	public static int convertHeight(int h, JPanel a) 
 	{
-		return h;
+		return (int) (h * ((double) a.getHeight() / maxHeight()));
 	}
 	public static int convertFontSize(int fontSize, JPanel a) 
 	{
+		int calc = (int) Math.round(fontSize * (((double) a.getWidth()) / maxWidth()));
+		if(calc != fontSize) return calc;
 		return fontSize;
 	}
 	public static int maxWidth() 
@@ -2425,6 +2438,10 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 					else if(arena.game_pause && (! arena.pause_printed))
 					{
 						arena.pause_printed = true;
+					}
+					if(arena.simpleTuto >= 1) 
+					{
+						arena.simpleTuto--;
 					}
 				}
 				try

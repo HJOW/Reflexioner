@@ -587,9 +587,9 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	{
 		Dimension scrSize = sets.getScreenSize();
 		
-		window.setSize((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50));
-		window.setMinimumSize(new Dimension((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50)));
-		window.setMaximumSize(new Dimension(550, 450));
+		window.setSize((int) (scrSize.getWidth() - 100), (int) (scrSize.getHeight() - 150));
+		window.setMaximumSize(new Dimension((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50)));
+		window.setMinimumSize(new Dimension(550, 450));
 		window.setLocation((int)(sets.getScreenSize().getWidth()/2 - window.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - window.getHeight()/2));
 		window.setLayout(new BorderLayout());
 		window.addWindowListener(this);
@@ -823,7 +823,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		controlBtPanel.setBackground(sets.getSelected_back());
 		bt_left = new JButton("←");
 		bt_right = new JButton("→");
-		bt_fire = new JButton("☆");
+		bt_fire = new JButton(sets.getLang().getText(Language.SHOOT));
 		bt_left.addActionListener(this);
 		bt_right.addActionListener(this);
 		bt_fire.addActionListener(this);
@@ -898,7 +898,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		helpPanel = new JPanel();
 		helpPanel.setBackground(sets.getSelected_back());
 		upPanel.add(helpPanel, BorderLayout.SOUTH);
-		helpPanel.setLayout(new FlowLayout());
+		helpPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		helpLabel = new JLabel(sets.getLang().getText(Language.REFLEX_SIMPLEHELP));
 		helpLabel.setForeground(sets.getSelected_fore());
 		if(usingFont != null)

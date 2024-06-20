@@ -31,7 +31,7 @@ public class English extends Language
 		allow = "Allow";
 		not_now = "not now";
 		first_additional_download = "Download additional resources to make this game more fantastic.";
-		reflex_simplehelp = "→←↑↓ : Move, SHIFT : Stop move, SPACE : Fire, 123 : Change weapon, 4 : Auto Fire, L : Pause, K : Exit";
+		reflex_simplehelp = "Move →←↑↓, Break SHIFT, Fire SPACE, Change weapon 123, Toggle auto Fire 4, Pause L, Exit K";
 		reflex_help = "Reflexioner\n\n"
 				+ "You can play with keyboard.\n"
 				+ "If you using touch screen, press ▲ button to open other buttons to control.\n\n"				
@@ -77,6 +77,7 @@ public class English extends Language
 		input_url = "Input the URL where to download resources.";
 		input_url2 = "Input the URL where to download resources. (2nd)";
 		input_replay_gap = "Input number to skip frames when saving replays.\nInput big number to make replay file smaller.\nToo big number occurs unnatural play.";
+		shoot = "Shoot";
 		
 		reflex_flex = "Flex";
 		reflex_berserk = "Berserk";

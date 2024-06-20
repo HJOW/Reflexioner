@@ -26,7 +26,7 @@ public class Korean extends Language
 		allow = "허가";
 		not_now = "나중에 하기";
 		first_additional_download = "추가 리소스를 다운로드하면 화려하게 즐길 수 있습니다.";
-		reflex_simplehelp = "→←↑↓ : 이동, SHIFT : 브레이크, SPACE : 발사, 123 : 무기 변경, 4 : 자동 발사, L : 일시 정지, K : 중단";
+		reflex_simplehelp = "이동 →←↑↓, 브레이크 SHIFT, 발사 SPACE, 무기 변경 123, 자동 발사 토글 4, 일시 정지 L, 중단 K";
 		reflex_help = "Reflexioner\n\n"
 				+ "이 게임은 키보드를 사용하는 것이 편리합니다.\n"
 				+ "터치 환경을 이용한다면, ▲ 버튼을 클릭해 터치 및 버튼으로 컨트롤할 수 있습니다.\n\n"				
@@ -319,6 +319,7 @@ public class Korean extends Language
 		production = "생산";
 		size = "크기";
 		situation = "상황";
+		shoot = "발사";
 		desc_resident = "주거 구역은 수용할 인구 한계를 높입니다.\n등급이 높을 수록 수용량은 줄어듭니다.."
 				+ "\n지능이 높은 인구가 등급이 지나치게 낮은 곳에 거주하면 행복도가 떨어집니다."
 				+ "\n지능에 비해 높은 등급에 거주하면 행복도가 증가합니다.";
