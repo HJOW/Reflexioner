@@ -54,8 +54,8 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 	public SpaceShip(List<Enemy> enemies)
 	{
 		this();
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR(Reflexioner.getSpaceShip_r());
 		setColor(Reflexioner.color_spaceShip);
 		setAccel(Reflexioner.getSpeed());
@@ -188,25 +188,25 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		{
 			case 1:
 				if(image_w1_exist)				
-					g.drawImage(image_w1, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);				
+					g.drawImage(image_w1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);				
 				else
 					super.draw(g, a);
 				break;
 			case 2:
 				if(image_w2_exist)
-					g.drawImage(image_w2, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);
+					g.drawImage(image_w2, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 				else
 					super.draw(g, a);
 				break;
 			case 3:
 				if(image_w3_exist)
-					g.drawImage(image_w3, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);
+					g.drawImage(image_w3, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 				else
 					super.draw(g, a);
 				break;
 			default:
 				if(image_w1_exist)
-					g.drawImage(image_w1, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);
+					g.drawImage(image_w1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 				else
 					super.draw(g, a);
 				break;
@@ -709,7 +709,7 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 					newMissile = new Beam(11);
 					newMissile.setX(getX() - ((int) Math.round(getR() / 2.0)));					
 					newMissile.setY(0);
-					newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+					newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 					//System.out.println(this.getY() + ", " + (newMissile.getH() - (Reflexioner.size_y - this.getY())));
 					newMissile.setLaunched(true);
 					newMissile.setOwner(Missile.SPACESHIP);
@@ -757,8 +757,8 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		
 		
 		Missile targets = null;
-		Area leftArea = new Area(new Rectangle(getX() - (Reflexioner.getSize_x() / 10), getY() - getR(), (Reflexioner.getSize_x() / 10), Reflexioner.getSize_y() / 5));
-		Area rightArea = new Area(new Rectangle(getX(), getY() - getR(), (Reflexioner.getSize_x() / 10), Reflexioner.getSize_y() / 5));
+		Area leftArea = new Area(new Rectangle(getX() - (Arena.maxWidth() / 10), getY() - getR(), (Arena.maxWidth() / 10), Arena.maxHeight() / 5));
+		Area rightArea = new Area(new Rectangle(getX(), getY() - getR(), (Arena.maxWidth() / 10), Arena.maxHeight() / 5));
 		int center_exist = 0;
 		for(Missile m : missileList)
 		{	
@@ -851,11 +851,11 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 			}
 		}
 		
-		if(right > left && getX() >= Reflexioner.getSize_x() - (Reflexioner.getSize_y() / 4))
+		if(right > left && getX() >= Arena.maxWidth() - (Arena.maxHeight() / 4))
 		{
 			left = left + Math.abs(right) + 2;
 		}
-		else if(right < left && getX() <= (Reflexioner.getSize_y() / 4))
+		else if(right < left && getX() <= (Arena.maxHeight() / 4))
 		{
 			right = right + Math.abs(left) + 2;
 		}
@@ -1084,18 +1084,18 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 			setX(getR());
 			refresh_autoControl();
 		}
-		if(getX() > Reflexioner.getSize_x() - getR()) 
+		if(getX() > Arena.maxWidth() - getR()) 
 		{
-			setX(Reflexioner.getSize_x() - getR());
+			setX(Arena.maxWidth() - getR());
 			refresh_autoControl();
 		}
-		if(getY() < getR() + (Reflexioner.getSize_y() / 3)) 
+		if(getY() < getR() + (Arena.maxHeight() / 3)) 
 		{
-			setY(getR() + (Reflexioner.getSize_y() / 3));
+			setY(getR() + (Arena.maxHeight() / 3));
 		}
-		if(getY() > (Reflexioner.getSize_y() - getR())) 
+		if(getY() > (Arena.maxHeight() - getR())) 
 		{
-			setY((Reflexioner.getSize_y() - getR()));
+			setY((Arena.maxHeight() - getR()));
 		}
 	}
 	public void refresh_autoControl()
@@ -1443,8 +1443,8 @@ class Cruiser extends SpaceShip
 	public Cruiser(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r() * 1.2));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed() / 1.2));
@@ -1712,8 +1712,8 @@ class Clipper extends SpaceShip
 	public Clipper(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r() / 1.2));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed() * 1.4));
@@ -1756,7 +1756,7 @@ class Clipper extends SpaceShip
 				newMissile = new Beam(6);
 				newMissile.setX(getX());					
 				newMissile.setY(0);
-				newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+				newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 				newMissile.setLaunched(true);
 				newMissile.setOwner(Missile.SPACESHIP);
 				newMissile.setDamage(Math.round(getDamage() / 3.0));
@@ -1808,7 +1808,7 @@ class Clipper extends SpaceShip
 						newMissile = new Beam(8);	
 						newMissile.setX(getX() + (int) Math.round((centers - i - 0.5) * 30));
 						newMissile.setY(0);
-						newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+						newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 						newMissile.setLaunched(true);
 						newMissile.setOwner(Missile.SPACESHIP);
 						newMissile.setDamage(getDamage());
@@ -1988,8 +1988,8 @@ class Warship extends Clipper
 	public Warship(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r()));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed()));
@@ -2267,8 +2267,8 @@ class Chaser extends Warship
 	public Chaser(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r() / 1.5));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed()));
@@ -2423,7 +2423,7 @@ class Chaser extends Warship
 					newMissile = new Beam(11);
 					newMissile.setX(getX() - ((int) Math.round(getR() / 2.0)));					
 					newMissile.setY(0);
-					newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+					newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 					//System.out.println(this.getY() + ", " + (newMissile.getH() - (Reflexioner.size_y - this.getY())));
 					newMissile.setLaunched(true);
 					newMissile.setOwner(Missile.SPACESHIP);
@@ -2538,8 +2538,8 @@ class Carrier extends Warship
 	public Carrier(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r() * 1.5));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed() / 2.0));
@@ -2806,8 +2806,8 @@ class Satellite extends SpaceShip
 	public Satellite(List<Enemy> enemies)
 	{
 		super(enemies);
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 		setR((int) Math.round(Reflexioner.getSpaceShip_r() / 2.0));
 		setColor(Reflexioner.color_spaceShip);
 		setAccel((int) Math.round(Reflexioner.getSpeed() * 1.6));
@@ -2890,7 +2890,7 @@ class Satellite extends SpaceShip
 				newMissile = new Beam(6);
 				newMissile.setX(getX());					
 				newMissile.setY(0);
-				newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+				newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 				newMissile.setLaunched(true);
 				newMissile.setOwner(Missile.SPACESHIP);
 				newMissile.setDamage(Math.round(getDamage() / 3.0));
@@ -2908,7 +2908,7 @@ class Satellite extends SpaceShip
 						newMissile = new Beam(6);
 						newMissile.setX(getX() + (int) Math.round((centers - i - 0.5) * 15));					
 						newMissile.setY(0);
-						newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+						newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 						newMissile.setLaunched(true);
 						newMissile.setOwner(Missile.SPACESHIP);
 						newMissile.setColor(new Color(Reflexioner.color_spaceShip_missile.getRed() / 2, Reflexioner.color_spaceShip_missile.getGreen(), Reflexioner.color_spaceShip_missile.getBlue()));
@@ -2927,7 +2927,7 @@ class Satellite extends SpaceShip
 					newMissile = new PulseMissile(Reflexioner.getFile_path(), Missile.SPACESHIP);
 					newMissile.setX(getX());
 					newMissile.setY(getY() - getR());
-					newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+					newMissile.setH(newMissile.getH() - (Arena.maxHeight() - this.getY()) - 10);
 					newMissile.setLaunched(true);
 					newMissile.setOwner(Missile.SPACESHIP);
 					newMissile.setDamage(Math.round(getDamage() * 30.0));

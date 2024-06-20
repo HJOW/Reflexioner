@@ -68,22 +68,22 @@ public class ReflexMissile extends DirectMissile
 					if(getDx() == 0)
 					{
 						if(Math.random() >= 0.5)
-							setDx(Reflexioner.getSize_x());
+							setDx(Arena.maxWidth());
 						else
-							setDx(-1 * Reflexioner.getSize_x());
+							setDx(-1 * Arena.maxWidth());
 					}
 					//System.out.println(this + " y is under 0 - " + getDy());
 				}
-				else if(getY() > Reflexioner.getSize_y())
+				else if(getY() > Arena.maxHeight())
 				{
-					setY(Reflexioner.getSize_y());
+					setY(Arena.maxHeight());
 					setDy(-1 * Reflexioner.getSpeed());
 					if(getDx() == 0)
 					{
 						if(Math.random() >= 0.5)
-							setDx(Reflexioner.getSize_x());
+							setDx(Arena.maxWidth());
 						else
-							setDx(-1 * Reflexioner.getSize_x());
+							setDx(-1 * Arena.maxWidth());
 					}
 					//System.out.println(this + " y is up - " + getDy());
 				}
@@ -93,9 +93,9 @@ public class ReflexMissile extends DirectMissile
 					setDx(1 * Reflexioner.getSpeed());				
 					//System.out.println(this + " x is under 0 - " + getDx());
 				}
-				else if(getX() > Reflexioner.getSize_x())
+				else if(getX() > Arena.maxWidth())
 				{
-					setX(Reflexioner.getSize_x());
+					setX(Arena.maxWidth());
 					setDx(-1 * Reflexioner.getSpeed());				
 					//System.out.println(this + " x is up - " + getDx());
 				}

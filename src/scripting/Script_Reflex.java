@@ -167,11 +167,11 @@ public class Script_Reflex implements Helpable, ControllableShip
 	}
 	public static int size_x()
 	{
-		return Reflexioner.getSize_x();
+		return Arena.maxWidth();
 	}
 	public static int size_y()
 	{
-		return Reflexioner.getSize_y();
+		return Arena.maxHeight();
 	}
 	public long player_hp()
 	{

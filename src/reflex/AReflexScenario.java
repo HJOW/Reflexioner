@@ -541,7 +541,7 @@ public class AReflexScenario extends ReflexScenario
 	{
 		Enemy enemy = new Enemy();
 		enemy.setColor(Reflexioner.color_enemy);
-		enemy.setX(Reflexioner.getSize_x());
+		enemy.setX(Arena.maxWidth());
 		enemy.setY(10);
 		enemy.setR(Reflexioner.getEnemy_r());
 		enemy.setColor(Reflexioner.color_enemy);
@@ -567,7 +567,7 @@ public class AReflexScenario extends ReflexScenario
 					{
 						enemy = new HyperBoss();
 						enemy.setColor(Reflexioner.color_bigenemy);
-						enemy.setX(Reflexioner.getSize_x());
+						enemy.setX(Arena.maxWidth());
 						enemy.setY(10);
 						enemy.setR(Reflexioner.getEnemy_r() * 2);
 						enemy.setColor(Reflexioner.color_enemy);
@@ -581,7 +581,7 @@ public class AReflexScenario extends ReflexScenario
 					{
 						enemy = new ExtremeBoss();
 						enemy.setColor(Reflexioner.color_bigenemy);
-						enemy.setX(Reflexioner.getSize_x());
+						enemy.setX(Arena.maxWidth());
 						enemy.setY(10);
 						enemy.setR(Reflexioner.getEnemy_r() * 2);
 						enemy.setColor(Reflexioner.color_enemy);
@@ -595,7 +595,7 @@ public class AReflexScenario extends ReflexScenario
 					{
 						enemy = new Boss();
 						enemy.setColor(Reflexioner.color_bigenemy);
-						enemy.setX(Reflexioner.getSize_x());
+						enemy.setX(Arena.maxWidth());
 						enemy.setY(10);
 						enemy.setR(Reflexioner.getEnemy_r() * 2);
 						enemy.setColor(Reflexioner.color_enemy);
@@ -609,7 +609,7 @@ public class AReflexScenario extends ReflexScenario
 					{
 						enemy = new BigEnemy();
 						enemy.setColor(Reflexioner.color_bigenemy);
-						enemy.setX(Reflexioner.getSize_x());
+						enemy.setX(Arena.maxWidth());
 						enemy.setY(10);
 						enemy.setR(Reflexioner.getEnemy_r());
 						enemy.setColor(Reflexioner.color_enemy);

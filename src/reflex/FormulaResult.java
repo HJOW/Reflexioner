@@ -107,11 +107,11 @@ public class FormulaResult implements Serializable
 					{
 						if(tokens.equalsIgnoreCase("size_x"))
 						{
-							coefficient = coefficient * Reflexioner.getSize_x();
+							coefficient = coefficient * Arena.maxWidth();
 						}
 						else if(tokens.equalsIgnoreCase("size_y"))
 						{
-							coefficient = coefficient * Reflexioner.getSize_y();
+							coefficient = coefficient * Arena.maxHeight();
 						}
 						else if(tokens.equalsIgnoreCase("range"))
 						{
@@ -127,11 +127,11 @@ public class FormulaResult implements Serializable
 						}
 						else if(tokens.equalsIgnoreCase("u_x"))
 						{
-							coefficient = coefficient * (shooter.getX() / (double)Reflexioner.getSize_x()) * range_unit;
+							coefficient = coefficient * (shooter.getX() / (double)Arena.maxWidth()) * range_unit;
 						}
 						else if(tokens.equalsIgnoreCase("u_y"))
 						{
-							coefficient = coefficient * (shooter.getY() / (double)Reflexioner.getSize_y()) * range_unit;
+							coefficient = coefficient * (shooter.getY() / (double)Arena.maxHeight()) * range_unit;
 						}
 						else if(target != null && tokens.equalsIgnoreCase("max_x"))
 						{
@@ -185,11 +185,11 @@ public class FormulaResult implements Serializable
 						{
 							if(tokens.equalsIgnoreCase("size_x"))
 							{
-								powers = powers * Reflexioner.getSize_x();
+								powers = powers * Arena.maxWidth();
 							}
 							else if(tokens.equalsIgnoreCase("size_y"))
 							{
-								powers = powers * Reflexioner.getSize_y();
+								powers = powers * Arena.maxHeight();
 							}
 							else if(tokens.equalsIgnoreCase("range"))
 							{
@@ -205,11 +205,11 @@ public class FormulaResult implements Serializable
 							}
 							else if(tokens.equalsIgnoreCase("u_x"))
 							{
-								powers = powers * (shooter.getX() / (double)Reflexioner.getSize_x()) * range_unit;
+								powers = powers * (shooter.getX() / (double)Arena.maxWidth()) * range_unit;
 							}
 							else if(tokens.equalsIgnoreCase("u_y"))
 							{
-								powers = powers * (shooter.getY() / (double)Reflexioner.getSize_y()) * range_unit;
+								powers = powers * (shooter.getY() / (double)Arena.maxHeight()) * range_unit;
 							}
 							else if(target != null && tokens.equalsIgnoreCase("max_x"))
 							{

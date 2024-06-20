@@ -22,7 +22,7 @@ public abstract class OvalObject extends GraphicObject
 	@Override
 	public void draw(Graphics g, JPanel a)
 	{
-		g.fillOval(getX() - (int)(r/2.0), getY() - (int)(r/2.0), r, r);		
+		g.fillOval(Arena.convertX(getX() - (int)(r/2.0), a), Arena.convertY(getY() - (int)(r/2.0), a), Arena.convertWidth(r, a), Arena.convertHeight(r, a));		
 	}
 	public int getR()
 	{

@@ -1,9 +1,10 @@
 package dom;
 
 import java.awt.Component;
+
 import javax.swing.JOptionPane;
 
-import reflex.Reflexioner;
+import reflex.Arena;
 import scripting.ScriptActor;
 
 public class DOM_Window
@@ -23,8 +24,8 @@ public class DOM_Window
 	public DOM_Location location = null;
 	public boolean closed = false;
 	public Object menubar = null;
-	public int innerHeight = Reflexioner.getSize_y(), innerWidth = Reflexioner.getSize_x();
-	public int outerHeight = Reflexioner.getSize_y(), outerWidth = Reflexioner.getSize_x();
+	public int innerHeight = Arena.maxHeight(), innerWidth = Arena.maxWidth();
+	public int outerHeight = Arena.maxHeight(), outerWidth = Arena.maxWidth();
 	public int pageXOffset = 0, pageYOffset = 0;
 	public Object scrollbar = null;
 	public Object statusbar = null;

@@ -93,10 +93,10 @@ public class Boss extends BigEnemy
 		Beam beam = new Beam(12);
 		beam.setOwner(owner);
 		beam.setX(this.getX());				
-		beam.setH(beam.getH() - (Reflexioner.getSize_y() - this.getY()) - 10);
+		beam.setH(beam.getH() - (Arena.maxHeight() - this.getY()) - 10);
 		beam.setH((int)Math.round(beam.getH() * 2.0));
 		beam.setY(this.getY() + beam.getH() - this.getR());
-		if(beam.getY() > Reflexioner.getSize_y()) beam.setY(Reflexioner.getSize_y() - 1);
+		if(beam.getY() > Arena.maxHeight()) beam.setY(Arena.maxHeight() - 1);
 		beam.setDamage(200 + (difficulty / 500));
 		beam.setColor(Reflexioner.color_enemy_missile);
 		if(isPlayer_own())
@@ -349,7 +349,7 @@ class ExtremeBoss extends Boss
 		for(int i=0; i<getMissiles(); i++)
 		{
 			Enemy newEnemy = new Enemy();
-			newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+			newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 			newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 			newEnemy.setMax_hp(newEnemy.getHp());
 			newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
@@ -592,11 +592,11 @@ class HyperBoss extends ExtremeBoss
 				
 				if(i % 2 == 0)
 				{
-					raser.setMax_x(Reflexioner.getSize_x() / 1.5);
+					raser.setMax_x(Arena.maxWidth() / 1.5);
 				}
 				else
 				{
-					raser.setMin_x(Reflexioner.getSize_x() / 2.5);
+					raser.setMin_x(Arena.maxWidth() / 2.5);
 				}
 				if(isPlayer_own())
 				{					
@@ -811,7 +811,7 @@ class UltraBoss extends HyperBoss
 				newEnemy = new Enemy();
 			else
 				newEnemy = new BigEnemy();
-			newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+			newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 			newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 			newEnemy.setMax_hp(newEnemy.getHp());
 			newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
@@ -1189,7 +1189,7 @@ class SealedBoss extends HyperBoss
 				super.draw(g, a);
 			else
 			{			
-				g.drawImage(loadedImage(), getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);			
+				g.drawImage(loadedImage(), Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 			}
 		}
 	}
@@ -1227,7 +1227,7 @@ class SealedBoss extends HyperBoss
 				newEnemy = new Enemy();
 			else
 				newEnemy = new BigEnemy();
-			newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+			newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 			newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 			newEnemy.setMax_hp(newEnemy.getHp());
 			newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
@@ -1406,8 +1406,8 @@ class SealedQuickBoss extends QuickBoss
 			if(loadedImage() == null || (! Reflexioner.image_allow))
 				super.draw(g, a);
 			else
-			{			
-				g.drawImage(loadedImage(), getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);			
+			{
+				g.drawImage(loadedImage(), Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 			}
 		}
 	}

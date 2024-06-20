@@ -38,6 +38,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private SpaceShip spaceShip;
 	private List<Missile> missile;
 	private ArenaThread thread;
+	private RepaintThread thread2;
 	private List<Boom> booms;
 	private List<Item> items;
 	private List<ReflexDecorate> decorates;
@@ -108,7 +109,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		this.setBorder(new EtchedBorder());
 		this.addMouseListener(sp);
 		this.addMouseMotionListener(sp);
-		thread = new ArenaThread(this);
+		thread  = new ArenaThread(this);
+		thread2 = new RepaintThread(this);
 		catchEnemies = Lint.big(0);
 		catchItems = Lint.big(0);
 		file_path = sets.getDefault_path();
@@ -208,7 +210,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	{
 		if(spaceShip != null) spaceShip.loadImages();
 		loadBackground();
-		repaint();
 	}
 	public static boolean swift_available()
 	{
@@ -246,7 +247,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			if(type.equalsIgnoreCase("normal"))
 			{
 				Enemy newEnemy = new Enemy(file_path);
-				newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+				newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 				newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 				newEnemy.setMax_hp(newEnemy.getHp());
 				newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
@@ -261,7 +262,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			else if(type.equalsIgnoreCase("sealed"))
 			{
 				Enemy newEnemy = new SealedEnemy(file_path);
-				newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+				newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 				newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 				newEnemy.setMax_hp(newEnemy.getHp());
 				newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
@@ -279,7 +280,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			{
 				BigEnemy newBigEnemy = new BigEnemy(file_path);
 				newBigEnemy.setGuide(true);
-				newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+				newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 				newBigEnemy.setHp((newBigEnemy.getHp() + (int) (difficulty / 2000)) * 2);
 				newBigEnemy.setMax_hp(newBigEnemy.getHp());
 				newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
@@ -295,7 +296,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				BigEnemy newBigEnemy = new BigEnemy(file_path);
 				newBigEnemy.setGuide(false);
 				newBigEnemy.setMissiles(3);
-				newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+				newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 				newBigEnemy.setHp((newBigEnemy.getHp() + (int) (difficulty / 2000)) * 2);
 				newBigEnemy.setMax_hp(newBigEnemy.getHp());
 				newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
@@ -397,7 +398,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		/*
 		Enemy newEnemy;
 		newEnemy = new SealedQuickBoss(file_path);
-		newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+		newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 		newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 2000));
 		newEnemy.setMax_hp(newEnemy.getHp());
 		newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));
@@ -568,8 +569,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		spaceShip.setEnemyList(enemies);
 		spaceShip.setMax_hp((long) Math.ceil(spaceShip.getMax_hp() / difficulty_mode));
 		spaceShip.setHp(spaceShip.getMax_hp());
-		spaceShip.setX(Reflexioner.getSize_x() / 2);
-		spaceShip.setY(Reflexioner.getSize_y() - (Reflexioner.getSize_y() / 4));
+		spaceShip.setX(Arena.maxWidth() / 2);
+		spaceShip.setY(Arena.maxHeight() - (Arena.maxHeight() / 4));
 		difficulty = 0;
 		bossCount = 0;
 		difficulty_delay = Reflexioner.getDifficulty_delay();
@@ -964,8 +965,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	public void start()
 	{
 		threadSwitch = true;
+		if(thread2 != null) thread2.exit();
+		thread2 = new RepaintThread(this);
 		ThreadAccumulate.add(thread);
-		thread.start();		
+		ThreadAccumulate.add(thread2);
+		thread2.start();
+		thread.start();
 	}
 	public void exit()
 	{
@@ -1230,11 +1235,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		{
 			getSpaceShip().drawHud(g, this);
 			g.setColor(Color.MAGENTA);
-			if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont2B);
+			if(Reflexioner.usingFont2B != null) g.setFont(Reflexioner.usingFont2B.deriveFont((float) convertFontSize(Reflexioner.usingFont2B.getSize(), this)));
 			if(pause_left >= 1)
 			{				
 				g.drawString(sets.getLang().getText(Language.PAUSE), (this.getWidth()/2) - (sets.getLang().getText(Language.PAUSE).length() * 9), (this.getHeight()/2) - 30);
-				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont);
+				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
 				g.drawString(String.valueOf(pause_left), (this.getWidth()/2) - (String.valueOf(pause_left).length() * 3), (this.getHeight()/2) + 30);
 			}
 			else if(game_pause)
@@ -1243,8 +1248,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			}
 			if(autoControl)
 			{
-				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont);
-				g.drawString(sets.getLang().getText(Language.AI), 5, Reflexioner.getSize_y() - 10);
+				if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
+				g.drawString(sets.getLang().getText(Language.AI), 5, Arena.maxHeight() - 10);
 			}
 		}
 		catch (Exception e1)
@@ -1254,7 +1259,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		try
 		{
 			g.setColor(Color.MAGENTA);
-			if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont);
+			if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) convertFontSize(Reflexioner.usingFont.getSize(), this)));
 			for(int i=0; i<messages.size(); i++)
 			{
 				g.drawString(messages.get(i), 15 + (int)Math.round((g.getFont().getSize() / 16.0) * messages.get(i).length()), 15 + (10 * i));
@@ -1264,6 +1269,34 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		{
 			
 		}
+	}
+	public static int convertX(int x, JPanel a) 
+	{
+		return x;
+	}
+	public static int convertY(int y, JPanel a) 
+	{
+		return y;
+	}
+	public static int convertWidth(int w, JPanel a) 
+	{
+		return w;
+	}
+	public static int convertHeight(int h, JPanel a) 
+	{
+		return h;
+	}
+	public static int convertFontSize(int fontSize, JPanel a) 
+	{
+		return fontSize;
+	}
+	public static int maxWidth() 
+	{
+		return 800;
+	}
+	public static int maxHeight() 
+	{
+		return 600;
 	}
 	public void player_stop()
 	{
@@ -1358,6 +1391,45 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				break;
 		}
 	}
+	class RepaintThread extends Thread implements ThreadControl
+	{
+		private transient Arena arena;
+		private transient boolean ths;
+		
+		public RepaintThread()
+		{
+			super();
+		}
+		public RepaintThread(Arena a)
+		{
+			this();
+			this.arena = a; 
+		}
+		
+		@Override
+		public void run()
+		{
+			ths = true;
+			while(ths)
+			{
+				try
+				{
+					arena.repaint();
+					Thread.sleep(8);
+				} 
+				catch (InterruptedException e)
+				{
+					break;
+				}
+			}
+		}
+		
+		@Override
+		public void exit() {
+			ths = false;
+			this.arena = null;
+		}
+	}
 	class ArenaThread extends Thread implements ThreadControl
 	{		
 		private transient Missile target_missile = null;
@@ -1380,74 +1452,63 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		}
 		public ArenaThread(Arena arena)
 		{
-			super();
+			this();
 			this.arena = arena;
 		}
+		@Override
 		public void run()
 		{
+			threadSwitch = true;
 			while(threadSwitch)
 			{
-				if (active)
+				if(arena == null) break;
+				if (arena.active)
 				{
-					if((! game_pause) && (pause_left <= 0))
+					if((! arena.game_pause) && (arena.pause_left <= 0))
 					{
 						try
 						{
-							boss_exist = false;
-							unique_exist = false;
-							for(Enemy e : enemies)
+							arena.boss_exist = false;
+							arena.unique_exist = false;
+							for(Enemy e : arena.enemies)
 							{
 								if(e instanceof Boss)
 								{								
-									boss_exist = true;
+									arena.boss_exist = true;
 									if(((Boss) e).isUnique())
 									{
-										unique_exist = true;
+										arena.unique_exist = true;
 										break;
 									}
 								}
 							}
-							if(scenario == null)
+							if(arena.scenario == null)
 							{
-								if(bossCount >= Reflexioner.getBoss_delay())
+								if(arena.bossCount >= Reflexioner.getBoss_delay())
 								{							
-									bossCount = 0;
-									if(! unique_exist)
+									arena.bossCount = 0;
+									if(! arena.unique_exist)
 									{
-										for(int i=0; i<enemies.size(); i++)
+										for(int i=0; i<arena.enemies.size(); i++)
 										{
-											newBoom = new OvalBoom(7);
-											((OvalBoom)newBoom).setMaker(i);
-											newBoom.loadImage(file_path);
-											newBoom.setX(enemies.get(i).getX());
-											newBoom.setY(enemies.get(i).getY());
-											booms.add(newBoom);
+											arena.newBoom = new OvalBoom(7);
+											((OvalBoom) arena.newBoom).setMaker(i);
+											arena.newBoom.loadImage(file_path);
+											arena.newBoom.setX(arena.enemies.get(i).getX());
+											arena.newBoom.setY(arena.enemies.get(i).getY());
+											arena.booms.add(arena.newBoom);
 										}
-										enemies.clear();
+										arena.enemies.clear();
 										newBoss = Boss.getNewInstance(file_path, difficulty, true);										
-										enemies.add(newBoss);
+										arena.enemies.add(newBoss);
 									}							
 								}
 								else bossCount = bossCount + 1;
 							}
-							/*
-							for(Boom b : booms)
-							{
-								System.out.print(b + ", " + b.getHp() + ", ");
-								if(b instanceof OvalBoom)
-								{
-									System.out.println(((OvalBoom) b).getR());
-								}
-								else
-								{
-									System.out.println();
-								}
-							}
-							*/
 							//System.out.println(ourEnemy.size());
-							for(int i=0; i<ourEnemy.size(); i++)
+							for(int i=0; i<arena.ourEnemy.size(); i++)
 							{
-								target_enemy = ourEnemy.get(i);
+								target_enemy = arena.ourEnemy.get(i);
 								target_enemy.update();
 								if(target_enemy instanceof Boss)
 								{
@@ -1456,8 +1517,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									
 									if(newBoss.getBeam_energy() >= newBoss.getBeam_std())
 									{
-										((Boss)target_enemy).setBeam_energy(0 - (int)(Math.random() * 100));											
-										missile.addAll(((Boss)target_enemy).shootBeam(difficulty, i, spaceShip));
+										((Boss) target_enemy).setBeam_energy(0 - (int)(Math.random() * 100));											
+										arena.missile.addAll(((Boss)target_enemy).shootBeam(arena.difficulty, i, arena.spaceShip));
 									}
 									else if((newBoss.getBeam_energy() <= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 9.5)))
 											&& (newBoss.getBeam_energy() >= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 8.5))))
@@ -1469,17 +1530,17 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										target_boom.setX(target_enemy.getX());
 										target_boom.setY(target_enemy.getY());
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
-										booms.add(target_boom);
+										arena.booms.add(target_boom);
 									}
 								}
 								if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
 								{
-									missile.addAll(target_enemy.fire(difficulty, i, spaceShip, enemies, file_path));
+									arena.missile.addAll(target_enemy.fire(arena.difficulty, i, arena.spaceShip, arena.enemies, arena.file_path));
 								}
 							}
-							for (int i = 0; i < enemies.size(); i++)
+							for (int i = 0; i < arena.enemies.size(); i++)
 							{
-								target_enemy = enemies.get(i);
+								target_enemy = arena.enemies.get(i);
 								target_enemy.update();
 								//System.out.println(enemies.get(i).ready_to_fire);
 								if(target_enemy instanceof Boss)
@@ -1490,7 +1551,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									if(newBoss.getBeam_energy() >= newBoss.getBeam_std())
 									{
 										((Boss)target_enemy).setBeam_energy(0 - (int)(Math.random() * 100));											
-										missile.addAll(((Boss)target_enemy).shootBeam(difficulty, i, spaceShip));
+										arena.missile.addAll(((Boss) target_enemy).shootBeam(arena.difficulty, i, arena.spaceShip));
 									}
 									else if((newBoss.getBeam_energy() <= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 9.5)))
 											&& (newBoss.getBeam_energy() >= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 8.5))))
@@ -1502,21 +1563,21 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										target_boom.setX(target_enemy.getX());
 										target_boom.setY(target_enemy.getY());
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
-										booms.add(target_boom);
+										arena.booms.add(target_boom);
 									}
 								}
 								if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
 								{
-									missile.addAll(target_enemy.fire(difficulty, i, spaceShip, enemies, file_path));
+									arena.missile.addAll(target_enemy.fire(arena.difficulty, i, arena.spaceShip, arena.enemies, arena.file_path));
 									if(target_enemy instanceof SealedEnemy)
 									{
-										newBoom = new OvalBoom();
-										((OvalBoom) newBoom).setMaker(i);
-										newBoom.loadImage(file_path);
-										newBoom.setX(target_enemy.getX());
-										newBoom.setY(target_enemy.getY());
-										((OvalBoom) newBoom).setRx((int)Math.round(target_enemy.getR() * 0.3));
-										booms.add(newBoom);
+										arena.newBoom = new OvalBoom();
+										((OvalBoom) arena.newBoom).setMaker(i);
+										arena.newBoom.loadImage(arena.file_path);
+										arena.newBoom.setX(target_enemy.getX());
+										arena.newBoom.setY(target_enemy.getY());
+										((OvalBoom) arena.newBoom).setRx((int)Math.round(target_enemy.getR() * 0.3));
+										arena.booms.add(arena.newBoom);
 									}
 								}
 									
@@ -1526,11 +1587,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						{
 							e1.printStackTrace();
 						}
-						for (int i = 0; i < booms.size(); i++)
+						for (int i = 0; i < arena.booms.size(); i++)
 						{
 							try
 							{
-								booms.get(i).update();
+								arena.booms.get(i).update();
 							} 
 							catch (Exception e)
 							{
@@ -1538,11 +1599,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 						k = 0;
-						while (k < booms.size())
+						while (k < arena.booms.size())
 						{
-							if (booms.get(k).getHp() <= 0)
+							if (arena.booms.get(k).getHp() <= 0)
 							{
-								booms.remove(k);
+								arena.booms.remove(k);
 							} 
 							else
 								k++;
@@ -1553,33 +1614,33 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							target_missile = missile.get(k);
 							if (! missile.get(k).isLaunched())
 							{
-								newBoom = new OvalBoom();
-								((OvalBoom) newBoom).setMaker(missile.get(k).getOwner());
-								newBoom.loadImage(file_path);
-								newBoom.setX(target_missile.getX());
-								newBoom.setY(target_missile.getY());
-								((OvalBoom) newBoom).setRx(4);
+								arena.newBoom = new OvalBoom();
+								((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
+								arena.newBoom.loadImage(file_path);
+								arena.newBoom.setX(target_missile.getX());
+								arena.newBoom.setY(target_missile.getY());
+								((OvalBoom) arena.newBoom).setRx(4);
 								if(! (target_missile instanceof Beam))
-									booms.add(newBoom);
-								missile.remove(k);		
+									arena.booms.add(newBoom);
+								arena.missile.remove(k);		
 								SoundCache.play("boom");
 							} 
-							else if (missile.get(k).getHp() <= 0)
+							else if (arena.missile.get(k).getHp() <= 0)
 							{
-								newBoom = new OvalBoom();
-								((OvalBoom) newBoom).setMaker(missile.get(k).getOwner());
-								newBoom.loadImage(file_path);
-								newBoom.setX(target_missile.getX());
-								newBoom.setY(target_missile.getY());
-								((OvalBoom) newBoom).setRx(4);
+								arena.newBoom = new OvalBoom();
+								((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
+								arena.newBoom.loadImage(file_path);
+								arena.newBoom.setX(target_missile.getX());
+								arena.newBoom.setY(target_missile.getY());
+								((OvalBoom) arena.newBoom).setRx(4);
 								if(! (target_missile instanceof Beam))
-									booms.add(newBoom);
-								if(missile.get(k) instanceof EnemyMissile)
+									arena.booms.add(arena.newBoom);
+								if(arena.missile.get(k) instanceof EnemyMissile)
 								{
-									getEnemies = ((EnemyMissile) missile.get(k)).getEnemies();
+									getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
 									try
 									{
-										while(getEnemies.size() + enemies.size() > Reflexioner.max_enemies)
+										while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
 										{
 											getEnemies.remove(0);
 										}
@@ -1588,14 +1649,14 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									{
 										
 									}
-									enemies.addAll(getEnemies);
+									arena.enemies.addAll(getEnemies);
 								}
-								else if(missile.get(k) instanceof HelperSpread)
+								else if(arena.missile.get(k) instanceof HelperSpread)
 								{
-									getEnemies = ((HelperSpread) missile.get(k)).open(spaceShip, difficulty_mode, file_path);
+									getEnemies = ((HelperSpread) arena.missile.get(k)).open(arena.spaceShip, arena.difficulty_mode, arena.file_path);
 									try
 									{
-										while(getEnemies.size() + ourEnemy.size() > Reflexioner.max_enemies)
+										while(getEnemies.size() + arena.ourEnemy.size() > Reflexioner.max_enemies)
 										{
 											getEnemies.remove(0);
 										}
@@ -1604,21 +1665,21 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									{
 										
 									}
-									ourEnemy.addAll(getEnemies);
+									arena.ourEnemy.addAll(getEnemies);
 								}
-								missile.remove(k);			
+								arena.missile.remove(k);			
 								SoundCache.play("boom");
 							} 
 							else if(((target_missile instanceof GuidedMissile)) 
-									&& (target_missile.getX() < -500 || target_missile.getX() >= Reflexioner.getSize_x() + 500
-								|| target_missile.getY() < -500 || target_missile.getY() >= Reflexioner.getSize_y() + 500))
+									&& (target_missile.getX() < -500 || target_missile.getX() >= Arena.maxWidth() + 500
+								|| target_missile.getY() < -500 || target_missile.getY() >= Arena.maxHeight() + 500))
 							{
-								if(missile.get(k) instanceof EnemyMissile)
+								if(arena.missile.get(k) instanceof EnemyMissile)
 								{
-									List<Enemy> getEnemies = ((EnemyMissile) missile.get(k)).getEnemies();
+									List<Enemy> getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
 									try
 									{
-										while(getEnemies.size() + enemies.size() > Reflexioner.max_enemies)
+										while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
 										{
 											getEnemies.remove(0);
 										}
@@ -1627,20 +1688,20 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									{
 										
 									}
-									enemies.addAll(getEnemies);
+									arena.enemies.addAll(getEnemies);
 								}
-								missile.remove(k);
+								arena.missile.remove(k);
 							}
 							else if((! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
-								&&	(target_missile.getX() < -100 || target_missile.getX() >= Reflexioner.getSize_x() + 100
-								|| target_missile.getY() < -100 || target_missile.getY() >= Reflexioner.getSize_y() + 100))
+								&&	(target_missile.getX() < -100 || target_missile.getX() >= Arena.maxWidth() + 100
+								|| target_missile.getY() < -100 || target_missile.getY() >= Arena.maxHeight() + 100))
 							{
-								if(missile.get(k) instanceof EnemyMissile)
+								if(arena.missile.get(k) instanceof EnemyMissile)
 								{
-									List<Enemy> getEnemies = ((EnemyMissile) missile.get(k)).getEnemies();
+									List<Enemy> getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
 									try
 									{
-										while(getEnemies.size() + enemies.size() > Reflexioner.max_enemies)
+										while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
 										{
 											getEnemies.remove(0);
 										}
@@ -1649,104 +1710,104 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									{
 										
 									}
-									enemies.addAll(getEnemies);
+									arena.enemies.addAll(getEnemies);
 								}
-								missile.remove(k);
+								arena.missile.remove(k);
 							}
 							else k++;
 						}
 						k = 0;
-						while (k < items.size())
+						while (k < arena.items.size())
 						{
-							target_item = items.get(k);
+							target_item = arena.items.get(k);
 							if (target_item.getHp() <= 0)
 							{
-								items.remove(k);							
+								arena.items.remove(k);							
 							} 
-							else if(target_item.getX() < -10 || target_item.getX() >= Reflexioner.getSize_x() + 10
-									|| target_item.getY() < -10 || target_item.getY() >= Reflexioner.getSize_y() + 10)
+							else if(target_item.getX() < -10 || target_item.getX() >= Arena.maxWidth() + 10
+									|| target_item.getY() < -10 || target_item.getY() >= Arena.maxHeight() + 10)
 							{
-								items.remove(k);
+								arena.items.remove(k);
 							}
 							else k++;
 						}
 						k = 0;
-						while (k < enemies.size())
+						while (k < arena.enemies.size())
 						{
-							target_enemy = enemies.get(k);
+							target_enemy = arena.enemies.get(k);
 							if (target_enemy.getHp() <= 0)
 							{							
-								spaceShip.setPoint(spaceShip.getPoint().add(Lint.big((long) Math.round(target_enemy.getMax_hp() * difficulty_mode))));
+								arena.spaceShip.setPoint(arena.spaceShip.getPoint().add(Lint.big((long) Math.round(target_enemy.getMax_hp() * arena.difficulty_mode))));
 								newItemProbability = Math.random();
-								newItemCount = target_enemy.makeItemCount(difficulty, difficulty_delay, newItemProbability);
+								newItemCount = target_enemy.makeItemCount(arena.difficulty, arena.difficulty_delay, newItemProbability);
 								
 								newItemCenter = newItemCount / 2.0;
 								for(int it=0; it<newItemCount; it++)
 								{
-									newItem = new Item((int)(Math.random() * 10), file_path);
+									newItem = new Item((int)(Math.random() * 10), arena.file_path);
 									newItem.setX(target_enemy.getX() + (int)Math.round((it - newItemCenter) * 20));
 									newItem.setY(target_enemy.getY());
-									items.add(newItem);
+									arena.items.add(newItem);
 								}
 								
 								if(target_enemy instanceof Boss)
 								{
-									newBoom = new OvalBoom(10);
-									((OvalBoom) newBoom).setMaker(k);
-									newBoom.loadImage(file_path);
+									arena.newBoom = new OvalBoom(10);
+									((OvalBoom) arena.newBoom).setMaker(k);
+									arena.newBoom.loadImage(arena.file_path);
 								}
 								else
 								{
-									newBoom = new OvalBoom(7);
-									((OvalBoom) newBoom).setMaker(k);
-									newBoom.loadImage(file_path);
+									arena.newBoom = new OvalBoom(7);
+									((OvalBoom) arena.newBoom).setMaker(k);
+									arena.newBoom.loadImage(arena.file_path);
 								}
-								newBoom.setX(target_enemy.getX());
-								newBoom.setY(target_enemy.getY());
-								booms.add(newBoom);
-								enemies.remove(k);	
+								arena.newBoom.setX(target_enemy.getX());
+								arena.newBoom.setY(target_enemy.getY());
+								arena.booms.add(arena.newBoom);
+								arena.enemies.remove(k);	
 								SoundCache.play("boom");
-								catchEnemies = catchEnemies.add(Lint.big(1));
+								arena.catchEnemies = arena.catchEnemies.add(Lint.big(1));
 							} 
 							else k++;
 						}
 						k = 0;
-						while (k < ourEnemy.size())
+						while (k < arena.ourEnemy.size())
 						{
-							target_enemy = ourEnemy.get(k);
+							target_enemy = arena.ourEnemy.get(k);
 							if (target_enemy.getHp() <= 0)
 							{													
 								if(target_enemy instanceof Boss)
 								{
-									newBoom = new OvalBoom(10);
-									((OvalBoom) newBoom).setMaker(missile.get(k).getOwner());
-									newBoom.loadImage(file_path);
+									arena.newBoom = new OvalBoom(10);
+									((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
+									arena.newBoom.loadImage(arena.file_path);
 								}
 								else
 								{
-									newBoom = new OvalBoom(7);
-									((OvalBoom) newBoom).setMaker(k);
-									newBoom.loadImage(file_path);
+									arena.newBoom = new OvalBoom(7);
+									((OvalBoom) arena.newBoom).setMaker(k);
+									arena.newBoom.loadImage(arena.file_path);
 								}
-								newBoom.setX(target_enemy.getX());
-								newBoom.setY(target_enemy.getY());
-								booms.add(newBoom);
-								ourEnemy.remove(k);	
+								arena.newBoom.setX(target_enemy.getX());
+								arena.newBoom.setY(target_enemy.getY());
+								arena.booms.add(arena.newBoom);
+								arena.ourEnemy.remove(k);	
 								SoundCache.play("boom");
 							} 
 							else k++;
 						}
-						for(int i=0; i<items.size(); i++)
+						for(int i=0; i<arena.items.size(); i++)
 						{
 							try
 							{
-								if(autoControl)
+								if(Arena.autoControl)
 								{
-									items.get(i).update(spaceShip.getX(), spaceShip.getY());
+									arena.items.get(i).update(arena.spaceShip.getX(), arena.spaceShip.getY());
 								}
 								else
 								{
-									items.get(i).update();
+									arena.items.get(i).update();
 								}
 							}
 							catch (Exception e)
@@ -1754,11 +1815,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								e.printStackTrace();
 							}
 						}
-						for (int i = 0; i < missile.size(); i++)
+						for (int i = 0; i < arena.missile.size(); i++)
 						{
 							try
 							{
-								missile.get(i).update();
+								arena.missile.get(i).update();
 							} 
 							catch (Exception e)
 							{
@@ -1767,180 +1828,179 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						}
 						try
 						{
-							spaceShip.update();
+							arena.spaceShip.update();
 						} 
 						catch (Exception e1)
 						{
 							e1.printStackTrace();
 						}
-						if(difficulty == 100)
+						if(arena.difficulty == 100)
 						{
-							if(testEnemy.size() >= 1)
-							{
-								System.out.println("Test");							
-								enemies.addAll(testEnemy);
+							if(arena.testEnemy.size() >= 1)
+							{				
+								arena.enemies.addAll(arena.testEnemy);
 							}
 						}
 						try
 						{
-							if((! unique_exist) && (scenario == null))
+							if((! arena.unique_exist) && (arena.scenario == null))
 							{
 								newEnemyProbability = Math.random();
-								if(difficulty < difficulty_delay)
+								if(arena.difficulty < arena.difficulty_delay)
 								{									
-									if (newEnemyProbability >= 0.95 && enemies.size() <= Reflexioner.max_enemies)
+									if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newEnemy = new Enemy(file_path);
-										newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 200));
+										newEnemy = new Enemy(arena.file_path);
+										newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 200));
 										newEnemy.setMax_hp(newEnemy.getHp());
-										newEnemy.setMax_energy(200 - (int)(difficulty / 1000.0));										
-										newEnemy.setDamage(50 + (difficulty / 100));
+										newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000.0));										
+										newEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
 										
-										enemies.add(newEnemy);
+										arena.enemies.add(newEnemy);
 									}
 								}
-								else if(difficulty < difficulty_delay * 2)
+								else if(arena.difficulty < arena.difficulty_delay * 2)
 								{
-									if (newEnemyProbability >= 0.98 && enemies.size() <= Reflexioner.max_enemies)
+									if (newEnemyProbability >= 0.98 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newBigEnemy = new BigEnemy(file_path);
+										newBigEnemy = new BigEnemy(arena.file_path);
 										newBigEnemy.setGuide(true);
-										newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (difficulty / 200)) * 1.25));
+										newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
 										newBigEnemy.setMax_hp(newBigEnemy.getHp());
-										newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newBigEnemy.setDamage(50 + (difficulty / 100));
+										newBigEnemy.setMax_energy(200 - (int) (arena.difficulty / 1000));
+										newBigEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										enemies.add(newBigEnemy);
+										if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										arena.enemies.add(newBigEnemy);
 									}
-									else if (newEnemyProbability >= 0.95 && enemies.size() <= Reflexioner.max_enemies)
+									else if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newBigEnemy = new BigEnemy(file_path);
+										newBigEnemy = new BigEnemy(arena.file_path);
 										newBigEnemy.setGuide(false);
 										newBigEnemy.setMissiles(1 + (int)Math.round(Math.random() * 1.5));
-										newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (difficulty / 200)) * 1.25));
+										newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
 										newBigEnemy.setMax_hp(newBigEnemy.getHp());
-										newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newBigEnemy.setDamage(50 + (difficulty / 100));
+										newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newBigEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										enemies.add(newBigEnemy);
+										if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										arena.enemies.add(newBigEnemy);
 									}
-									else if (newEnemyProbability >= 0.90 && enemies.size() <= Reflexioner.max_enemies)
+									else if (newEnemyProbability >= 0.90 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newEnemy = new Enemy(file_path);
-										newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newEnemy.setHp((int)((newEnemy.getHp() + (int) (difficulty / 200)) * 1.25));
+										newEnemy = new Enemy(arena.file_path);
+										newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newEnemy.setHp((int)((newEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
 										newEnemy.setMax_hp(newEnemy.getHp());
-										newEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newEnemy.setDamage(50 + (difficulty / 100));
+										newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										enemies.add(newEnemy);
+										if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										arena.enemies.add(newEnemy);
 									}
 								}
 								else
 								{
-									if (newEnemyProbability >= 0.99 && enemies.size() <= Reflexioner.max_enemies)
+									if (newEnemyProbability >= 0.99 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newEnemy = new SealedEnemy(file_path);
-										newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 300));
+										newEnemy = new SealedEnemy(arena.file_path);
+										newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 300));
 										newEnemy.setMax_hp(newEnemy.getHp());
-										newEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newEnemy.setDamage(50 + (difficulty / 100));
-										((SealedEnemy) newEnemy).setSeal_weakness(50 - (int)(difficulty / 100000.0));
+										newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newEnemy.setDamage(50 + (arena.difficulty / 100));
+										((SealedEnemy) newEnemy).setSeal_weakness(50 - (int)(arena.difficulty / 100000.0));
 										if(((SealedEnemy) newEnemy).getSeal_weakness() < 20) ((SealedEnemy) newEnemy).setSeal_weakness(20); 
 										if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										enemies.add(newEnemy);
+										if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										arena.enemies.add(newEnemy);
 									}
-									else if (newEnemyProbability >= 0.97 && enemies.size() <= Reflexioner.max_enemies)
+									else if (newEnemyProbability >= 0.97 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newBigEnemy = new BigEnemy(file_path);
+										newBigEnemy = new BigEnemy(arena.file_path);
 										newBigEnemy.setGuide(true);
 										newBigEnemy.setMissiles(1 + (int)Math.round(Math.random() * 1.5));
-										newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+										newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newBigEnemy.setHp((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 2);
+										newBigEnemy.setMax_hp(newBigEnemy.getHp());
+										newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newBigEnemy.setDamage(50 + (arena.difficulty / 100));
+										if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
+										if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										arena.enemies.add(newBigEnemy);
+									}
+									else if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
+									{
+										newBigEnemy = new BigEnemy(arena.file_path);
+										newBigEnemy.setMissiles(2 + (int) Math.round(Math.random() * 2.5));
+										newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 										newBigEnemy.setHp((newBigEnemy.getHp() + (int) (difficulty / 200)) * 2);
 										newBigEnemy.setMax_hp(newBigEnemy.getHp());
-										newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newBigEnemy.setDamage(50 + (difficulty / 100));
+										newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newBigEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										enemies.add(newBigEnemy);
+										if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
+										arena.enemies.add(newBigEnemy);
 									}
-									else if (newEnemyProbability >= 0.95 && enemies.size() <= Reflexioner.max_enemies)
+									else if (newEnemyProbability >= 0.90 && arena.enemies.size() <= Reflexioner.max_enemies)
 									{
-										newBigEnemy = new BigEnemy(file_path);
-										newBigEnemy.setMissiles(2 + (int)Math.round(Math.random() * 2.5));
-										newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newBigEnemy.setHp((newBigEnemy.getHp() + (int) (difficulty / 200)) * 2);
-										newBigEnemy.setMax_hp(newBigEnemy.getHp());
-										newBigEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newBigEnemy.setDamage(50 + (difficulty / 100));
-										if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-										enemies.add(newBigEnemy);
-									}
-									else if (newEnemyProbability >= 0.90 && enemies.size() <= Reflexioner.max_enemies)
-									{
-										newEnemy = new Enemy(file_path);
-										newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
-										newEnemy.setHp(newEnemy.getHp() + (int) (difficulty / 200));
+										newEnemy = new Enemy(arena.file_path);
+										newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
+										newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 200));
 										newEnemy.setMax_hp(newEnemy.getHp());
-										newEnemy.setMax_energy(200 - (int)(difficulty / 1000));
-										newEnemy.setDamage(50 + (difficulty / 100));
+										newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
+										newEnemy.setDamage(50 + (arena.difficulty / 100));
 										if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-										if(difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										if(difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-										enemies.add(newEnemy);
+										if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
+										arena.enemies.add(newEnemy);
 									}
 								}
 							}
-							else if(scenario != null)
+							else if(arena.scenario != null)
 							{
-								if(scenario.getPatterns() != null && (! unique_exist))
+								if(arena.scenario.getPatterns() != null && (! arena.unique_exist))
 								{
-									for(EnemyPattern s : scenario.getPatterns())
+									for(EnemyPattern s : arena.scenario.getPatterns())
 									{
-										if((difficulty >= s.getMin_delay().longValue()) && (difficulty <= s.getMax_delay().longValue() || s.getMax_delay().longValue() <= -1))
+										if((arena.difficulty >= s.getMin_delay().longValue()) && (arena.difficulty <= s.getMax_delay().longValue() || s.getMax_delay().longValue() <= -1))
 										{
-											if(Math.random() <= s.getRatio().doubleValue() && enemies.size() <= scenario.getEnemy_limit().intValue())
+											if(Math.random() <= s.getRatio().doubleValue() && arena.enemies.size() <= arena.scenario.getEnemy_limit().intValue())
 											{
-												newEnemy = s.createEnemy(file_path, difficulty);
-												newEnemy.loadImage(file_path);
-												newEnemy.setDamage(Math.round(newEnemy.getDamage() + (s.getAddDamageRatio().doubleValue() * difficulty)));
-												newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (s.getAddHPRatio().doubleValue() * difficulty)));
+												newEnemy = s.createEnemy(arena.file_path, arena.difficulty);
+												newEnemy.loadImage(arena.file_path);
+												newEnemy.setDamage(Math.round(newEnemy.getDamage() + (s.getAddDamageRatio().doubleValue() * arena.difficulty)));
+												newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (s.getAddHPRatio().doubleValue() * arena.difficulty)));
 												newEnemy.setHp(newEnemy.getMax_hp());
 												newEnemy.init();
-												enemies.add(newEnemy);
+												arena.enemies.add(newEnemy);
 											}
 										}
 									}
 								}
-								if(scenario.getDefaultPattern() != null && (! unique_exist))
+								if(arena.scenario.getDefaultPattern() != null && (! arena.unique_exist))
 								{
-									if(Math.random() <= scenario.getDefaultPattern().getRatio() && enemies.size() <= scenario.getEnemy_limit())
+									if(Math.random() <= arena.scenario.getDefaultPattern().getRatio() && arena.enemies.size() <= arena.scenario.getEnemy_limit())
 									{
-										newEnemy = scenario.getDefaultPattern().createEnemy(file_path, difficulty);
-										newEnemy.loadImage(file_path);
-										newEnemy.setDamage(Math.round(newEnemy.getDamage() + (scenario.getDefaultPattern().getAddDamageRatio() * difficulty)));
-										newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (scenario.getDefaultPattern().getAddHPRatio() * difficulty)));
+										newEnemy = arena.scenario.getDefaultPattern().createEnemy(arena.file_path, arena.difficulty);
+										newEnemy.loadImage(arena.file_path);
+										newEnemy.setDamage(Math.round(newEnemy.getDamage() + (scenario.getDefaultPattern().getAddDamageRatio() * arena.difficulty)));
+										newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (scenario.getDefaultPattern().getAddHPRatio()     * arena.difficulty)));
 										newEnemy.setHp(newEnemy.getMax_hp());
 										newEnemy.init();
-										enemies.add(newEnemy);
+										arena.enemies.add(newEnemy);
 									}
 								}
 							}
@@ -1949,12 +2009,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						{
 							e1.printStackTrace();
 						}
-						for (int j = 0; j < missile.size(); j++)
+						for (int j = 0; j < arena.missile.size(); j++)
 						{
 							//System.out.println(j + " : " + missile.get(j).getOwner());
 							try
 							{
-								target_missile = missile.get(j);
+								target_missile = arena.missile.get(j);
 							} 
 							catch (Exception e1)
 							{
@@ -1962,23 +2022,22 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								continue;
 							}
 							
-							for (int i = 0; i < enemies.size(); i++)
+							for (int i = 0; i < arena.enemies.size(); i++)
 							{
 								try
 								{
-									target_enemy = enemies.get(i);
-									if (target_missile.getOwner() == Missile.SPACESHIP
-											&& target_enemy.collapse(target_missile))
+									target_enemy = arena.enemies.get(i);
+									if (target_missile.getOwner() == Missile.SPACESHIP && target_enemy.collapse(target_missile))
 									{
 										target_enemy.setHp(target_enemy.getHp() - target_missile.getDamage());
 										if(target_missile instanceof PulseMissile)
 										{
 											target_boom = new OvalBoom(target_missile.getW());
 											((OvalBoom) target_boom).setMaker(missile.get(j).getOwner());
-											target_boom.loadImage(file_path);
+											target_boom.loadImage(arena.file_path);
 											target_boom.setX(target_missile.getX());
 											target_boom.setY(target_missile.getY());
-											booms.add(target_boom);
+											arena.booms.add(target_boom);
 											target_missile.setHp(0);
 										}
 										else if(target_missile instanceof ReflexMissile)
@@ -1987,10 +2046,10 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 											target_missile.setDy(-1 * target_missile.getDy());
 											target_boom = new OvalBoom(3);
 											((OvalBoom) target_boom).setMaker(missile.get(j).getOwner());
-											target_boom.loadImage(file_path);
+											target_boom.loadImage(arena.file_path);
 											target_boom.setX(target_missile.getX());
 											target_boom.setY(target_missile.getY());
-											booms.add(target_boom);
+											arena.booms.add(target_boom);
 											if(((ReflexMissile) target_missile).getDx() == 0)
 											{
 												if(Math.random() >= 0.5)
@@ -2016,10 +2075,9 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 							try
 							{
-								if (target_missile.getOwner() != Missile.SPACESHIP
-										&& spaceShip.collapse(target_missile))
+								if (target_missile.getOwner() != Missile.SPACESHIP && arena.spaceShip.collapse(target_missile))
 								{
-									spaceShip.setHp(spaceShip.getHp() - target_missile.getDamage());
+									arena.spaceShip.setHp(arena.spaceShip.getHp() - target_missile.getDamage());
 									if(! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
 										target_missile.setHp(0);
 								}
@@ -2030,11 +2088,10 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}	
 							try
 							{
-								for(int l=0; l<ourEnemy.size(); l++)
-								if(target_missile.getOwner() != Missile.SPACESHIP
-										&& ourEnemy.get(l).collapse(target_missile))
+								for(int l=0; l<arena.ourEnemy.size(); l++)
+								if(target_missile.getOwner() != Missile.SPACESHIP && arena.ourEnemy.get(l).collapse(target_missile))
 								{
-									ourEnemy.get(l).setHp(ourEnemy.get(l).getHp() - target_missile.getDamage());
+									arena.ourEnemy.get(l).setHp(arena.ourEnemy.get(l).getHp() - target_missile.getDamage());
 									if(! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
 										target_missile.setHp(0);
 								}
@@ -2045,7 +2102,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 						
-						for(ReflexTrigger t : triggers)
+						for(ReflexTrigger t : arena.triggers)
 						{
 							if(t.isAccept(arena))
 							{
@@ -2060,20 +2117,20 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 						
-						for (int i = 0; i < enemies.size(); i++)
+						for (int i = 0; i < arena.enemies.size(); i++)
 						{
 							try
 							{
-								target_enemy = enemies.get(i);
-								if(spaceShip.collapse(target_enemy))
+								target_enemy = arena.enemies.get(i);
+								if(arena.spaceShip.collapse(target_enemy))
 								{
-									spaceShip.setHp(spaceShip.getHp() - target_enemy.getHp());
-									newBoom = new OvalBoom(7);
-									((OvalBoom) newBoom).setMaker(i);
-									newBoom.loadImage(file_path);
-									newBoom.setX(target_enemy.getX());
-									newBoom.setY(target_enemy.getY());
-									booms.add(newBoom);
+									arena.spaceShip.setHp(arena.spaceShip.getHp() - target_enemy.getHp());
+									arena.newBoom = new OvalBoom(7);
+									((OvalBoom) arena.newBoom).setMaker(i);
+									arena.newBoom.loadImage(arena.file_path);
+									arena.newBoom.setX(target_enemy.getX());
+									arena.newBoom.setY(target_enemy.getY());
+									arena.booms.add(arena.newBoom);
 									target_enemy.setHp(0);
 								}
 							}
@@ -2082,20 +2139,20 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								e.printStackTrace();
 							}
 						}
-						for(int i=0; i<items.size(); i++)
+						for(int i=0; i<arena.items.size(); i++)
 						{
 							try
 							{
-								if(spaceShip.collapse(items.get(i)))
+								if(arena.spaceShip.collapse(arena.items.get(i)))
 								{
-									items.get(i).setHp(0);
-									newBoom = new ItemUseBoom(6);
-									newBoom.loadImage(file_path);
-									newBoom.setX(items.get(i).getX());
-									newBoom.setY(items.get(i).getY());
-									booms.add(newBoom);
-									catchItems = catchItems.add(Lint.big(1));
-									applyItem(items.get(i).getType());
+									arena.items.get(i).setHp(0);
+									arena.newBoom = new ItemUseBoom(6);
+									arena.newBoom.loadImage(arena.file_path);
+									arena.newBoom.setX(arena.items.get(i).getX());
+									arena.newBoom.setY(arena.items.get(i).getY());
+									arena.booms.add(arena.newBoom);
+									arena.catchItems = arena.catchItems.add(Lint.big(1));
+									applyItem(arena.items.get(i).getType());
 									SoundCache.play("boom");
 								}
 							}
@@ -2106,17 +2163,17 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						}
 						try
 						{
-							if(spaceShip.getHp() <= 0 && finish_count < 0)
+							if(arena.spaceShip.getHp() <= 0 && arena.finish_count < 0)
 							{
-								for(int l=0; l<ourEnemy.size(); l++)
+								for(int l=0; l<arena.ourEnemy.size(); l++)
 								{
-									ourEnemy.get(l).setHp(0);
+									arena.ourEnemy.get(l).setHp(0);
 								}
-								newBoom = new OvalBoom(spaceShip.getR() / 2, Missile.SPACESHIP);
-								newBoom.setX(spaceShip.getX());
-								newBoom.setY(spaceShip.getY());
-								booms.add(newBoom);
-								finish_count = (spaceShip.getR() / 2) + 5;
+								arena.newBoom = new OvalBoom(arena.spaceShip.getR() / 2, Missile.SPACESHIP);
+								arena.newBoom.setX(arena.spaceShip.getX());
+								arena.newBoom.setY(arena.spaceShip.getY());
+								arena.booms.add(arena.newBoom);
+								arena.finish_count = (arena.spaceShip.getR() / 2) + 5;
 							}
 						}
 						catch (Exception e1)
@@ -2125,21 +2182,21 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						}
 						
 						
-						if(finish_count == 0)
+						if(arena.finish_count == 0)
 						{
-							game_finish();
+							arena.game_finish();
 						}
-						decreaseFinishCount();
+						arena.decreaseFinishCount();
 						
-						if(scenario != null)
+						if(arena.scenario != null)
 						{
-							if(scenario instanceof DReflexScenario)
+							if(arena.scenario instanceof DReflexScenario)
 							{
-								if(((DReflexScenario) scenario).getDeadline() != null)
+								if(((DReflexScenario) arena.scenario).getDeadline() != null)
 								{
-									if((Lint.big(0).compareTo(((DReflexScenario) scenario).getDeadline()) <= 1) && Lint.big(difficulty).compareTo(((DReflexScenario) scenario).getDeadline()) >= 1)
+									if((Lint.big(0).compareTo(((DReflexScenario) arena.scenario).getDeadline()) <= 1) && Lint.big(arena.difficulty).compareTo(((DReflexScenario) arena.scenario).getDeadline()) >= 1)
 									{
-										game_finish();
+										arena.game_finish();
 									}
 								}
 							}
@@ -2147,90 +2204,73 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						
 						try
 						{
-							if (sp != null)
-								sp.update(spaceShip.getHp(), spaceShip.getMax_hp(), spaceShip.getPoint(), spaceShip.getEnergy(), spaceShip.getMax_energy());
+							if (arena.sp != null)
+								arena.sp.update(arena.spaceShip.getHp(), arena.spaceShip.getMax_hp(), arena.spaceShip.getPoint(), arena.spaceShip.getEnergy(), arena.spaceShip.getMax_energy());
 						} 
 						catch (Exception e1)
 						{
 							e1.printStackTrace();
 						}	
 						
-						if(decorates.size() <= 40 && Math.random() >= (0.7 - (difficulty / 100000.0)))
+						if(arena.decorates.size() <= 40 && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
 						{
-							decorates.add(new ReflexDecorate("star", (int) (Math.random() * Reflexioner.getSize_x()), 0, (int)(3 * Math.random() + 5 + (difficulty / 500)), (int)(3 * Math.random() + 1), file_path));
+							arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, (int)(3 * Math.random() + 5 + (arena.difficulty / 500)), (int)(3 * Math.random() + 1), arena.file_path));
 						}
-						for(int i=0; i<decorates.size(); i++)
+						for(int i=0; i<arena.decorates.size(); i++)
 						{
-							if(decorates.get(i) != null)
+							if(arena.decorates.get(i) != null)
 							{
-								decorates.get(i).update();
-								if(decorates.get(i).getX() < -10 || decorates.get(i).getX() > Reflexioner.getSize_x()
-										|| decorates.get(i).getY() < -10 || decorates.get(i).getY() > Reflexioner.getSize_y())
-									decorates.get(i).setHp(0);
+								arena.decorates.get(i).update();
+								if(arena.decorates.get(i).getX() < -10 || arena.decorates.get(i).getX() > Arena.maxWidth()
+										|| arena.decorates.get(i).getY() < -10 || arena.decorates.get(i).getY() > Arena.maxHeight())
+									arena.decorates.get(i).setHp(0);
 							}
 						}
 						k = 0;
-						while (k < decorates.size())
+						while (k < arena.decorates.size())
 						{
-							if (decorates.get(k).getHp() <= 0)
+							if (arena.decorates.get(k).getHp() <= 0)
 							{
-								decorates.remove(k);
+								arena.decorates.remove(k);
 							} 
 							else
 								k++;
 						}
 						
-						try
+						if(arena.difficulty < (Integer.MAX_VALUE * (long)100) - 1)
 						{
-							repaint();
-						} 
-						catch (Exception e1)
-						{
-							e1.printStackTrace();
-						}
-						
-						if(difficulty < (Integer.MAX_VALUE * (long)100) - 1)
-						{
-							if(! unique_exist)
+							if(! arena.unique_exist)
 							{
-								difficulty = difficulty + 1;
+								arena.difficulty = arena.difficulty + 1;
 							}
 						}
 						
-						if(timeout >= 0)
+						if(arena.timeout >= 0)
 						{
-							if(difficulty >= timeout)
+							if(arena.difficulty >= arena.timeout)
 							{
-								game_finish();
+								arena.game_finish();
 							}
 						}
-						/*
-						if(difficulty % 100 == 0)
-							System.out.println(difficulty);	
-						*/
-						
-						
-						Reflexioner.setSize_x(getWidth());
-						Reflexioner.setSize_y(getHeight());
 						
 						//showPlayerInfo();
-						if(Reflexioner.max_enemies <= 30 && difficulty % 5000 == 0)
+						if(Reflexioner.max_enemies <= 30 && arena.difficulty % 5000 == 0)
 						{
 							Reflexioner.max_enemies += 1;
 						}
 						
-						if(spaceShip.getFire_delay() >= 1)
+						if(arena.spaceShip.getFire_delay() >= 1)
 						{
-							spaceShip.setFire_delay(spaceShip.getFire_delay() - 1);
+							arena.spaceShip.setFire_delay(arena.spaceShip.getFire_delay() - 1);
 						}
 						
-						if(scenario != null)
+						if(arena.scenario != null)
 						{
-							if(scenario instanceof XReflexScenario)
+							if(arena.scenario instanceof XReflexScenario)
 							{
 								try
 								{
-									scriptManager.actOnly(((XReflexScenario) scenario).getScript());
+									arena.scriptManager.actOnly(((XReflexScenario) arena.scenario).getScript());
 								}
 								catch(Exception e)
 								{
@@ -2239,12 +2279,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 						
-						for(int i=0; i<enemies.size(); i++)
+						for(int i=0; i<arena.enemies.size(); i++)
 						{
 							unique_index = -2;
-							if(enemies.get(i) instanceof Boss)
+							if(arena.enemies.get(i) instanceof Boss)
 							{
-								if(((Boss) enemies.get(i)).isUnique())
+								if(((Boss) arena.enemies.get(i)).isUnique())
 								{
 									//System.out.println(enemies.get(i) + ", " + ((Boss) enemies.get(i)).isUnique());
 									unique_index = i;
@@ -2254,36 +2294,36 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 						}
 						if(unique_index >= 0)
 						{
-							for(int i=0; i<enemies.size(); i++)
+							for(int i=0; i<arena.enemies.size(); i++)
 							{
 								if(i != unique_index) 
 								{
-									if(! enemies.get(i).isOwn_unique())
+									if(! arena.enemies.get(i).isOwn_unique())
 									{
-										enemies.get(i).setHp(0);
+										arena.enemies.get(i).setHp(0);
 									}
 								}
 							}
 						}
 						
-						if(! unique_exist)
+						if(! arena.unique_exist)
 						{
-							for(int i=0; i<enemies.size(); i++)
+							for(int i=0; i<arena.enemies.size(); i++)
 							{
-								if(enemies.get(i).isOwn_unique())
+								if(arena.enemies.get(i).isOwn_unique())
 								{
-									enemies.get(i).setHp(0);
+									arena.enemies.get(i).setHp(0);
 								}
 							}
 						}
 						
 						if(Reflexioner.replay_save)
 						{
-							if(replay.getScenes().size() < Integer.MAX_VALUE)
+							if(arena.replay.getScenes().size() < Integer.MAX_VALUE)
 							{								
 								if(Reflexioner.replay_now_delay == 0)
 								{
-									replay.addScene(nowState(true));
+									arena.replay.addScene(nowState(true));
 								}
 								Reflexioner.replay_now_delay++;
 								if(Reflexioner.replay_now_delay >= Reflexioner.replay_interval)
@@ -2293,19 +2333,19 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 						
-						if(swift_delay >= 1)
+						if(Arena.swift_delay >= 1)
 						{
-							swift_delay--;
+							Arena.swift_delay--;
 						}
 												
-						if(autoControl)
+						if(Arena.autoControl)
 						{
-							if(active && (! game_pause))
+							if(arena.active && (! arena.game_pause))
 							{
 								double controlRandom = Math.random();
 								boolean boss_exist = false;
 								int unders = 0;
-								if(spaceShip.getEnergy() / (double)spaceShip.getMax_energy() >= 0.5)
+								if(arena.spaceShip.getEnergy() / (double) arena.spaceShip.getMax_energy() >= 0.5)
 								{
 									controlRandom = controlRandom + 0.4;
 								}
@@ -2313,11 +2353,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								{
 									controlRandom = controlRandom + 0.2;
 								}
-								for(Enemy e : enemies)
+								for(Enemy e : arena.enemies)
 								{
 									if(e != null)
 									{
-										if(Math.abs(spaceShip.getX() - e.getX()) < 2)
+										if(Math.abs(arena.spaceShip.getX() - e.getX()) < 2)
 										{
 											unders++;
 										}
@@ -2327,49 +2367,49 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										}
 									}
 								}
-								if(controlRandom >= 1.7 - spaceShip.ai_advantage_mode3(enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) spaceShip.setMode(3);
-								else if(controlRandom >= 1.7 - spaceShip.ai_advantage_mode2(enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) spaceShip.setMode(2);
-								else spaceShip.setMode(1);
-								if(spaceShip.getFire_delay() <= 0)
+								if(controlRandom >= 1.7 - arena.spaceShip.ai_advantage_mode3(arena.enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) arena.spaceShip.setMode(3);
+								else if(controlRandom >= 1.7 - arena.spaceShip.ai_advantage_mode2(arena.enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) arena.spaceShip.setMode(2);
+								else arena.spaceShip.setMode(1);
+								if(arena.spaceShip.getFire_delay() <= 0)
 								{
-									fired_missile = spaceShip.fire();
-									if(fired_missile != null)
-										missile.addAll(fired_missile);
+									arena.fired_missile = arena.spaceShip.fire();
+									if(arena.fired_missile != null)
+										arena.missile.addAll(arena.fired_missile);
 									//System.out.println(spaceShip.fire());
-									spaceShip.setFire_delay(spaceShip.afterFireDelay());
+									arena.spaceShip.setFire_delay(arena.spaceShip.afterFireDelay());
 								}
 								
-								if(autoControlDelay <= 0)
+								if(arena.autoControlDelay <= 0)
 								{
-									control_auto();
-									autoControlDelay = 3;
+									arena.control_auto();
+									arena.autoControlDelay = 3;
 								}
-								else autoControlDelay--;
+								else arena.autoControlDelay--;
 							}
 						}
-						else if(autoFire)
+						else if(arena.autoFire)
 						{
-							if(spaceShip.getFire_delay() <= 0)
+							if(arena.spaceShip.getFire_delay() <= 0)
 							{
-								fired_missile = spaceShip.fire();
-								if(fired_missile != null)
-									missile.addAll(fired_missile);
+								arena.fired_missile = arena.spaceShip.fire();
+								if(arena.fired_missile != null)
+									arena.missile.addAll(arena.fired_missile);
 								//System.out.println(spaceShip.fire());
-								spaceShip.setFire_delay(spaceShip.afterFireDelay());
+								arena.spaceShip.setFire_delay(arena.spaceShip.afterFireDelay());
 							}
 						}
-						if(messages.size() >= 1)
+						if(arena.messages.size() >= 1)
 						{
 							try
 							{
-								if(message_delay <= 0)
+								if(arena.message_delay <= 0)
 								{
-									messages.remove(0);
-									message_delay = 50;
+									arena.messages.remove(0);
+									arena.message_delay = 50;
 								}
 								else
 								{
-									message_delay--;
+									arena.message_delay--;
 								}
 							} 
 							catch (Exception e)
@@ -2378,40 +2418,24 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							}
 						}
 					}
-					else if(pause_left >= 1)
+					else if(arena.pause_left >= 1)
 					{
-						pause_left--;
-						try
-						{
-							repaint();
-						} 
-						catch (Exception e1)
-						{
-							e1.printStackTrace();
-						}
+						arena.pause_left--;
 					}
-					else if(game_pause && (! pause_printed))
+					else if(arena.game_pause && (! arena.pause_printed))
 					{
-						pause_printed = true;
-						try
-						{
-							repaint();
-						} 
-						catch (Exception e1)
-						{
-							e1.printStackTrace();
-						}
+						arena.pause_printed = true;
 					}
 				}
 				try
 				{
-					if(game_xspeed <= 0) game_xspeed = 1;
+					if(arena.game_xspeed <= 0) arena.game_xspeed = 1;
 					if(Reflexioner.getReact_delay() <= 10) Reflexioner.setReact_delay(10);
-					Thread.sleep(Reflexioner.getReact_delay() / game_xspeed);
+					Thread.sleep(Reflexioner.getReact_delay() / arena.game_xspeed);
 				} 
 				catch (InterruptedException e)
 				{
-					e.printStackTrace();
+					break;
 				}
 			}
 		}
@@ -2419,7 +2443,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		public void exit()
 		{
 			threadSwitch = false;
-			
+			arena = null;
 		}
 	}
 	public ReflexSave nowState()

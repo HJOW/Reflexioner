@@ -145,7 +145,7 @@ public class OvalBoom extends OvalObject implements Boom
 	{
 		if(Reflexioner.image_allow && image != null)
 		{
-			g.drawImage(image, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);
+			g.drawImage(image, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
 		}
 		else
 		{

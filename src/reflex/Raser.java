@@ -15,7 +15,7 @@ public class Raser extends Missile implements Boom, FormulaUsedMissile
 	private double progress = 0.0, max_progress = 1000.0;
 	private String formula;
 	private double range_unit = 1000.0;
-	private double min_x = -Reflexioner.getSize_x() * 16, max_x = Reflexioner.getSize_x() * 16, min_y = -Reflexioner.getSize_y() * 16, max_y = Reflexioner.getSize_y() * 16;
+	private double min_x = -Arena.maxWidth() * 16, max_x = Arena.maxWidth() * 16, min_y = -Arena.maxHeight() * 16, max_y = Arena.maxHeight() * 16;
 	private boolean range_absolute = false;
 	
 	public Raser clone()
@@ -86,10 +86,10 @@ public class Raser extends Missile implements Boom, FormulaUsedMissile
 		
 		if(range_unit >= 1)
 		{
-			p1_x = (int)Math.round( (r.getP1().getX() / range_unit) * Reflexioner.getSize_x() );
-			p1_y = (int)Math.round( (r.getP1().getY() / range_unit) * Reflexioner.getSize_y());
-			p2_x = (int)Math.round( (r.getP2().getX() / range_unit) * Reflexioner.getSize_x() );
-			p2_y = (int)Math.round( (r.getP2().getY() / range_unit) * Reflexioner.getSize_y());
+			p1_x = (int)Math.round( (r.getP1().getX() / range_unit) * Arena.maxWidth() );
+			p1_y = (int)Math.round( (r.getP1().getY() / range_unit) * Arena.maxHeight());
+			p2_x = (int)Math.round( (r.getP2().getX() / range_unit) * Arena.maxWidth() );
+			p2_y = (int)Math.round( (r.getP2().getY() / range_unit) * Arena.maxHeight());
 		}
 		else
 		{
@@ -351,7 +351,7 @@ class FormulaMissile extends Missile implements FormulaUsedMissile
 	private double progress = 0.0, max_progress = 1000.0;
 	private String formula;
 	private double range_unit = 1000.0;
-	private double min_x = -Reflexioner.getSize_x() * 16, max_x = Reflexioner.getSize_x() * 16, min_y = -Reflexioner.getSize_y() * 16, max_y = Reflexioner.getSize_y() * 16;
+	private double min_x = -Arena.maxWidth() * 16, max_x = Arena.maxWidth() * 16, min_y = -Arena.maxHeight() * 16, max_y = Arena.maxHeight() * 16;
 	private boolean range_absolute = false;
 	public FormulaMissile()
 	{
@@ -420,10 +420,10 @@ class FormulaMissile extends Missile implements FormulaUsedMissile
 		
 		if(range_unit >= 1)
 		{
-			p1_x = (int)Math.round( (r.getP1().getX() / range_unit) * Reflexioner.getSize_x() );
-			p1_y = (int)Math.round( (r.getP1().getY() / range_unit) * Reflexioner.getSize_y());
-			p2_x = (int)Math.round( (r.getP2().getX() / range_unit) * Reflexioner.getSize_x() );
-			p2_y = (int)Math.round( (r.getP2().getY() / range_unit) * Reflexioner.getSize_y());
+			p1_x = (int)Math.round( (r.getP1().getX() / range_unit) * Arena.maxWidth() );
+			p1_y = (int)Math.round( (r.getP1().getY() / range_unit) * Arena.maxHeight());
+			p2_x = (int)Math.round( (r.getP2().getX() / range_unit) * Arena.maxWidth() );
+			p2_y = (int)Math.round( (r.getP2().getY() / range_unit) * Arena.maxHeight());
 		}
 		else
 		{

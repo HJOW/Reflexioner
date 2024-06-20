@@ -18,7 +18,7 @@ public class CircleBoom extends OvalBoom
 	@Override
 	public void draw(Graphics g, JPanel a)
 	{
-		g.drawOval(getX() - (int)(getR()/2.0), getY() - (int)(getR()/2.0), getR(), getR());		
+		g.drawOval(Arena.convertX(getX() - (int)(getR()/2.0), a), Arena.convertY(getY() - (int)(getR()/2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a));		
 	}
 	public String getBoomName(boolean makerInclude)
 	{

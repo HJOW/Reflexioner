@@ -31,7 +31,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 	public Enemy()
 	{
 		super();
-		setX(Reflexioner.getSize_x());
+		setX(Arena.maxWidth());
 		setY(10);
 		setR(Reflexioner.getEnemy_r());
 		setColor(Reflexioner.color_enemy);
@@ -201,7 +201,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 			super.draw(g, a);
 		else
 		{			
-			g.drawImage(image, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);			
+			g.drawImage(image, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);			
 		}
 	}
 	@Override
@@ -216,15 +216,15 @@ public class Enemy extends OvalObject implements HaveEnergy
 			{
 				dx = (int) ((Reflexioner.getSpeed() / 2) * Math.random());
 			}
-			if(getX() > Reflexioner.getSize_x() - getR())
+			if(getX() > Arena.maxWidth() - getR())
 			{
 				dx = (int) -((Reflexioner.getSpeed() / 2) * Math.random());
 			}
-			if(getY() < ((Reflexioner.getSize_y() * 2) / 3) - getR())
+			if(getY() < ((Arena.maxHeight() * 2) / 3) - getR())
 			{
 				dy = (int) ((Reflexioner.getSpeed() / 2) * Math.random());
 			}
-			if(getY() > (Reflexioner.getSize_y()) - getR())
+			if(getY() > (Arena.maxHeight()) - getR())
 			{
 				dy = (int) -((Reflexioner.getSpeed() / 2) * Math.random());
 			}
@@ -236,7 +236,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 				//System.out.println("!! X " + getX() + "/" + getR());
 				dx = (int) ((Reflexioner.getSpeed() / 2) * Math.random());
 			}
-			if(getX() > Reflexioner.getSize_x() - getR())
+			if(getX() > Arena.maxWidth() - getR())
 			{
 				//System.out.println("!! X " + getX() + "/" + (Reflexioner.size_x - getR()));
 				dx = (int) -((Reflexioner.getSpeed() / 2) * Math.random());
@@ -246,7 +246,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 				//System.out.println("!! Y " + getY() + "/" + getR());
 				dy = (int) ((Reflexioner.getSpeed() / 2) * Math.random());
 			}
-			if(getY() > (Reflexioner.getSize_y() / 3) - getR())
+			if(getY() > (Arena.maxHeight() / 3) - getR())
 			{
 				//System.out.println("!! Y " + getY() + "/" + ((Reflexioner.size_y / 5) - getR()));
 				dy = (int) -((Reflexioner.getSpeed() / 2) * Math.random());

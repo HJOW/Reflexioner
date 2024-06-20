@@ -121,7 +121,7 @@ public class Item extends OvalObject
 			g.setColor(Reflexioner.color_item_text);
 			try
 			{
-				g.setFont(new Font(Reflexioner.usingFontName, Font.BOLD, 12));
+				g.setFont(new Font(Reflexioner.usingFontName, Font.BOLD, Arena.convertFontSize(12, a)));
 			} 
 			catch (Exception e)
 			{
@@ -162,11 +162,11 @@ public class Item extends OvalObject
 				default:
 					printFont = "D";
 			}
-			g.drawString(printFont, getX() - (int)(getR() / 3.8), getY());
+			g.drawString(printFont, Arena.convertX(getX() - (int)(getR() / 3.8), a), Arena.convertY(getY(), a));
 		}
 		else
 		{
-			g.drawImage(image, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);
+			g.drawImage(image, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertY(getR(), a), null);
 		}
 	}
 	public int getDy()

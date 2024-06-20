@@ -12,7 +12,7 @@ public class Beam extends Missile implements Boom
 		setDy(0);
 		this.setY(0);
 		this.setW((int) (getHp() * 2));
-		this.setH((int) Math.round(Reflexioner.getSize_y() * 1.5));
+		this.setH((int) Math.round(Arena.maxHeight() * 1.5));
 	}
 	public Beam(long hp)
 	{
@@ -21,7 +21,7 @@ public class Beam extends Missile implements Boom
 		setDy(0);
 		this.setY(0);
 		this.setW((int) (getHp() * 2));
-		this.setH((int) Math.round(Reflexioner.getSize_y() * 1.5));
+		this.setH((int) Math.round(Arena.maxHeight() * 1.5));
 	}
 	public Beam(long hp, String path)
 	{

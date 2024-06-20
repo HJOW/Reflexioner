@@ -37,7 +37,7 @@ public class SpaceShipEnemy extends Boss
 		{
 			ship.setAccel_x((int) ((Reflexioner.getSpeed() / 2) * Math.random()));
 		}
-		if(getX() > Reflexioner.getSize_x() - getR())
+		if(getX() > Arena.maxWidth() - getR())
 		{
 			ship.setAccel_x((int) -((Reflexioner.getSpeed() / 2) * Math.random()));
 		}
@@ -45,7 +45,7 @@ public class SpaceShipEnemy extends Boss
 		{
 			ship.setAccel_x((int) ((Reflexioner.getSpeed() / 2) * Math.random()));
 		}
-		if(getY() > (Reflexioner.getSize_y() / 3) - getR())
+		if(getY() > (Arena.maxHeight() / 3) - getR())
 		{
 			ship.setAccel_x((int) -((Reflexioner.getSpeed() / 2) * Math.random()));
 		}

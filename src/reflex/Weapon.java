@@ -31,7 +31,7 @@ public class Weapon implements Serializable
 	private double progress = 0.0, max_progress = 1000.0;
 	private String formula = "";
 	private double range_unit = 1000.0;
-	private double min_x = -Reflexioner.getSize_x() * 16, max_x = Reflexioner.getSize_x() * 16, min_y = -Reflexioner.getSize_y() * 16, max_y = Reflexioner.getSize_y() * 16;
+	private double min_x = -Arena.maxWidth() * 16, max_x = Arena.maxWidth() * 16, min_y = -Arena.maxHeight() * 16, max_y = Arena.maxHeight() * 16;
 	private boolean range_absolute = false;
 	protected transient int fire_missiles;
 	protected transient double center;
@@ -503,14 +503,14 @@ public class Weapon implements Serializable
 					if(owner == Missile.SPACESHIP)
 					{
 						newMissile.setY(0);
-						newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - owner_y) - 10);
+						newMissile.setH(newMissile.getH() - (Arena.maxHeight() - owner_y) - 10);
 					}
 					else
 					{
-						newMissile.setH(newMissile.getH() - (Reflexioner.getSize_y() - owner_y) - 10);
+						newMissile.setH(newMissile.getH() - (Arena.maxHeight() - owner_y) - 10);
 						newMissile.setH((int)Math.round(newMissile.getH() * 2.0));
 						newMissile.setY(owner_y + newMissile.getH());
-						if(newMissile.getY() > Reflexioner.getSize_y()) newMissile.setY(Reflexioner.getSize_y() - 1);
+						if(newMissile.getY() > Arena.maxHeight()) newMissile.setY(Arena.maxHeight() - 1);
 					}
 				}
 				if(newMissile instanceof HelperSpread)

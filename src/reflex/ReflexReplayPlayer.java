@@ -149,7 +149,7 @@ public class ReflexReplayPlayer extends MouseDragCatcher implements ActionListen
 		{
 			((JFrame)window).setUndecorated(true);
 		}
-		window.setSize(Reflexioner.getSize_x() + 100, Reflexioner.getSize_y() + 50);
+		window.setSize(Arena.maxWidth() + 100, Arena.maxHeight() + 50);
 		window.setLocation((int)(sets.getScreenSize().getWidth()/2 - window.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - window.getHeight()/2));
 		mainPanel = new JPanel();
 		window.add(mainPanel, BorderLayout.CENTER);
@@ -301,7 +301,7 @@ public class ReflexReplayPlayer extends MouseDragCatcher implements ActionListen
 		
 		replayCanvas = new ReplayCanvas();
 		replayCanvas.loadBackground(sets.getDefault_path());
-		replayCanvas.setSize(Reflexioner.getSize_x(), Reflexioner.getSize_y());
+		replayCanvas.setSize(Arena.maxWidth(), Arena.maxHeight());
 		centerPanel.add(replayCanvas);
 		
 		downPanel.setLayout(new FlowLayout());
@@ -936,11 +936,11 @@ public class ReflexReplayPlayer extends MouseDragCatcher implements ActionListen
 							else showReplayTitle = sets.getLang().getText(Language.COMPLETE);
 						}
 						else showReplayTitle = sets.getLang().getText(Language.COMPLETE);
-						g.drawString(showReplayTitle, (Reflexioner.getSize_x() / 2) - (showReplayTitle.length() * 9), Reflexioner.getSize_y() / 4);
+						g.drawString(showReplayTitle, (Arena.maxWidth() / 2) - (showReplayTitle.length() * 9), Arena.maxHeight() / 4);
 						if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont);
 						for(int s=0; s<finishMessages.size(); s++)
 						{
-							g.drawString(finishMessages.get(s), (Reflexioner.getSize_x() / 2) - (finishMessages.get(s).length() * 3), (Reflexioner.getSize_y() / 3) + (s * 30));
+							g.drawString(finishMessages.get(s), (Arena.maxWidth() / 2) - (finishMessages.get(s).length() * 3), (Arena.maxHeight() / 3) + (s * 30));
 						}
 					}
 				} 

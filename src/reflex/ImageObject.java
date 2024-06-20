@@ -38,7 +38,7 @@ public abstract class ImageObject extends RectObject
 	@Override
 	public void draw(Graphics g, JPanel a)
 	{
-		g.drawImage(img, getX() - (int)(img.getWidth()/2.0), getY() - (int)(img.getHeight()/2.0), null);
+		g.drawImage(img, Arena.convertX(getX() - (int)(img.getWidth()/2.0), a), Arena.convertY(getY() - (int)(img.getHeight()/2.0), a), null);
 	}
 	public String getName()
 	{

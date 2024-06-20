@@ -8,7 +8,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -22,7 +21,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -54,7 +52,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -125,7 +122,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	
 	public static Language lang = null;
 	private static String file_path = null;
-	private static int size_x = 650, size_y = 500;
 	private static int speed = 9, react_delay = 37, boss_delay = 5000, difficulty_delay = 5000, boss_beam_delay = 400;
 	private static int spaceShip_r = 50;
 	private static int enemy_r = 35;
@@ -588,10 +584,12 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		init();
 	}
 	private void init()
-	{		
-		window.setSize(size_x, size_y);
-		window.setMinimumSize(new Dimension(size_x, size_y));
-		window.setMaximumSize(new Dimension(size_x + 1, size_y + 1));
+	{
+		Dimension scrSize = sets.getScreenSize();
+		
+		window.setSize((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50));
+		window.setMinimumSize(new Dimension((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50)));
+		window.setMaximumSize(new Dimension(550, 450));
 		window.setLocation((int)(sets.getScreenSize().getWidth()/2 - window.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - window.getHeight()/2));
 		window.setLayout(new BorderLayout());
 		window.addWindowListener(this);
@@ -6564,22 +6562,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	public static String getFile_path()
 	{
 		return new String(file_path);
-	}
-	public static int getSize_x()
-	{
-		return size_x;
-	}
-	public static int getSize_y()
-	{
-		return size_y;
-	}
-	static void setSize_x(int x)
-	{
-		size_x = x;
-	}
-	static void setSize_y(int y)
-	{
-		size_y = y;
 	}
 	@Override
 	public void openConsole()

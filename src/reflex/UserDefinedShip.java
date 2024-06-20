@@ -620,8 +620,8 @@ public class UserDefinedShip extends SpaceShip
 		this.setAccel(speed_capacity.intValue());
 		this.setMax_energy(energy_capacity.longValue());
 		this.setEnergy(energy_capacity.longValue());
-		setX((int) (Reflexioner.getSize_x() / 3.0));
-		setY((int) (Reflexioner.getSize_y() / 1.5));
+		setX((int) (Arena.maxWidth() / 3.0));
+		setY((int) (Arena.maxHeight() / 1.5));
 	}
 	@Override
 	public Area area()

@@ -24,7 +24,7 @@ public abstract class RectObject extends GraphicObject
 	public void draw(Graphics g, JPanel a)
 	{
 		//System.out.println("DrawRect " + g.getColor() + ", 좌표 " + getX() + ", " + getY() + " 크기 " + w + ", " + h);
-		g.fillRect(getX() - (int)(w/2.0), getY() - (int)(h/2.0), w, h);	
+		g.fillRect(Arena.convertX(getX() - (int)(w/2.0), a), Arena.convertY(getY() - (int)(h/2.0), a), Arena.convertWidth(w, a), Arena.convertHeight(h, a));	
 	}
 	public int getW()
 	{

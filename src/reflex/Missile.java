@@ -135,7 +135,7 @@ public class Missile extends RectObject
 		}
 		else
 		{
-			g.drawImage(image, getX() - (int)(getW() / 2.0), getY() - (int)(getH() / 2.0), getW(), getH(), null);
+			g.drawImage(image, Arena.convertX(getX() - (int)(getW() / 2.0), a), Arena.convertY(getY() - (int)(getH() / 2.0), a), Arena.convertWidth(getW(), a), Arena.convertHeight(getH(), a), null);
 			
 		}
 	}
@@ -267,7 +267,7 @@ class PulseMissile extends Missile
 	@Override
 	public void draw(Graphics g, JPanel a)
 	{
-		g.drawRect(getX(), getY(), getW(), getH());
+		g.drawRect(Arena.convertX(getX(), a), Arena.convertY(getY(), a), Arena.convertWidth(getW(), a), Arena.convertHeight(getH(), a));
 	}	
 	public Missile clone(boolean imgnull)
 	{		
@@ -401,7 +401,7 @@ class HelperSpread extends Missile
 			{
 				case 0:
 					newEnemy = new Enemy(path, true);
-					newEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+					newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 					newEnemy.setHp(newEnemy.getHp() + (int) (owner.getDamage() / 20));
 					newEnemy.setMax_hp(newEnemy.getHp());
 					newEnemy.setMax_energy(200 - (int)(owner.getDamage() / 10.0));										
@@ -413,7 +413,7 @@ class HelperSpread extends Missile
 				case 1:
 					newBigEnemy = new BigEnemy(path, true);
 					newBigEnemy.setGuide(true);
-					newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+					newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 					newBigEnemy.setHp((newBigEnemy.getHp() + (int) (owner.getDamage() / 20)) * 2);
 					newBigEnemy.setMax_hp(newBigEnemy.getHp());
 					newBigEnemy.setMax_energy(200 - (int)(owner.getDamage() / 10));
@@ -426,7 +426,7 @@ class HelperSpread extends Missile
 				case 2:
 					newBigEnemy = new QuickBoss(path, true);
 					newBigEnemy.setGuide(true);
-					newBigEnemy.setX((int) (Math.random() * Reflexioner.getSize_x()));
+					newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
 					newBigEnemy.setHp((newBigEnemy.getHp() + (int) (owner.getDamage())) * 2);
 					newBigEnemy.setMax_hp(newBigEnemy.getHp());
 					newBigEnemy.setMax_energy(200 - (int)(owner.getDamage() / 10));

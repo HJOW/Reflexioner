@@ -111,7 +111,7 @@ public class ReflexDecorate extends OvalObject
 			super.draw(g, a);
 		else
 		{
-			g.drawImage(image, getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), getR(), getR(), null);			
+			g.drawImage(image, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);			
 		}
 	}
 	public String getName()
