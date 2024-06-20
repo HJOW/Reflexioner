@@ -3,11 +3,12 @@ package reflexioner;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Vector;
 
-import setting.Setting;
 import mainClasses.RunManager;
+import setting.Setting;
 
 public class SoundCache
 {
@@ -76,6 +77,12 @@ public class SoundCache
 				fireMissile = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_missile.wav");
+			if(res != null) fireMissile = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "fire_beam.wav"));
 		if(file.exists())
 		{
@@ -89,6 +96,12 @@ public class SoundCache
 				fireBeam = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_beam.wav");
+			if(res != null) fireBeam = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "fire_multiple_missiles.wav"));
 		if(file.exists())
 		{
@@ -102,6 +115,12 @@ public class SoundCache
 				fireMultiplyMissiles = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_multiple_missiles.wav");
+			if(res != null) fireMultiplyMissiles = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "hit.wav"));
 		if(file.exists())
 		{
@@ -115,6 +134,12 @@ public class SoundCache
 				hit = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/hit.wav");
+			if(res != null) hit = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "boom.wav"));
 		if(file.exists())
 		{
@@ -128,6 +153,12 @@ public class SoundCache
 				boom = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/boom.wav");
+			if(res != null) boom = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "clicks.wav"));
 		if(file.exists())
 		{
@@ -141,6 +172,12 @@ public class SoundCache
 				clicks = null;
 			}
 		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/clicks.wav");
+			if(res != null) clicks = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "bgm.wav"));
 		if(file.exists())
 		{
@@ -153,6 +190,11 @@ public class SoundCache
 				e.printStackTrace();
 				bgm = null;
 			}
+		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/bgm.wav");
+			if(res != null) bgm = Applet.newAudioClip(res);
 		}
 	}
 	public static void play(String commands)

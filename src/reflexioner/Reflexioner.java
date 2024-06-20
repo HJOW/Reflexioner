@@ -102,7 +102,6 @@ import setting.Key;
 import setting.KeyBlock;
 import setting.Lint;
 import setting.Setting;
-import setting.SettingManager;
 
 public class Reflexioner extends MouseDragCatcher implements Openable, WindowListener, ActionListener, MessageShowable, ListSelectionListener, ChangeListener, ItemListener
 {
@@ -448,7 +447,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private FileFilter fileFilter_rp2;
 	private String download_url1, download_url2;
 	private JButton bt_setUrl;
-	private JMenuItem menu_help_script;
 	private JComboBox start_scenario_selectShipCombo;
 	private String selected_scenario_ship;
 	private JPanel start_notice_descPanel;
@@ -497,7 +495,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private int about_x;
 	private int about_y;
 	private JButton bt_viewOnEditor;
-	private JMenuItem menu_manage_setting;
 	
 	
 	public Reflexioner()
@@ -1173,7 +1170,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		
 		
 		start_downloadPanel = new JPanel();
-		mainTab.add(sets.getLang().getText(Language.DOWNLOAD_PACK), start_downloadPanel);
+		// mainTab.add(sets.getLang().getText(Language.DOWNLOAD_PACK), start_downloadPanel);
 		start_downloadPanel.setLayout(new BorderLayout());
 		start_downloadPanel.setBackground(sets.getSelected_back());
 		start_download_upPanel = new JPanel();
@@ -1565,17 +1562,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		menu_file_manage.add(menu_manage_setIntervalReplay);
 		
-		menu_manage_setting = new JMenuItem(lang.getText(Language.DETAIL) + " " + lang.getText(Language.SETTING));
-		menu_manage_setting.addActionListener(this);
-		menu_manage_setting.setBackground(sets.getSelected_back());
-		menu_manage_setting.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-		{
-			menu_manage_setting.setFont(usingFont);
-		}
-		menu_file_manage.add(menu_manage_setting);
-		if(! independence) menu_manage_setting.setVisible(false);
-		
 		menu_manage_uninstall = new JMenuItem(sets.getLang().getText(Language.UNINSTALL));
 		menu_manage_uninstall.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, KeyEvent.CTRL_MASK));
 		menu_manage_uninstall.addActionListener(this);
@@ -1664,16 +1650,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		menuBar.add(menu_help);		
 				
-		menu_help_script = new JMenuItem(sets.getLang().getText(Language.SCRIPT) + " " + sets.getLang().getText(Language.HELP));
-		menu_help_script.addActionListener(this);
-		menu_help_script.setBackground(sets.getSelected_back());
-		menu_help_script.setForeground(sets.getSelected_fore());
-		if(usingFont != null)
-		{
-			menu_help_script.setFont(usingFont);
-		}
-		menu_help.add(menu_help_script);
-		
 		menu_help_files = new JMenuItem();
 		menu_help_files.addActionListener(this);
 		menu_help_files.setBackground(sets.getSelected_back());
@@ -4328,13 +4304,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			{
 				JOptionPane.showMessageDialog(startDialog, sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
 			}
-		}
-		else if(ob == menu_manage_setting)
-		{
-			window.setVisible(false);	
-			startDialog.setVisible(false);
-			messageDialog.setVisible(false);
-			new SettingManager(sets.clone(), sets.getScreenSize(), version_main, version_sub_1, version_sub_2, true, manager, false, arguments).open();			
 		}
 	}	
 	private void update_needfiles()

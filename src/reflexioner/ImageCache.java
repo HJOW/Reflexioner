@@ -763,6 +763,8 @@ public class ImageCache
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + keyname + ".jpg");
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "enemy_boom" + ".jpg");
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "enemy_boom" + ".png");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "boom" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "boom" + ".png");
 				
 				if(inp != null) {
 					try 
@@ -796,6 +798,8 @@ public class ImageCache
 			if(! target.exists()) target = new File(RunManager.r65279(path + keyname2 + ".jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".jpg"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".png"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".jpg"));
 			if(target.exists())
 			{
 				img_ovalboom = ImageIO.read(target);
@@ -835,6 +839,8 @@ public class ImageCache
 			if(! target.exists()) target = new File(RunManager.r65279(path + keyname + ".jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".jpg"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".png"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".jpg"));
 			if(target.exists())
 			{
 				img_itemuseboom = ImageIO.read(target);
@@ -845,6 +851,8 @@ public class ImageCache
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + keyname + ".jpg");
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "item_boom" + ".jpg");
 				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "item_boom" + ".png");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "boom" + ".jpg");
+				if(inp == null) inp = RunManager.getIndexClass().getClassLoader().getResourceAsStream("resources/image/" + "boom" + ".png");
 				
 				if(inp != null) {
 					try 

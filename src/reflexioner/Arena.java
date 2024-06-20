@@ -1563,6 +1563,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										target_boom.setX(target_enemy.getX());
 										target_boom.setY(target_enemy.getY());
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
+										target_boom.loadImage(arena.file_path);
 										arena.booms.add(target_boom);
 									}
 								}
@@ -1596,6 +1597,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										target_boom.setX(target_enemy.getX());
 										target_boom.setY(target_enemy.getY());
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
+										target_boom.loadImage(arena.file_path);
 										arena.booms.add(target_boom);
 									}
 								}
@@ -2205,6 +2207,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								arena.newBoom = new OvalBoom(arena.spaceShip.getR() / 2, Missile.SPACESHIP);
 								arena.newBoom.setX(arena.spaceShip.getX());
 								arena.newBoom.setY(arena.spaceShip.getY());
+								arena.newBoom.loadImage(arena.file_path);
 								arena.booms.add(arena.newBoom);
 								arena.finish_count = (arena.spaceShip.getR() / 2) + 5;
 							}

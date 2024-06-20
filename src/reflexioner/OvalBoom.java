@@ -132,6 +132,8 @@ public class OvalBoom extends OvalObject implements Boom
 			if(! target.exists()) target = new File(RunManager.r65279(path + getBoomName(false) + ".jpg"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".png"));
 			if(! target.exists()) target = new File(RunManager.r65279(path + "boom_" + "default" + ".jpg"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".png"));
+			if(! target.exists()) target = new File(RunManager.r65279(path + "boom" + ".jpg"));
 			if(! target.exists()) return;
 			image = ImageIO.read(target);
 		} 
