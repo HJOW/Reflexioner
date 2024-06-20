@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Key;
 import setting.KeyBlock;
 import setting.SaveInt;

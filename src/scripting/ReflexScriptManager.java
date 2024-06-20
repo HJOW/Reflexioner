@@ -18,7 +18,7 @@ import dom.DOM_Document;
 import dom.DOM_History;
 import dom.DOM_Navigator;
 import dom.DOM_Window;
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Setting;
 import lang.Language;
 import mainClasses.Openable;

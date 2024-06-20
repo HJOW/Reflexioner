@@ -4,7 +4,7 @@ import java.awt.Component;
 
 import javax.swing.JOptionPane;
 
-import reflex.Arena;
+import reflexioner.Arena;
 import scripting.ScriptActor;
 
 public class DOM_Window

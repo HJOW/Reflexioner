@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import lang.Language;
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Lint;
 import setting.Setting;
 

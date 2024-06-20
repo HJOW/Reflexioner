@@ -12,7 +12,7 @@ import java.util.Vector;
 import lang.English;
 import lang.Korean;
 import lang.Language;
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import scripting.ScriptModule;
 
 public class Setting implements CanBeClone, Objectable

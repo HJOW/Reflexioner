@@ -23,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EtchedBorder;
 
 import lang.Language;
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Setting;
 
 public class Help extends JDialog implements ActionListener, WindowListener, MouseListener, MouseMotionListener

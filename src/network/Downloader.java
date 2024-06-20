@@ -26,7 +26,7 @@ import javax.swing.border.EtchedBorder;
 
 import lang.Language;
 import mainClasses.RunManager;
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Setting;
 import setting.VersionData;
 

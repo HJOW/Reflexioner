@@ -2,7 +2,7 @@ package setting;
 
 import java.util.StringTokenizer;
 
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 
 public class DetailedVersionData extends VersionData
 {

@@ -5,15 +5,15 @@ import java.util.List;
 
 import lang.Language;
 import mainClasses.MessageShowable;
-import reflex.Arena;
-import reflex.ControllableShip;
-import reflex.Enemy;
-import reflex.ImageCache;
-import reflex.Missile;
-import reflex.ReflexDecorate;
-import reflex.ReflexScenario;
-import reflex.Reflexioner;
-import reflex.StringDecorate;
+import reflexioner.Arena;
+import reflexioner.ControllableShip;
+import reflexioner.Enemy;
+import reflexioner.ImageCache;
+import reflexioner.Missile;
+import reflexioner.ReflexDecorate;
+import reflexioner.ReflexScenario;
+import reflexioner.Reflexioner;
+import reflexioner.StringDecorate;
 import setting.Setting;
 
 public class Script_Reflex implements Helpable, ControllableShip

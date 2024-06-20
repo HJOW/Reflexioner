@@ -25,7 +25,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import reflex.Reflexioner;
+import reflexioner.Reflexioner;
 import setting.Setting;
 import lang.Language;
 import mainClasses.MessageShowable;
