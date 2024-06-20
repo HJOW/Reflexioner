@@ -131,8 +131,7 @@ public class RunManager implements Serializable
 		if(setting == null) setting = null;
 		else setting = setting.clone();
 		System.out.print(".");
-		//BeforeProgressDialog.showNow();
-		//BeforeProgressDialog.progress(0);
+		BeforeProgressDialog.showNow();
 		if(args != null)
 		{
 			if(args.length >= 1)
@@ -157,7 +156,6 @@ public class RunManager implements Serializable
 		System.out.print(".");
 		
 		
-		//BeforeProgressDialog.progress(0.01);
 		if(setting == null)
 		{
 			try
@@ -191,13 +189,8 @@ public class RunManager implements Serializable
 					obin.close();
 					firstTime = false;
 				}
-				//BeforeProgressDialog.progress(0.1);
 				fin.close();
 				
-								
-				//System.out.println(setting.center_tab);
-				//System.out.println("Ver : " + setting.getVer_main() + "." + setting.getVer_sub1() + "" + setting.getVer_sub2());
-				//System.out.println(setting.getVersion_aut() + " : " + Reflexioner.version_auts());
 				if(setting.getVer_main() == Reflexioner.version_main 
 						&& setting.getVer_sub1() == Reflexioner.version_sub_1
 						&& setting.getVer_sub2() == Reflexioner.version_sub_2)
@@ -223,85 +216,6 @@ public class RunManager implements Serializable
 					//loadComplete = true;
 				}						
 				
-				if(loadComplete)
-				{
-					try
-					{
-						VersionData downloaded_ver = setting.getDownloaded_ver();
-						boolean need_runDownloaded = false;
-						File downloaded = new File(setting.getDownloaded_path());
-						if(downloaded.exists())
-						{
-							if(downloaded_ver != null)
-							{
-								if(downloaded_ver.v_m() > Reflexioner.version_main)
-								{
-									need_runDownloaded = true;
-								}
-								else if(downloaded_ver.v_m() >= Reflexioner.version_main && downloaded_ver.v_1() > Reflexioner.version_sub_1)
-								{
-									need_runDownloaded = true;
-								}
-								else if(downloaded_ver.v_m() >= Reflexioner.version_main 
-										&& downloaded_ver.v_1() >= Reflexioner.version_sub_1 
-										&& downloaded_ver.v_2() > Reflexioner.version_sub_2)
-								{
-									need_runDownloaded = true;
-								}
-								else if(downloaded_ver.v_m() >= Reflexioner.version_main 
-										&& downloaded_ver.v_1() >= Reflexioner.version_sub_1 
-										&& downloaded_ver.v_2() >= Reflexioner.version_sub_2 
-										&& (downloaded_ver.v_t() == ' ' && Reflexioner.isBeta()))
-								{
-									need_runDownloaded = true;
-								}
-								else
-								{
-									need_runDownloaded = false;
-								}
-							}
-							else
-							{
-								need_runDownloaded = false;
-							}
-						}
-						else
-						{
-							need_runDownloaded = false;
-						}
-						if(args != null)
-						{
-							for(int i=0; i<args.length; i++)
-							{
-								if(args[i] != null)
-								{
-									if(args[i].equalsIgnoreCase("just_run"))
-									{
-										need_runDownloaded = false;
-										break;
-									}
-								}
-							}
-						}
-						if(need_runDownloaded)
-						{
-							try
-							{								
-								Runtime.getRuntime().exec("java -jar " + setting.getDownloaded_path());
-								System.exit(0);
-							} 
-							catch (Exception e)
-							{
-								System.out.println(e.getMessage());
-								System.out.println("Run failed, try to run old version.");								
-							}							
-						}						
-					} 
-					catch (Exception e)
-					{
-						
-					}					
-				}
 			}
 			catch(InvalidClassException e)
 			{
@@ -370,35 +284,7 @@ public class RunManager implements Serializable
 				} 
 			}
 		}
-		
-		if(setting.getNext_execute_saved().booleanValue())
-		{
-			switch(setting.getNext_execute().intValue())
-			{
-				case 0:
-					reflexoner = false;
-					break;
-				case 1:
-					reflexoner = false;
-					break;
-				case 2:
-					reflexoner = false;
-					break;
-				case 3:
-					reflexoner = false;
-					break;
-				case 4:
-					reflexoner = true;
-					break;
-				case 5:
-					reflexoner = false;
-					break;
-				case 6:
-					reflexoner = false;
-					break;
-			}
-		}
-		
+		reflexoner = true;
 		if(! loadComplete)
 		{
 			setting.setDefault_path(new String(default_path));
@@ -408,7 +294,6 @@ public class RunManager implements Serializable
 			setting.setScreenSize(screenSize);
 			setting.setNotice_url("http://netstorm.woobi.co.kr/calc/"); // TODO
 		}
-		
 		
 		if(args != null)
 		{
@@ -557,55 +442,9 @@ public class RunManager implements Serializable
 							default_lang = false;
 							arg_index++;
 						}
-						else if(args[arg_index].equalsIgnoreCase("set_mode"))
-						{
-							break;
-						}
-						else if(args[arg_index].equalsIgnoreCase("conquer"))
-						{
-							reflexoner = false;
-							break;
-						}
-						else if(args[arg_index].equalsIgnoreCase("onecard"))
-						{
-							reflexoner = false;
-							break;
-						}
-						else if(args[arg_index].equalsIgnoreCase("check_code"))
-						{							
-							break;
-						}							
-						else if(args[arg_index].equalsIgnoreCase("gui"))
-						{
-							arg_index++;
-							continue;
-						}
-						else if(args[arg_index].equalsIgnoreCase("reflex"))
-						{
-							reflexoner = true;
-							arg_index++;
-							continue;
-						}
-						else if(args[arg_index].equalsIgnoreCase("mathconqueror"))
-						{
-							reflexoner = false;
-							arg_index++;
-							continue;
-						}
-						else if(args[arg_index].equalsIgnoreCase("citymanager"))
-						{
-							reflexoner = false;
-							arg_index++;
-							continue;
-						}
 						else if(args[arg_index].equalsIgnoreCase("classic"))
 						{
 							classic_mode = true;
-							arg_index++;
-							continue;
-						}
-						else if(args[arg_index].equalsIgnoreCase("console"))
-						{
 							arg_index++;
 							continue;
 						}
@@ -764,7 +603,6 @@ public class RunManager implements Serializable
 			}
 			if(os.startsWith("window") || os.startsWith("windows") || os.startsWith("Window") || os.startsWith("Windows"))
 			{
-				
 				setting.setOp_multiply('×');
 			}
 			else
@@ -774,23 +612,9 @@ public class RunManager implements Serializable
 		}
 		
 		System.out.print(".");
-		//BeforeProgressDialog.progress(0.2);
-		//System.out.println(loadComplete);
-		//System.out.println(setting.center_tab);	
-		//System.out.println("center_tab : " + setting.getOb_center_tab() + " " + setting.center_tab);
-		
-		//Openable window;
-		//System.out.println(setting.classic_mode);
-		/*
-		for(int i=0; i<setting.lang.getList().length; i++)
-		{
-			System.out.println(setting.lang.getText(i));
-		}*/
 		
 		TrackStorage.newInstance(setting);
 		System.out.print(".");
-		//setting.setClassic_mode(false);
-		//classic_mode = false;
 		
 		ConfigSetting readConfigData = ConfigMaker.readConfig(setting);
 		setting = readConfigData.sets;
@@ -933,7 +757,7 @@ public class RunManager implements Serializable
 		}
 		
 		System.out.println(".!");
-		//System.out.println("Serial : " + setting.getKey().generate_master(setting, 2938291));
+		BeforeProgressDialog.close();
 		window.open();
 	}
 	public static String r65279(String target)

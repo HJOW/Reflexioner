@@ -26,10 +26,12 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 	private Label title;
 	private Label progressBar;
 	private Button close;
-	//private Thread thread;
-	private volatile boolean threadSwitch = true;
+	private Thread thread;
 	private Panel centerPanel;
-	private long progresses = 0;
+	private int value = 0;
+	
+	private volatile boolean threadSwitch = true;
+	
 	public static BeforeProgressDialog getInstance()
 	{
 		if(progress == null)
@@ -60,15 +62,11 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 		mainPanel.add(centerPanel, BorderLayout.SOUTH);
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(controlPanel, BorderLayout.CENTER);		
-		title = new Label(sets.getLang().getText(Language.LOAD));
+		title = new Label("Reflexioner");
 		title.setFont(new Font(null, Font.BOLD, 25));
 		titlePanel.setLayout(new FlowLayout());
 		titlePanel.add(title);
 		progressBar = new Label();
-		//progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
-		//progressBar.setStringPainted(true);
-		//progressBar.setString(String.valueOf(0));
-		//centerPanel.add(progressBar2, BorderLayout.SOUTH);
 		close = new Button(sets.getLang().getText(Language.X));
 		close.addActionListener(this);
 		controlPanel.setLayout(new BorderLayout());
@@ -76,60 +74,22 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 		controlPanel.add(close, BorderLayout.EAST);
 		titlePanel.setBackground(Color.DARK_GRAY);
 		title.setForeground(Color.GRAY);
-		progresses = 0;
-		//thread = new Thread(this);
+		thread = new Thread(this);
 	}
-	public void setValue(int value)
-	{		
+	protected void setValue(int value)
+	{
+		this.value = value;
+		if(this.value < 0  ) this.value =   0;
+		if(this.value > 100) this.value = 100;
+		
 		String str = "";
-		for(int i=0; i<value; i++)
+		for(int i=0; i<this.value; i++)
 			str = str + "l";
 		progressBar.setText(str);
 	}
-	public void setValue(double value)
+	protected void setValue(double value)
 	{
-		String str = "";
-		for(int i=0; i<(int)(value * 100); i++)
-		{
-			str = str + "l";
-		}
-		
-		progressBar.setText(str);
-	}
-	public long getProgresses()
-	{
-		return progresses;
-	}
-	public void setProgresses(long progresses)
-	{
-		this.progresses = progresses;
-	}
-	public static void progress(int value)
-	{
-		progress.setValue(value);
-	}
-	public static void progress(long value)
-	{
-		try
-		{
-			progress.setValue(value);
-		
-		}
-		catch(Exception e)
-		{
-			
-		}
-	}
-	public static void progress(double value)
-	{
-		try
-		{
-			progress.setValue(value);
-		}
-		catch(Exception e)
-		{
-			
-		}
+		setValue((int) (value * 100.0));
 	}
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -137,6 +97,7 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 		Object ob = e.getSource();
 		if(ob == close)
 		{
+			threadSwitch = false;
 			System.exit(0);
 		}
 	}
@@ -145,9 +106,8 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 	public void open()
 	{
 		this.setVisible(true);
-		setValue(0);
 		threadSwitch = true;
-		//thread.start();
+		thread.start();
 	}
 	
 	@Override
@@ -165,11 +125,6 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 	{
 		progress.closeThis();
 	}
-	public static long getProgress()
-	{
-		return progress.getProgresses();
-		
-	}
 	public static void showNow()
 	{
 		BeforeProgressDialog.getInstance().open();
@@ -179,7 +134,10 @@ public class BeforeProgressDialog extends Frame implements ActionListener, Opena
 	{
 		while(threadSwitch)
 		{
+			this.value++;
+			setValue(value);
 			
+			try { Thread.sleep(50L); } catch(InterruptedException e) { break; } 
 		}		
 	}
 }

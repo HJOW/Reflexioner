@@ -44,7 +44,6 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -98,8 +97,6 @@ import mainClasses.RunManager;
 import mainClasses.ThreadAccumulate;
 import mainClasses.Uninstaller;
 import setting.Difficulty;
-import setting.Key;
-import setting.KeyBlock;
 import setting.Lint;
 import setting.Setting;
 
@@ -113,7 +110,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	public static final long version_nightly = 31;
 	public static final int  version_main = 0;
 	public static final int  version_sub_1 = 9;
-	public static final int  version_sub_2 = 1;
+	public static final int  version_sub_2 = 3;
 	public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
 	
 	public static Language lang = null;
@@ -319,20 +316,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JLabel about_editionLabel;
 	private JMenuItem menu_file_start;
 	private int grade_mode;
-	private JDialog serialDialog;
-	private JPanel serialDialog_mainPanel;
-	private JPanel serialDialog_upPanel;
-	private JPanel serialDialog_downPanel;
-	private JPanel serialDialog_centerPanel;
-	private JPanel serialDialog_titlePanel;
-	private JLabel serialDialog_title;
-	private JPanel serialDialog_contentPanel;
-	private JEditorPane serialDialog_message;
-	private JScrollPane serialDialog_messageSc;
-	private JTextField[] serialDialog_keys;
-	private JLabel[] serialDialog_bars;
-	private JButton serialDialog_close;
-	private JButton serialDialog_ok;
 	private JDialog userDefinedDialog;
 	private JPanel userDefined_mainPanel;
 	private JPanel userDefined_upPanel;
@@ -555,7 +538,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	{
 		Dimension scrSize = sets.getScreenSize();
 		
-		window.setSize((int) (scrSize.getWidth() - 100), (int) (scrSize.getHeight() - 150));
+		window.setSize((int) (scrSize.getWidth() / 1.5), (int) (scrSize.getHeight() / 1.5));
 		window.setMaximumSize(new Dimension((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50)));
 		window.setMinimumSize(new Dimension(550, 450));
 		window.setLocation((int)(sets.getScreenSize().getWidth()/2 - window.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - window.getHeight()/2));
@@ -1958,99 +1941,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			bt_aboutClose.setBackground(sets.getSelected_button());
 		about_downPanel.add(bt_aboutClose);
 		
-		serialDialog = new JDialog(aboutDialog, true);		
-		serialDialog.setSize(450, 220);
-		serialDialog.setTitle(sets.getLang().getText(Language.AUTHORITY));
-		serialDialog.setLocation((int)(sets.getScreenSize().getWidth()/2 - serialDialog.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - serialDialog.getHeight()/2));
-		serialDialog.getContentPane().setLayout(new BorderLayout());
-		serialDialog_mainPanel = new JPanel();
-		serialDialog.getContentPane().add(serialDialog_mainPanel);
-		serialDialog_mainPanel.setLayout(new BorderLayout());
-		serialDialog_mainPanel.setBorder(new EtchedBorder());
-		serialDialog_mainPanel.setBackground(sets.getSelected_back());
-		serialDialog_upPanel = new JPanel();
-		serialDialog_downPanel = new JPanel();
-		serialDialog_centerPanel = new JPanel();
-		serialDialog_upPanel.setBackground(sets.getSelected_back());
-		serialDialog_downPanel.setBackground(sets.getSelected_back());
-		serialDialog_centerPanel.setBackground(sets.getSelected_back());
-		serialDialog_mainPanel.add(serialDialog_upPanel, BorderLayout.NORTH);
-		serialDialog_mainPanel.add(serialDialog_centerPanel, BorderLayout.CENTER);		
-		serialDialog_mainPanel.add(serialDialog_downPanel, BorderLayout.SOUTH);
-		serialDialog_upPanel.setLayout(new BorderLayout());
-		serialDialog_centerPanel.setLayout(new BorderLayout());
-		serialDialog_downPanel.setLayout(new FlowLayout());
-		serialDialog_titlePanel = new JPanel();
-		serialDialog_titlePanel.addMouseListener(this);
-		serialDialog_titlePanel.addMouseMotionListener(this);
-		serialDialog_titlePanel.setBackground(sets.getSelected_inside_back());
-		//serialDialog_upPanel.add(serialDialog_titlePanel, BorderLayout.NORTH);
-		serialDialog_titlePanel.setBorder(new EtchedBorder());
-		serialDialog_titlePanel.setLayout(new FlowLayout());
-		serialDialog_title = new JLabel(sets.getLang().getText(Language.AUTHORITY));
-		if(usingFont != null)
-			serialDialog_title.setFont(usingFont);
-		serialDialog_title.setForeground(sets.getSelected_fore());
-		serialDialog_titlePanel.add(serialDialog_title);
-		serialDialog_upPanel.add(serialDialog_titlePanel, BorderLayout.NORTH);
-		serialDialog.setUndecorated(true);
-		serialDialog_contentPanel = new JPanel();
-		serialDialog_contentPanel.setBackground(sets.getSelected_back());
-		serialDialog_centerPanel.add(serialDialog_contentPanel, BorderLayout.SOUTH);
-		serialDialog_message = new JEditorPane();
-		serialDialog_message.setBackground(sets.getSelected_inside_back());
-		serialDialog_message.setEditable(false);		
-		//serialDialog_message.setLineWrap(true);
-		serialDialog_messageSc = new JScrollPane(serialDialog_message, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		serialDialog_centerPanel.add(serialDialog_messageSc, BorderLayout.CENTER);
-		try
-		{
-			serialDialog_message.setPage(sets.getNotice_url() + "/free_serial.html");
-		}
-		catch(Exception e)
-		{
-			serialDialog_message.setText(sets.getLang().getText(Language.INPUT_SERIAL_AGREEMENT));
-		}
-		
-		serialDialog_contentPanel.setLayout(new FlowLayout());
-		serialDialog_keys = new JTextField[5];
-		serialDialog_bars = new JLabel[4];
-		for(int i=0; i<serialDialog_keys.length; i++)
-		{
-			serialDialog_keys[i] = new JTextField(5);	
-			if(usingFont != null)
-				serialDialog_keys[i].setFont(usingFont);
-			serialDialog_keys[i].setBackground(sets.getSelected_inside_back());
-			serialDialog_keys[i].setForeground(sets.getSelected_fore());
-			serialDialog_contentPanel.add(serialDialog_keys[i]);
-			if(i < serialDialog_keys.length - 1)
-			{
-				serialDialog_bars[i] = new JLabel("-");
-				serialDialog_bars[i].setForeground(sets.getSelected_fore());
-				if(usingFont != null)
-					serialDialog_bars[i].setFont(usingFont);
-				serialDialog_contentPanel.add(serialDialog_bars[i]);
-			}			
-		}
-		serialDialog_keys[serialDialog_keys.length - 1].addActionListener(this);
-		serialDialog_close = new JButton(sets.getLang().getText(Language.CLOSE));
-		if(usingFont != null)
-			serialDialog_close.setFont(usingFont);
-		serialDialog_ok = new JButton(sets.getLang().getText(Language.OK));
-		if(usingFont != null)
-			serialDialog_ok.setFont(usingFont);
-		serialDialog_close.addActionListener(this);
-		serialDialog_ok.addActionListener(this);
-		serialDialog_ok.setForeground(sets.getSelected_fore());
-		serialDialog_close.setForeground(sets.getSelected_fore());
-		if(sets.getSelected_button() != null)
-		{
-			serialDialog_close.setBackground(sets.getSelected_button());
-			serialDialog_ok.setBackground(sets.getSelected_button());
-		}
-		serialDialog_downPanel.add(serialDialog_ok);
-		serialDialog_downPanel.add(serialDialog_close);
-		
 		userDefinedDialog = new JDialog(startDialog, true);
 		userDefinedDialog.setSize(400, 300);
 		userDefinedDialog.setLocation((int)(sets.getScreenSize().getWidth()/2 - userDefinedDialog.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - userDefinedDialog.getHeight()/2));
@@ -2624,26 +2514,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 					KEY_0 = sets.getProperties().get("keys_0").trim().toCharArray()[0];
 				}
 			}
-			if(sets.getProperties().containsKey("serial"))
-			{
-				try
-				{
-					Key key = new Key();
-					KeyBlock[] blocks = new KeyBlock[5];
-					StringTokenizer minusTokenizer = new StringTokenizer(sets.getProperties().get("serial"), "-");
-					for(int i=0; i<blocks.length; i++)
-					{
-						blocks[i] = new KeyBlock(minusTokenizer.nextToken());
-					}
-					key.setChars(blocks);
-					sets.setKey(key);
-					sets.getProperties().remove("serial");
-				} 
-				catch (Exception e)
-				{
-					if(sets.isError_printDetail()) e.printStackTrace();
-				}
-			}
 			int[] langList = sets.getLang().getList();
 			for(int i=0; i<langList.length; i++)
 			{
@@ -2930,7 +2800,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		try_transparent(finishDialog, doubled);
 		try_transparent(startDialog, doubled);
 		try_transparent(messageDialog, value);
-		try_transparent(serialDialog, doubled);
 		try_transparent(scenarioEditor, doubled);		
 		if(checker == null) checker = new Code_Checker(false, startDialog, sets);
 		try_transparent(checker.getWindow(), doubled);
@@ -4161,90 +4030,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			finishDialog.setVisible(false);
 			arena.resume();
 		}
-		else if(ob == serialDialog_close)
-		{
-			serialDialog.setVisible(false);
-		}
-		else if(ob == serialDialog_ok)
-		{
-			String[] getKeys = new String[serialDialog_keys.length];
-			for(int i=0; i<getKeys.length; i++)
-			{
-				getKeys[i] = serialDialog_keys[i].getText().toUpperCase(Locale.ENGLISH);
-			}
-			if(sets.input(getKeys))
-			{
-				grade_mode = getGrade(sets);	
-				
-				
-				try
-				{
-					save_sets(sets, false);
-					String[] options = new String[2];
-					options[0] = sets.getLang().getText(Language.EXIT);
-					options[1] = sets.getLang().getText(Language.CLOSE);
-										
-					SwingUtilities.invokeLater(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							about_editionLabel.setForeground(getGradeColor());
-							about_editionLabel.setText(getGradeString(sets));
-							about_editionLabel.setFont(getGradeFont());
-							
-							start_notice_editionLabel.setText(getGradeString(sets));
-							start_notice_editionLabel.setForeground(getGradeColor());
-							
-							combo_ship.removeAllItems();
-							List<String> shipNames = SpaceShip.spaceShipNameList(sets, grade_mode);
-							List<Integer> shipKeyList = SpaceShip.spaceShipKeyIntsList(grade_mode);
-							ships = new String[shipNames.size()];
-							shipKeys = new int[ships.length];
-							for(int i=0; i<ships.length; i++)
-							{
-								ships[i] = shipNames.get(i);
-								shipKeys[i] = shipKeyList.get(i).intValue();
-							}
-							
-							if(grade_mode >= 1)
-							{
-								menu_file_start_userDefined.setVisible(true);								
-								bt_viewOnEditor.setVisible(true);
-							}
-							else
-							{
-								menu_file_start_userDefined.setVisible(false);
-								bt_viewOnEditor.setVisible(false);
-							}
-							for(int i=0; i<ships.length; i++)
-							{
-								combo_ship.addItem(ships[i]);
-							}
-						}						
-					});
-					int getSelection = JOptionPane.showOptionDialog(serialDialog, sets.getLang().getText(Language.NEED_RESTART), sets.getLang().getText(Language.NEED_RESTART), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
-					if(getSelection == JOptionPane.YES_OPTION)
-					{
-						exit();
-					}
-					else
-					{
-						
-					}
-				} 
-				catch (Exception e1)
-				{
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(serialDialog,sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-				}
-				serialDialog.setVisible(false);
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(serialDialog,sets.getLang().getText(Language.DESCRIPTIONS + 20));
-			}
-		}
 		else if(ob == menu_help_about)
 		{
 			aboutDialog.setVisible(true);
@@ -5344,10 +5129,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			finishDialog.setLocation(e.getXOnScreen() - mouse_finish_x, e.getYOnScreen() - mouse_finish_y);
 		}
-		else if(ob == serialDialog_titlePanel)
-		{
-			serialDialog.setLocation(e.getXOnScreen() - mouse_serial_x, e.getYOnScreen() - mouse_serial_y);
-		}
 		else if(ob == autoUserDefined_titlePanel)
 		{
 			autoUserDefinedDialog.setLocation(e.getXOnScreen() - mouse_auto_x, e.getYOnScreen() - mouse_auto_y);
@@ -5417,11 +5198,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			mouse_finish_x = e.getX();
 			mouse_finish_y = e.getY();
 		}
-		else if(ob == serialDialog_titlePanel)
-		{
-			mouse_serial_x = e.getX();
-			mouse_serial_y = e.getY();
-		}
 		else if(ob == autoUserDefined_titlePanel)
 		{
 			mouse_auto_x = e.getX();
@@ -5441,14 +5217,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			about_x = e.getX();
 			about_y = e.getY();
-		}
-		else if(ob == about_editionLabel)
-		{
-			serialDialog.setVisible(true);
-		}
-		else if(ob == start_notice_editionLabel)
-		{
-			serialDialog.setVisible(true);
 		}
 		else if(ob == start_verLabel)
 		{
@@ -6582,31 +6350,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	}
 	public static int getGrade(Setting sets)
 	{
-		calc_grade = 0;
-		try
-		{
-			if(sets.accept_mastered() && (! sets.abandoned_key()))
-			{
-				calc_grade = 3;
-				return 3;
-			}
-		} 
-		catch (Exception e)
-		{
-			
-		}
-		try
-		{
-			if(sets.accept_net() && (! sets.abandoned_key()))
-			{
-				calc_grade = 2;
-				return 2;
-			}
-		} 
-		catch (Exception e)
-		{
-			
-		}
 		try
 		{
 			if(sets.accepted())
@@ -6615,81 +6358,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				return 1;
 			}
 		} 
-		catch (Exception e)
-		{
-			
-		}
-		try
-		{
-			Key key = sets.getKey();
-			String[] blocks = new String[key.getChars().length - 1];
-			char[] keyChar = new char[5];
-			long sum = 0;
-			for(int i=0; i<key.getChars().length - 1; i++)
-			{				
-				blocks[i] = new String(key.getChars()[i].blocks);
-				for(int j=0; j<key.getChars().length; j++)
-				{
-					for(int k=0; k<key.getChars()[j].getBlocks().length; k++)
-					{
-						sum = sum + (int) key.getChars()[j].getBlocks()[k];
-					}
-				}
-			}
-			for(int i=0; i<keyChar.length; i++)
-			{
-				switch((int)(sum % (i + 5)))
-				{
-					case 0:
-						keyChar[i] = 'A';
-						break;
-					case 1:
-						keyChar[i] = 'B';
-						break;
-					case 2:
-						keyChar[i] = 'C';
-						break;
-					case 3:
-						keyChar[i] = 'D';
-						break;
-					case 4:
-						keyChar[i] = 'E';
-						break;
-					case 5:
-						keyChar[i] = 'F';
-						break;
-					case 6:
-						keyChar[i] = 'G';
-						break;
-					case 7:
-						keyChar[i] = 'H';
-						break;
-					case 8:
-						keyChar[i] = 'I';
-						break;
-					case 9:
-						keyChar[i] = 'J';
-						break;
-					case 10:
-						keyChar[i] = 'K';
-						break;
-					default:
-						keyChar[i] = 'Z';
-				}
-			}	
-			String keyStr = new String(keyChar);
-			if(String.valueOf(key.getChars()[key.getChars().length - 1].blocks).equalsIgnoreCase(keyStr))
-			{				
-				calc_grade_str = "";
-				for(int i=0; i<blocks.length; i++)
-				{
-					calc_grade_str = calc_grade_str + blocks[i];
-				}
-				if(calc_grade <= 0)
-					calc_grade = -1;
-				return -1;
-			}
-		}
 		catch (Exception e)
 		{
 			

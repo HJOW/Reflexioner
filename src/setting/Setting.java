@@ -103,8 +103,6 @@ public class Setting implements CanBeClone, Objectable
 	private SaveChar ob_op_heart = null;
 	private SaveChar ob_ver_test = null;
 	
-	private Key key;
-	
 	private SaveBoolean next_execute_saved = null;
 	private SaveInt next_execute = null;
 	
@@ -178,7 +176,6 @@ public class Setting implements CanBeClone, Objectable
 		
 	public Setting()
 	{
-		key = new Key();
 		next_execute_saved = new SaveBoolean(true);
 		next_execute = new SaveInt(0);
 	}	
@@ -300,7 +297,6 @@ public class Setting implements CanBeClone, Objectable
 			if(this.jarfile_path != null) newOne.jarfile_path = new String(this.jarfile_path);
 			if(this.next_execute_saved != null) newOne.next_execute_saved = (SaveBoolean) this.next_execute_saved.clone();
 			if(this.next_execute != null) newOne.next_execute = (SaveInt) this.next_execute.clone();
-			if(key != null) newOne.key = this.key.clone();
 			
 			if(use_image != null) newOne.use_image = new Boolean(this.use_image.booleanValue());
 			else newOne.use_image = new Boolean(true);
@@ -784,20 +780,6 @@ public class Setting implements CanBeClone, Objectable
 		setting.themeSelection_new = new Boolean(true);
 		
 		return setting;
-	}
-	public boolean input(String[] keys)
-	{
-		Key newKey = new Key();
-		for(int i=0; i<keys.length; i++)
-		{
-			newKey.getChars()[i] = new KeyBlock(keys[i]);
-		}
-		if(newKey.accepted(this))
-		{
-			key = newKey;
-			return true;
-		}
-		else return false;
 	}
 	public int getTheme()
 	{
@@ -1435,34 +1417,7 @@ public class Setting implements CanBeClone, Objectable
 	}
 	public boolean accepted()
 	{
-		if(key != null)
-		{
-			try
-			{
-				if(abandoned_key()) return false;
-				else return key.accepted(this);
-			} 
-			catch (Exception e)
-			{
-				return key.accepted(this);
-			}
-		}
-		else return false;
-	}
-	public boolean accept_net() throws Exception
-	{
-		if(key != null) return key.accept_net(this);
-		else return false;
-	}
-	public boolean accept_mastered()
-	{
-		if(key != null) return key.accepted_master(this);
-		else return false;
-	}
-	public boolean abandoned_key() throws Exception
-	{
-		if(key != null) return key.abandoned(this);
-		else return false;
+		return true;
 	}
 	public boolean isProfessional_contents_loaded()
 	{
@@ -1488,14 +1443,6 @@ public class Setting implements CanBeClone, Objectable
 			SaveBoolean ob_professional_contents_loaded)
 	{
 		this.ob_professional_contents_loaded = ob_professional_contents_loaded;
-	}
-	public Key getKey()
-	{
-		return key;
-	}
-	public void setKey(Key key)
-	{
-		this.key = key;
 	}
 	public boolean isClassic_mode()
 	{

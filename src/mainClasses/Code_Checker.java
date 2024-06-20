@@ -540,7 +540,7 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 		for(int i=0; i<contentPns.length; i++)
 		{
 			contentPns[i] = new JPanel();
-			contentPns[i].setLayout(new FlowLayout());
+			contentPns[i].setLayout(new FlowLayout(FlowLayout.LEFT));
 			contentLabels[i] = new JLabel();
 			contentFields[i] = new JTextField(30);
 			if(Reflexioner.usingFont != null)
