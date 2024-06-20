@@ -689,45 +689,14 @@ public class Setting implements CanBeClone, Objectable
 		setting.use_color = true;
 		setting.otherObjects = new Vector<String>();
 		
-		if(screenSize.getWidth() >= 1920)
-		{
-			setting.width = 1800;			
-		}
-		else if(screenSize.getWidth() >= 1600)
-		{
-			setting.width = 1560;					
-		}
-		else if(screenSize.getWidth() >= 1280)
-		{
-			setting.width = 1200;
-		}
-		else if(screenSize.getWidth() >= 1024)
-		{
-			setting.width = 960;
-		}			
-		else setting.width = 620;
+		setting.width = (int) (screenSize.getWidth() - 150);
+		if(setting.width < 750) setting.width = 750;
 		
-		if(screenSize.getHeight() >= 1080)
-		{
-			setting.height = 700;
-		}
-		else if(screenSize.getHeight() >= 1024)
-		{
-			setting.height = 650;
-		}
-		else if(screenSize.getHeight() >= 864)
-		{
-			setting.height = 550;
-		}
-		else if(screenSize.getHeight() >= 768)
-		{
-			setting.height = 450;
-		}
-		else if(screenSize.getHeight() >= 720)
-		{
-			setting.height = 410;
-		}
-		else setting.height = 350;
+		setting.height = (int) (screenSize.getHeight() - 250);
+		if(setting.height < 550) setting.height = 550;
+		
+		setting.auto_scrollBar = false;
+		setting.scrollBar = false;
 		
 		try
 		{
@@ -740,36 +709,12 @@ public class Setting implements CanBeClone, Objectable
 		{
 			
 		}
-			
-		if(setting.auto_scrollBar)
-		{
-			int scrollCount = setting.slots * 300;
-			if(setting.width > scrollCount) setting.scrollBar = false;
-			else setting.scrollBar = true;
-		}
-		else
-		{
-			if(setting.width >= 1280 && setting.slots <= 4) setting.scrollBar = false;
-			else setting.scrollBar = true;
-		}
-		
-		
-		if(os.startsWith("window") || os.startsWith("windows") || os.startsWith("Window") || os.startsWith("Windows"))
-		{
-			
-			setting.op_multiply = '×';
-		}
-		else
-		{
-			setting.op_multiply = '*';
-		}
 		
 		setting.notice_url = "http://netstorm.woobi.co.kr/calc/";
 		setting.ver_main = Reflexioner.version_main;
 		setting.ver_sub1 = Reflexioner.version_sub_1;
 		setting.ver_sub2 = Reflexioner.version_sub_2;
 		setting.ver_test = Reflexioner.version_test;
-		setting.change_card_count = 1;
 		
 		setting.themeSelection_new = new Boolean(true);
 		

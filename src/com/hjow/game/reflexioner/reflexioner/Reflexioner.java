@@ -107,10 +107,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	
 	private static boolean frame_loaded = false;
 	
-	public static final long version_nightly = 31;
+	public static final long version_nightly = 32;
 	public static final int  version_main = 0;
 	public static final int  version_sub_1 = 9;
-	public static final int  version_sub_2 = 3;
+	public static final int  version_sub_2 = 4;
 	public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
 	
 	public static Language lang = null;
@@ -536,7 +536,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	{
 		Dimension scrSize = sets.getScreenSize();
 		
-		window.setSize((int) (scrSize.getWidth() / 1.5), (int) (scrSize.getHeight() / 1.5));
+		window.setSize((int) (sets.getWidth()), (int) (sets.getHeight()));
 		window.setMaximumSize(new Dimension((int) (scrSize.getWidth() - 50), (int) (scrSize.getHeight() - 50)));
 		window.setMinimumSize(new Dimension(550, 450));
 		window.setLocation((int)(sets.getScreenSize().getWidth()/2 - window.getWidth()/2), (int)(sets.getScreenSize().getHeight()/2 - window.getHeight()/2));

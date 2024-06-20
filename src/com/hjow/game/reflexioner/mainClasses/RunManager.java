@@ -544,69 +544,12 @@ public class RunManager implements Serializable
 			}
 			if(default_size)
 			{
-				if(screenSize.getWidth() >= 1920)
-				{
-					setting.setWidth(1800);
-					if(setting.getSlots() <= 4)
-					{
-						setting.setScrollBar(false);
-					}
-				}
-				else if(screenSize.getWidth() >= 1600)
-				{
-					setting.setWidth(1520);					
-				}
-				else if(screenSize.getWidth() >= 1280)
-				{
-					setting.setWidth(1200);
-				}
-				else if(screenSize.getWidth() >= 1024)
-				{
-					setting.setWidth(960);
-					if(setting.getSlots() >= 4)
-					{
-						setting.setScrollBar(true);
-					}
-				}			
-				else
-				{
-					setting.setWidth(620);
-					if(setting.getSlots() >= 3)
-					{
-						setting.setScrollBar(true);
-					}
-				}
+				setting.setWidth((int) (screenSize.getWidth() - 150));
+				if(setting.getWidth() < 750) setting.setWidth(750);
 				
-				
-				if(screenSize.getHeight() >= 1080)
-				{
-					setting.setHeight(700);
-				}
-				else if(screenSize.getHeight() >= 1024)
-				{
-					setting.setHeight(650);
-				}
-				else if(screenSize.getHeight() >= 864)
-				{
-					setting.setHeight(550);
-				}
-				else if(screenSize.getHeight() >= 768)
-				{
-					setting.setHeight(450);
-				}
-				else if(screenSize.getHeight() >= 720)
-				{
-					setting.setHeight(410);
-				}
-				else setting.setHeight(350);
-			}
-			if(os.startsWith("window") || os.startsWith("windows") || os.startsWith("Window") || os.startsWith("Windows"))
-			{
-				setting.setOp_multiply('×');
-			}
-			else
-			{
-				setting.setOp_multiply('*');
+				setting.setHeight((int) (screenSize.getHeight() - 250));
+				if(setting.getHeight() < 550) setting.setHeight(550);
+				setting.setScrollBar(false);
 			}
 		}
 		
