@@ -4,11 +4,11 @@ IF EXIST Reflexioner.jar goto :RUNJAR
 goto :END
 
 :RUNCLASS
-java ReflexionerIndex gui
+javaw ReflexionerIndex gui
 goto :END
 
 :RUNJAR
-java -jar ReflexionerIndex gui
+javaw -jar ReflexionerIndex gui
 goto :END
 
 :END
