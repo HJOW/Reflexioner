@@ -1183,7 +1183,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		
 		start_scenario_centerPanel.add(start_scenario_descriptionPanel, BorderLayout.CENTER);
 		start_scenario_centerPanel.add(start_scenarioListScroll, BorderLayout.WEST);		
-		scenarios = new Vector<ReflexScenario>();		
+		scenarios = new Vector<ReflexScenario>();
 		
 		start_scenario_downPanel.setLayout(new FlowLayout());
 		bt_start_scenario = new JButton(sets.getLang().getText(Language.START));

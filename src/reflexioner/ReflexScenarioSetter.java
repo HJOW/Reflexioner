@@ -12,6 +12,8 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 import lang.Language;
+import pack.InstalledPack;
+import pack.Pack;
 import setting.Lint;
 import setting.Setting;
 
@@ -371,7 +373,15 @@ public class ReflexScenarioSetter
 		newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
 		scenarios.add(newScenario);
 		
-				
+		List<Pack> packs = InstalledPack.getPacks();
+		for(Pack p : packs)
+		{
+			List<ReflexScenario> pscenarios = p.getScenarios();
+			for(ReflexScenario psc : pscenarios)
+			{
+				if(! scenarios.contains(psc)) scenarios.add(psc);
+			}
+		}
 		
 		if(alsoFiles)
 		{

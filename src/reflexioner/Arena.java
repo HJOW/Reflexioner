@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.List;
@@ -24,6 +25,8 @@ import lang.Language;
 import mainClasses.RunManager;
 import mainClasses.ThreadAccumulate;
 import mainClasses.ThreadControl;
+import pack.InstalledPack;
+import pack.Pack;
 import scripting.ScriptActor;
 import setting.Difficulty;
 import setting.Lint;
@@ -449,7 +452,28 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				userDefinedShip = null;
 				player_type = SpaceShip.SATELLITE;
 			}
-			else userDefinedShip = new AUserDefinedShip(commands, enemies);
+			else
+			{
+				boolean find = false;
+				
+				List<Pack> packs = InstalledPack.getPacks();
+				for(Pack p : packs)
+				{
+					List<SpaceShip> pships = p.getSpaceShip();
+					for(SpaceShip pship : pships)
+					{
+						if(commands.equalsIgnoreCase(pship.getKeyName()))
+						{
+							find = true;
+							userDefinedShip = null;
+							player_type = pship.getKeyInt();
+							break;
+						}
+					}
+				}
+				
+				if(! find) userDefinedShip = new AUserDefinedShip(commands, enemies);
+			}
 			return "success";
 		} 
 		catch (NullPointerException e)
@@ -557,7 +581,33 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 					spaceShip = new Satellite(enemies);
 					break;
 				default:
-					spaceShip = new SpaceShip(enemies);		
+					boolean find = false;
+					
+					List<Pack> packs = InstalledPack.getPacks();
+					for(Pack p : packs)
+					{
+						List<SpaceShip> pships = p.getSpaceShip();
+						for(SpaceShip pship : pships)
+						{
+							if(player_type == pship.getKeyInt())
+							{
+								find = true;
+								try
+								{
+									Class<? extends SpaceShip> shipClass = pship.getClass();
+									Constructor<? extends SpaceShip> cons = shipClass.getConstructor(List.class);
+									spaceShip = cons.newInstance(enemies);
+								}
+								catch(Exception e)
+								{
+									find = false;
+								}
+								break;
+							}
+						}
+					}
+					
+					if(! find) spaceShip = new SpaceShip(enemies);		
 			}
 			spaceShip.init();
 		}

@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 
 import lang.Language;
 import mainClasses.RunManager;
+import pack.InstalledPack;
+import pack.Pack;
 import setting.Lint;
 import setting.Setting;
 
@@ -110,6 +112,16 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		if(grade_mode >= 2) lists.add(new Integer(new Chaser().getKeyInt()));
 		if(grade_mode >= 3) lists.add(new Integer(new Carrier().getKeyInt()));
 		
+		List<Pack> packs = InstalledPack.getPacks();
+		for(Pack p : packs)
+		{
+			List<SpaceShip> pships = p.getSpaceShip();
+			for(SpaceShip pship : pships)
+			{
+				if(! lists.contains(pship.getKeyInt())) lists.add(pship.getKeyInt());
+			}
+		}
+		
 		return lists;
 	}
 	public static List<String> spaceShipNameList(Setting sets)
@@ -126,6 +138,16 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		if(grade_mode >= 2) lists.add(new Warship().getName(sets));
 		if(grade_mode >= 2) lists.add(new Chaser().getName(sets));
 		if(grade_mode >= 3) lists.add(new Carrier().getName(sets));
+		
+		List<Pack> packs = InstalledPack.getPacks();
+		for(Pack p : packs)
+		{
+			List<SpaceShip> pships = p.getSpaceShip();
+			for(SpaceShip pship : pships)
+			{
+				if(! lists.contains(pship.getKeyName())) lists.add(pship.getKeyName());
+			}
+		}
 		
 		return lists;
 	}
