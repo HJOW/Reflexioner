@@ -114,10 +114,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	
 	private static boolean frame_loaded = false;
 	
-	public static final long version_nightly = 25;
+	public static final long version_nightly = 26;
 	public static final int  version_main = 0;
 	public static final int  version_sub_1 = 9;
-	public static final int  version_sub_2 = 0;
+	public static final int  version_sub_2 = 1;
 	public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
 	
 	public static Language lang = null;
