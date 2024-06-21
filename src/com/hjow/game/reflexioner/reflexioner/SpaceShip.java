@@ -237,6 +237,7 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 	public void drawHud(Graphics g, Arena a)
 	{
 		if(getHp() <= 0) return;
+		if(! a.usingHud()) return;
 		switch(mode) 
 		{
 		case 1:
@@ -252,8 +253,34 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
 		    g.setColor(Color.BLUE);
 		}
 		
-		if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFontB);
-		g.drawString("Weapon " + mode, a.getWidth() - 80, a.getHeight() - 9);
+		if(Reflexioner.usingFontB != null) g.setFont(Reflexioner.usingFontB.deriveFont((float) Arena.convertFontSize((int) (Reflexioner.usingFontB.getSize() * 0.5), a)));
+		g.drawString("Weapon " + mode, Arena.convertX(Arena.maxWidth() - 40, a), Arena.convertY(Arena.maxHeight() - 5, a));
+		
+		g.setColor(new Color(100, 0, 0));
+		double len = 100.0;
+		g.fillRect(Arena.convertX(5, a), Arena.convertY(Arena.maxHeight() - 10, a), Arena.convertWidth((int) len, a), Arena.convertHeight(3, a));
+		
+		g.setColor(Color.RED);
+		len = ((getHp() * 100.0) / getMax_hp());
+		if(len > 100.0) len = 100.0;
+		g.fillRect(Arena.convertX(5, a), Arena.convertY(Arena.maxHeight() - 10, a), Arena.convertWidth((int) len, a), Arena.convertHeight(3, a));
+		
+		g.setColor(new Color(0, 0, 100));
+		len = 100.0;
+		g.fillRect(Arena.convertX(5, a), Arena.convertY(Arena.maxHeight() -  5, a), Arena.convertWidth((int) len, a), Arena.convertHeight(3, a));
+		
+		g.setColor(Color.BLUE);
+		len = ((getEnergy() * 100.0) / getMax_energy());
+		if(len > 100.0) len = 100.0;
+		g.fillRect(Arena.convertX(5, a), Arena.convertY(Arena.maxHeight() -  5, a), Arena.convertWidth((int) len, a), Arena.convertHeight(3, a));
+		
+		len = 100.0;
+		
+		g.setColor(Color.LIGHT_GRAY);
+		if(Reflexioner.usingFont != null) g.setFont(Reflexioner.usingFont.deriveFont((float) Arena.convertFontSize((int) (Reflexioner.usingFont.getSize() * 0.5), a)));
+		g.drawString("Score", Arena.convertX(20 + (int) len, a), Arena.convertY(Arena.maxHeight() - 5, a));
+		g.setColor(Color.GRAY);
+		g.drawString(String.valueOf(a.getPoint()), Arena.convertX(40 + (int) len, a), Arena.convertY(Arena.maxHeight() - 5, a));
 	}
 	public void removeImage(int weapon)
 	{

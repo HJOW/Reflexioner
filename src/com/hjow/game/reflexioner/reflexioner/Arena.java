@@ -57,6 +57,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private Reflexioner sp;
 	private boolean threadSwitch = false;
 	private boolean show = false;
+	private boolean hud = true;
 	private boolean active = true;
 	private boolean game_pause = false;
 	private int k=0;
@@ -73,6 +74,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private boolean unique_exist = false;
 	private String name = "", authcode = "";
 	private Setting sets;
+	private int decorationMax = 128;
 	private long difficulty_delay = 5000;
 	private long timeout = -1;
 	private String saved_script_5 = "", saved_script_6 = "", saved_script_7 = "";	
@@ -2281,7 +2283,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							e1.printStackTrace();
 						}	
 						
-						if(arena.decorates.size() <= 40 && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
+						if(arena.decorates.size() <= arena.decorationMax && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
 						{
 							arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, (int)(3 * Math.random() + 5 + (arena.difficulty / 500)), (int)(3 * Math.random() + 1), arena.file_path));
 						}
@@ -3119,6 +3121,14 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	public void addDecorate(ReflexDecorate deco)
 	{
 		decorates.add(deco);
+	}
+	public boolean usingHud()
+	{
+		return hud;
+	}
+	public void setHudUsage(boolean usage)
+	{
+		hud = usage;
 	}
 	@Override
 	public void control(int k) 
