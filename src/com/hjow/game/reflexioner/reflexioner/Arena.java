@@ -6,14 +6,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.zip.GZIPOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
@@ -22,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import com.hjow.game.reflexioner.lang.Language;
+import com.hjow.game.reflexioner.mainClasses.RXUtils;
 import com.hjow.game.reflexioner.mainClasses.RunManager;
 import com.hjow.game.reflexioner.mainClasses.ThreadAccumulate;
 import com.hjow.game.reflexioner.mainClasses.ThreadControl;
@@ -751,10 +758,9 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			pause();
 			game_pause = false;
 			
-			authcode = "";			
+			authcode = "";
+			Properties propAuth = new Properties();
 			
-			StringBuffer auth_code = new StringBuffer("");
-			String[] auth_codes = new String[17];
 			int ship_type = 1;
 			if(spaceShip instanceof Clipper) ship_type = 3;
 			else if(spaceShip instanceof Cruiser) ship_type = 2;
@@ -768,75 +774,83 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 				spaceShip.setPoint(spaceShip.getPoint().multiply(Lint.big(2)));
 			}
 			
-			auth_codes[0] = String.valueOf(spaceShip.getPoint().toString()); // point.toString()
-			auth_codes[1] = name;
-			auth_codes[2] = String.valueOf(ship_type);
-			auth_codes[3] = String.valueOf(difficulty); // clearCount
-			auth_codes[4] = String.valueOf(Reflexioner.version_main);
-			auth_codes[5] = String.valueOf(Reflexioner.version_sub_1);
-			auth_codes[6] = String.valueOf(Reflexioner.version_sub_2);
-			BigInteger secret_code = new BigInteger("0");
-			BigInteger secret_nameCode = new BigInteger("0");
-			
-			if(autoControl)
-			{
-				auth_codes[1] = auth_codes[1] + " (auto)";
-			}
-			
-			
 			Calendar calendar_inst = Calendar.getInstance();
 			int aut_year, aut_month, aut_day, aut_hour, aut_min, aut_sec;
-			aut_year = calendar_inst.get(Calendar.YEAR);
+			aut_year  = calendar_inst.get(Calendar.YEAR);
 			aut_month = calendar_inst.get(Calendar.MONTH);
-			aut_day = calendar_inst.get(Calendar.DATE);
-			aut_hour = calendar_inst.get(Calendar.HOUR);
-			aut_min = calendar_inst.get(Calendar.MINUTE);
-			aut_sec = calendar_inst.get(Calendar.SECOND);
+			aut_day   = calendar_inst.get(Calendar.DATE);
+			aut_hour  = calendar_inst.get(Calendar.HOUR);
+			aut_min   = calendar_inst.get(Calendar.MINUTE);
+			aut_sec   = calendar_inst.get(Calendar.SECOND);
 			
-			if(todayEvent)
+			propAuth.setProperty("Point"           , spaceShip.getPoint().toString());
+			propAuth.setProperty("Name"            , name);
+			propAuth.setProperty("Ship"            , spaceShip.getName(sets));
+			propAuth.setProperty("ShipCode"        , String.valueOf(ship_type));
+			propAuth.setProperty("ShipKey"         , spaceShip.getKeyName());
+			propAuth.setProperty("Difficulty"      , Difficulty.intToString(difficulty, 3.3));
+			propAuth.setProperty("DifficultyValue" , String.valueOf(difficulty));
+			propAuth.setProperty("PlayDate"        , String.valueOf(aut_year + "." + (aut_month + 1) + "." + aut_day + " " + aut_hour + ":" + aut_min + ":" + aut_sec));
+			propAuth.setProperty("PlayDateValue"   , String.valueOf(calendar_inst.getTimeInMillis()));
+			propAuth.setProperty("Version1"        , String.valueOf(Reflexioner.version_main));
+			propAuth.setProperty("Version2"        , String.valueOf(Reflexioner.version_sub_1));
+			propAuth.setProperty("Version3"        , String.valueOf(Reflexioner.version_sub_2));
+			propAuth.setProperty("Version"         , String.valueOf(Reflexioner.getVersionString(true)));
+			propAuth.setProperty("Auto"            , String.valueOf(autoControl));
+			propAuth.setProperty("TodayEvent"      , String.valueOf(todayEvent));
+			if(scenario == null) propAuth.setProperty("Scenario", "Standard");
+			else                 propAuth.setProperty("Scenario", scenario.getName());
+			
+			propAuth.remove("Code1");
+			Set<String> keys = propAuth.stringPropertyNames();
+			List<String> keyList = new ArrayList<String>();
+			keyList.addAll(keys);
+			keys = null;
+			Collections.sort(keyList);
+			
+			StringBuilder code1Creator = new StringBuilder("");
+			for(String k : keyList)
 			{
-				auth_codes[1] = auth_codes[1] + " (" + String.valueOf(aut_year) + "." + String.valueOf(aut_month) + "." + String.valueOf(aut_day) + ")";
+				propAuth.setProperty(k, propAuth.getProperty(k).replace("\n", " "));
+				code1Creator = code1Creator.append(k).append(":").append(propAuth.getProperty(k)).append("|");
 			}
+			keyList = null;
 			
-			secret_code = secret_code.add(new BigInteger(String.valueOf((Reflexioner.version_main * 100) + (Reflexioner.version_sub_1 * 10) + Reflexioner.version_sub_2)));
-			secret_code = secret_code.multiply(Lint.big(difficulty)); // clearCount
-			secret_code = secret_code.add(new BigInteger(String.valueOf(spaceShip.getPoint().toString()))); // point.toString()
-			// authority_code used
-			long authority_code = Reflexioner.getAuthorizedCode(2938291);
-			secret_code = secret_code.add(Lint.big(authority_code + (ship_type * ((Reflexioner.version_main * 100) + (Reflexioner.version_sub_1 * 10) + Reflexioner.version_sub_2))));
-									
-			
-			
-			auth_codes[8] = String.valueOf(aut_year);
-			auth_codes[9] = String.valueOf(aut_month);
-			auth_codes[10] = String.valueOf(aut_day);
-			auth_codes[11] = String.valueOf(aut_hour);
-			auth_codes[12] = String.valueOf(aut_min);
-			auth_codes[13] = String.valueOf(aut_sec);
-			if(scenario == null)
-				auth_codes[14] = "Reflexioner " + Difficulty.starToString((long) Math.round(difficulty_mode * 2)) + " " + spaceShip.getName(sets) + " " + Reflexioner.getVersionString(true);
-			else
-				auth_codes[14] = "Reflexioner " + Difficulty.intToString((long) Math.round(difficulty_mode * 2), 3.3) + " " + scenario.getName() + " " + Reflexioner.getVersionString(true);
-			auth_codes[15] = "Calc";
-						
-			secret_nameCode = Lint.copy(secret_code);
-			secret_nameCode = secret_nameCode.multiply(new BigInteger(String.valueOf(Math.round((double) RunManager.getNameCode(auth_codes[1]) / 100.0) + 5)));
-			
-			secret_code = secret_code.add(Lint.newBigInteger((difficulty + 2) * ((aut_year * 6) + (aut_month * 5) + (aut_day * 4) + (aut_hour * 3) + (aut_min * 2) + aut_sec)));
-			// clearCount
-			
-			secret_nameCode = secret_nameCode.add(Lint.big(auth_codes[14].length()).multiply(Lint.big(authority_code)));
-			auth_codes[7] = secret_code.toString();			
-			auth_codes[16] = secret_nameCode.toString();			
-			
-			for(int i=0; i<auth_codes.length; i++)
+			GZIPOutputStream gzipper = null;
+			try
 			{
-				auth_code.append(auth_codes[i]);
-				if(i < auth_codes.length - 1) auth_code.append("||");
+				byte[] code1bin = code1Creator.toString().getBytes("UTF-8");
+				
+				MessageDigest digest = MessageDigest.getInstance("SHA-256");
+				code1bin = digest.digest(code1bin);
+				
+				String code1 = RXUtils.hexString(code1bin);
+				code1Creator = null;
+				propAuth.setProperty("Code1", code1);
+				
+				ByteArrayOutputStream coll = new ByteArrayOutputStream();
+				propAuth.storeToXML(coll, "Reflexioner Result Code");
+				propAuth.clear();
+				
+				byte[] propXml = coll.toByteArray();
+				coll = new ByteArrayOutputStream();
+				gzipper = new GZIPOutputStream(coll);
+				
+				gzipper.write(propXml);
+				propXml = null;
+				gzipper.close(); gzipper = null;
+				
+				authcode = RXUtils.hexString(coll.toByteArray());
+				authcode = authcode.replace("\n", " ");
+				coll = null;
+				event_accepted = false;
 			}
-			
-			authcode = auth_code.toString();
-			event_accepted = false;
+			catch(Exception ex)
+			{ ex.printStackTrace(); authcode = ""; }
+			finally
+			{
+				if(gzipper != null) { try { gzipper.close(); } catch(Exception ex) {} }
+			}
 			
 			if(! authority_mode) authcode = sets.getLang().getText(Language.DESCRIPTIONS + 18);
 			if(scenario != null)
