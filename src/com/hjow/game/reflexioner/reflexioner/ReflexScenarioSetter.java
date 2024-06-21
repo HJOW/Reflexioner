@@ -227,8 +227,8 @@ public class ReflexScenarioSetter
 		
 		newScenario = new CReflexScenario();
 		newScenario.setName("Clipper Experience");
-		newScenario.setDescription("Try to control special ship called \'Clipper\'.\nThis ship is for Professional, Ultimate, and Master Edition.");
-		newScenario.setKoreanDescription("\'Clipper\' 라는 특별한 함선을 체험해 보세요.\n이 함선은 원래 Professional, Ultimate, 또는 Master 버전에서만 사용할 수 있습니다.\n\n함선 체험 시나리오는 난이도가 매우 높습니다.");
+		newScenario.setDescription("Try to control special ship called \'Clipper\'.");
+		newScenario.setKoreanDescription("\'Clipper\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
 		newScenario.setDifficulty(new Integer(50));
 		newScenario.setDiff_delay(new Long(3000));
 		newScenario.setEnemy_limit(new Integer(20));
@@ -265,8 +265,8 @@ public class ReflexScenarioSetter
 		patterns = new Vector<EnemyPattern>();
 		newScenario = new BReflexScenario();
 		newScenario.setName("Warship Experience");
-		newScenario.setDescription("Try to control special ship called \'Warship\'.\nThis ship is for Ultimate, and Master Edition.");
-		newScenario.setKoreanDescription("\'Warship\' 라는 특별한 함선을 체험해 보세요.\n이 함선은 원래 Ultimate, 또는 Master 버전에서만 사용할 수 있습니다.\n\n함선 체험 시나리오는 난이도가 매우 높습니다.");
+		newScenario.setDescription("Try to control special ship called \'Warship\'.");
+		newScenario.setKoreanDescription("\'Warship\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
 		newScenario.setDifficulty(new Integer(25));
 		newScenario.setDiff_delay(new Long(3000));
 		newScenario.setEnemy_limit(new Integer(20));
@@ -302,8 +302,8 @@ public class ReflexScenarioSetter
 		patterns = new Vector<EnemyPattern>();
 		newScenario = new BReflexScenario();
 		newScenario.setName("Chaser Experience");
-		newScenario.setDescription("Try to control special ship called \'Chaser\'.\nThis ship is for Ultimate, and Master Edition.");
-		newScenario.setKoreanDescription("\'Chaser\' 라는 특별한 함선을 체험해 보세요.\n이 함선은 원래 Ultimate, 또는 Master 버전에서만 사용할 수 있습니다.\n\n함선 체험 시나리오는 난이도가 매우 높습니다.");
+		newScenario.setDescription("Try to control special ship called \'Chaser\'.");
+		newScenario.setKoreanDescription("\'Chaser\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
 		newScenario.setDifficulty(new Integer(25));
 		newScenario.setDiff_delay(new Long(5500));
 		newScenario.setEnemy_limit(new Integer(20));
@@ -340,8 +340,8 @@ public class ReflexScenarioSetter
 		patterns = new Vector<EnemyPattern>();
 		newScenario = new BReflexScenario();
 		newScenario.setName("Carrier Experience");
-		newScenario.setDescription("Try to control special ship called \'Carrier\'.\nThis ship is for Ultimate, and Master Edition.");
-		newScenario.setKoreanDescription("\'Carrier\' 라는 특별한 함선을 체험해 보세요.\n이 함선은 원래 Master 버전에서만 사용할 수 있습니다.\n\n함선 체험 시나리오는 난이도가 매우 높습니다.");
+		newScenario.setDescription("Try to control special ship called \'Carrier\'.");
+		newScenario.setKoreanDescription("\'Carrier\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
 		newScenario.setDifficulty(new Integer(25));
 		newScenario.setDiff_delay(new Long(5550));
 		newScenario.setEnemy_limit(new Integer(20));

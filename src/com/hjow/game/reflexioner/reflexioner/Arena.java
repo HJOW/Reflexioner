@@ -49,6 +49,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private Vector<String> messages;
 	private Reflexioner sp;
 	private boolean threadSwitch = false;
+	private boolean show = false;
 	private boolean active = true;
 	private boolean game_pause = false;
 	private int k=0;
@@ -545,6 +546,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 		Reflexioner.replay_now_delay = 0;
 		autoControlDelay = 0;
 		simpleTuto = 80;
+		show = true;
 				
 		prepareTest();
 		if(userDefinedShip == null)
@@ -1122,6 +1124,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	public void paint(Graphics g)
 	{
 		super.paint(g);
+		if(! show)
+		{
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			return;
+		}
 		try
 		{
 			for(Enemy e : enemies)
@@ -1267,7 +1275,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			}
 			if(simpleTuto >= 1)
 			{
-				String tuto = sets.getLang().getText(Language.REFLEX_SIMPLEHELP);
+				String tuto = " ," + sets.getLang().getText(Language.REFLEX_SIMPLEHELP);
 				String[] splits = tuto.split(",");
 				for(int idx=0; idx<splits.length; idx++) 
 				{

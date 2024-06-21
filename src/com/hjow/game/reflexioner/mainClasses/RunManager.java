@@ -37,7 +37,6 @@ import com.hjow.game.reflexioner.lang.UserDefinedKor;
 import com.hjow.game.reflexioner.lang.UserDefinedLang;
 import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 import com.hjow.game.reflexioner.setting.Setting;
-import com.hjow.game.reflexioner.tracking.TrackStorage;
 
 public class RunManager implements Serializable
 {
@@ -555,8 +554,6 @@ public class RunManager implements Serializable
 		
 		System.out.print(".");
 		
-		TrackStorage.newInstance(setting);
-		System.out.print(".");
 		
 		ConfigSetting readConfigData = ConfigMaker.readConfig(setting);
 		setting = readConfigData.sets;

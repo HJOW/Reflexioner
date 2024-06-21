@@ -221,6 +221,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JPanel centerPanel;
 	private JPanel downPanel;
 	private JPanel infoPanel;
+	private JPanel infoPnLeft, infoPnRight;
 	private JLabel hpLabel;
 	private JProgressBar hpBar;
 	private UpdateHp updateHp;
@@ -780,7 +781,19 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			bt_fire.setBackground(sets.getSelected_back());
 		}
 		
-		infoPanel.setLayout(new FlowLayout());
+		infoPanel.setLayout(new BorderLayout());
+		
+		infoPnLeft  = new JPanel();
+		infoPnRight = new JPanel();
+		
+		infoPnLeft.setBackground(sets.getSelected_back());
+		infoPnRight.setBackground(sets.getSelected_back());
+		
+		infoPnLeft.setLayout(new FlowLayout(FlowLayout.LEFT));
+		infoPnRight.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		infoPanel.add(infoPnLeft, BorderLayout.CENTER);
+		infoPanel.add(infoPnRight, BorderLayout.EAST);
 		
 		hpLabel = new JLabel(sets.getLang().getText(Language.HP));
 		hpLabel.setForeground(sets.getSelected_fore());
@@ -788,17 +801,28 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		if(usingFont != null)
 			hpLabel.setFont(usingFont);
 		
-		infoPanel.add(hpLabel);
-		infoPanel.add(hpBar);
+		int barWidth = (int) (sets.getWidth() / 3.0 - 50);
+        if(barWidth < 250) barWidth = 250;
+        
+		Dimension barSize = new Dimension(barWidth, (int) hpBar.getMaximumSize().getHeight());
+		hpBar.setSize(barSize);
+		hpBar.setPreferredSize(barSize);
+		
+		infoPnLeft.add(hpLabel);
+		infoPnLeft.add(hpBar);
 		updateHp.setTarget(hpBar);
 		
-		energyLabel = new JLabel("E");
+		energyLabel = new JLabel("Energe");
 		energyLabel.setForeground(sets.getSelected_fore());
 		if(usingFont != null)
 			energyLabel.setFont(usingFont);
 		energyBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
-		infoPanel.add(energyLabel);
-		infoPanel.add(energyBar);
+		barSize = new Dimension(barWidth, (int) energyBar.getMaximumSize().getHeight());
+		energyBar.setSize(barSize);
+		energyBar.setPreferredSize(barSize);
+		
+		infoPnLeft.add(energyLabel);
+		infoPnLeft.add(energyBar);
 				
 		updateEnergy.setTarget(energyBar);
 		
@@ -815,8 +839,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		
 		updatePoint.setTarget(pointField);
 		
-		infoPanel.add(pointLabel);
-		infoPanel.add(pointField);
+		infoPnLeft.add(pointLabel);
+		infoPnLeft.add(pointField);
 		
 		bt_touch = new JButton("▼");
 		bt_touch.addActionListener(this);
@@ -827,7 +851,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		if(usingFont != null)
 			bt_touch.setFont(usingFont);
-		infoPanel.add(bt_touch);
+		infoPnRight.add(bt_touch);
 		
 		helpPanel = new JPanel();
 		helpPanel.setBackground(sets.getSelected_back());
@@ -1724,7 +1748,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		{
 			finish_pns[i] = new JPanel();
 			finish_pns[i].setBackground(sets.getSelected_back());
-			finish_pns[i].setLayout(new FlowLayout());			
+			finish_pns[i].setLayout(new FlowLayout(FlowLayout.LEFT));			
 			finish_centerPanel.add(finish_pns[i]);
 		}
 		
@@ -1789,9 +1813,22 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			finish_authField.setFont(usingFont);
 			bt_authCopy.setFont(usingFont);
 		}
-		finish_pns[5].add(finish_authLabel);
-		finish_pns[5].add(finish_authField);
-		finish_pns[5].add(bt_authCopy);
+		
+		finish_pns[5].setLayout(new BorderLayout());
+		
+		JPanel pn5c, pn5r;
+		pn5c = new JPanel();
+		pn5r = new JPanel();
+		pn5c.setBackground(sets.getSelected_back());
+		pn5r.setBackground(sets.getSelected_back());
+		pn5c.setLayout(new FlowLayout(FlowLayout.LEFT));
+		pn5r.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		finish_pns[5].add(pn5c, BorderLayout.CENTER);
+		finish_pns[5].add(pn5r, BorderLayout.EAST);
+		
+		pn5c.add(finish_authLabel);
+		pn5c.add(finish_authField);
+		pn5r.add(bt_authCopy);
 		
 		//bt_continue.setVisible(false);
 		bt_saveReplay = new JButton(sets.getLang().getText(Language.REPLAY));
