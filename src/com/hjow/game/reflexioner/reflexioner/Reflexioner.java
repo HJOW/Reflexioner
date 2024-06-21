@@ -5850,6 +5850,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				if(frame_loaded)
 				{
 					String inputs = JOptionPane.showInputDialog(startDialog, "Channels", "8");
+					if(inputs != null) { inputs = inputs.trim(); if(inputs.equals("")) inputs = null; }
 					if(inputs == null)
 					{
 						sound_allow = false;
@@ -5861,6 +5862,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 						try
 						{
 							SoundCache.prepareSound(sets, Integer.parseInt(inputs));
+							sound_allow = true;
 						} 
 						catch (NumberFormatException e1)
 						{						
@@ -5874,6 +5876,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				else
 				{
 					SoundCache.prepareSound(sets, 8);
+					sound_allow = true;
 				}
 			}
 			else
