@@ -767,10 +767,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			int ship_type = 1;
 			if(spaceShip instanceof Clipper) ship_type = 3;
 			else if(spaceShip instanceof Cruiser) ship_type = 2;
-			if(Reflexioner.version_main >= 0 && Reflexioner.version_sub_1 >= 9 && Reflexioner.version_sub_2 >= 0 && Reflexioner.version_nightly >= 4)
-			{
-				ship_type = spaceShip.getKeyInt();
-			}
+			ship_type = spaceShip.getKeyInt();
 			
 			if(todayEvent)
 			{
@@ -823,7 +820,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			try
 			{
 				SecuredDist sp = new SecuredDist();
-				byte[] code1bin = (sp.getLeftPad() + code1Creator.toString() + sp.getRightPad()).getBytes("UTF-8");
+				byte[] code1bin = (sp.getLeftPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) + code1Creator.toString() + sp.getRightPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2)).getBytes("UTF-8");
 				code1bin = RXUtils.hash(code1bin);
 				
 				String code1 = RXUtils.hexString(code1bin);

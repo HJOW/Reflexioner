@@ -392,7 +392,13 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 				keyList = null;
 			    
 				SecuredDist sp = new SecuredDist();
-				byte[] code1bin = (sp.getLeftPad() + code1Creator.toString() + sp.getRightPad()).getBytes("UTF-8");
+				
+				String vm, vs1, vs2;
+				vm  = result.getProperty("Version1");
+				vs1 = result.getProperty("Version2");
+				vs2 = result.getProperty("Version3");
+				
+				byte[] code1bin = (sp.getLeftPad(Integer.parseInt(vm), Integer.parseInt(vs1), Integer.parseInt(vs2)) + code1Creator.toString() + sp.getRightPad(Integer.parseInt(vm), Integer.parseInt(vs1), Integer.parseInt(vs2))).getBytes("UTF-8");
 				code1bin = RXUtils.hash(code1bin);
 				
 			    String code1re = RXUtils.hexString(code1bin);
