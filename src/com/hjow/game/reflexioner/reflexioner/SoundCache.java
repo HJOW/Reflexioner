@@ -1,19 +1,24 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Vector;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 
 import com.hjow.game.reflexioner.mainClasses.RunManager;
 import com.hjow.game.reflexioner.setting.Setting;
 
 public class SoundCache
 {
-	public static AudioClip fireMissile = null, fireBeam = null, fireMultiplyMissiles = null, hit = null, boom = null, takeItem = null, clicks = null;
-	public static AudioClip bgm = null;
+	public static SoundClip fireMissile = null, fireBeam = null, fireMultiplyMissiles = null, hit = null, boom = null, takeItem = null, clicks = null;
+	public static SoundClip bgm = null;
 	private static int channels = 16;
 	private static SoundThread[] playThreads = null;
 	private static int nowState = 0;
@@ -69,7 +74,7 @@ public class SoundCache
 		{
 			try
 			{
-				fireMissile = Applet.newAudioClip(file.toURI().toURL());
+				fireMissile = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -80,7 +85,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_missile.wav");
-			if(res != null) fireMissile = Applet.newAudioClip(res);
+			if(res != null) fireMissile = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "fire_beam.wav"));
@@ -88,7 +93,7 @@ public class SoundCache
 		{
 			try
 			{
-				fireBeam = Applet.newAudioClip(file.toURI().toURL());
+				fireBeam = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -99,7 +104,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_beam.wav");
-			if(res != null) fireBeam = Applet.newAudioClip(res);
+			if(res != null) fireBeam = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "fire_multiple_missiles.wav"));
@@ -107,7 +112,7 @@ public class SoundCache
 		{
 			try
 			{
-				fireMultiplyMissiles = Applet.newAudioClip(file.toURI().toURL());
+				fireMultiplyMissiles = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -118,7 +123,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/fire_multiple_missiles.wav");
-			if(res != null) fireMultiplyMissiles = Applet.newAudioClip(res);
+			if(res != null) fireMultiplyMissiles = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "hit.wav"));
@@ -126,7 +131,7 @@ public class SoundCache
 		{
 			try
 			{
-				hit = Applet.newAudioClip(file.toURI().toURL());
+				hit = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -137,7 +142,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/hit.wav");
-			if(res != null) hit = Applet.newAudioClip(res);
+			if(res != null) hit = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "boom.wav"));
@@ -145,7 +150,7 @@ public class SoundCache
 		{
 			try
 			{
-				boom = Applet.newAudioClip(file.toURI().toURL());
+				boom = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -156,7 +161,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/boom.wav");
-			if(res != null) boom = Applet.newAudioClip(res);
+			if(res != null) boom = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "takeitem.wav"));
@@ -164,7 +169,7 @@ public class SoundCache
 		{
 			try
 			{
-				takeItem = Applet.newAudioClip(file.toURI().toURL());
+				takeItem = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -175,7 +180,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/takeitem.wav");
-			if(res != null) takeItem = Applet.newAudioClip(res);
+			if(res != null) takeItem = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "clicks.wav"));
@@ -183,7 +188,7 @@ public class SoundCache
 		{
 			try
 			{
-				clicks = Applet.newAudioClip(file.toURI().toURL());
+				clicks = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -194,7 +199,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/clicks.wav");
-			if(res != null) clicks = Applet.newAudioClip(res);
+			if(res != null) clicks = new SoundClip(res);
 		}
 		
 		file = new File(RunManager.r65279(path + "bgm.wav"));
@@ -202,7 +207,7 @@ public class SoundCache
 		{
 			try
 			{
-				bgm = Applet.newAudioClip(file.toURI().toURL());
+				bgm = new SoundClip(file.toURI().toURL());
 			} 
 			catch (Exception e)
 			{
@@ -213,7 +218,7 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/bgm.wav");
-			if(res != null) bgm = Applet.newAudioClip(res);
+			if(res != null) bgm = new SoundClip(res);
 		}
 	}
 	public static void play(String commands)
@@ -258,7 +263,7 @@ class SoundThread extends Thread implements Comparable<SoundThread>
 	private Vector<String> needToPlay = new Vector<String>();
 	private String target = "";
 	private transient long sleeping = 0;
-	private transient AudioClip playing = null;
+	private transient SoundClip playing = null;
 	private transient long calc_sleeps = 0;
 	public SoundThread()
 	{
@@ -347,5 +352,58 @@ class SoundThread extends Thread implements Comparable<SoundThread>
 	public int compareTo(SoundThread o)
 	{
 		return new Integer(nowSize()).compareTo(new Integer(o.nowSize()));
+	}
+}
+class SoundClip
+{
+    protected URL url;
+    protected Clip clip;
+    public SoundClip(URL url)
+    {
+    	this.url = url;
+    	try
+    	{
+    		clip = AudioSystem.getClip();
+    		AudioInputStream inpx = AudioSystem.getAudioInputStream(url);
+    		/*
+    		AudioInputStream inp1 = AudioSystem.getAudioInputStream(url);
+    		AudioInputStream inpx = null;
+    		
+    		AudioFormat formatBase    = inp1.getFormat();
+    		AudioFormat formatDecoded = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, formatBase.getSampleRate(), 16, formatBase.getChannels(), formatBase.getChannels() * 2, formatBase.getSampleRate(), false);
+    		inpx = AudioSystem.getAudioInputStream(formatDecoded, inp1);
+    		*/
+    		
+        	clip.open(inpx);
+        	Thread.sleep(clip.getMicrosecondLength() / 1000);
+    	}
+    	catch(Exception ex)
+    	{
+    		// ex.printStackTrace();
+    	}
+    }
+    public void start()
+    {
+    	if(clip != null) clip.start();
+    }
+    public void play()
+    {
+    	start();
+    }
+    public void stop()
+    {
+    	if(clip != null) clip.stop();
+    }
+	public URL getUrl() {
+		return url;
+	}
+	public void setUrl(URL url) {
+		this.url = url;
+	}
+	public Clip getClip() {
+		return clip;
+	}
+	public void setClip(Clip clip) {
+		this.clip = clip;
 	}
 }
