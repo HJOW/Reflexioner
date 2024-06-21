@@ -74,10 +74,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private boolean unique_exist = false;
 	private String name = "", authcode = "";
 	private Setting sets;
-	private int decorationMax = 128;
 	private long difficulty_delay = 5000;
 	private long timeout = -1;
-	private String saved_script_5 = "", saved_script_6 = "", saved_script_7 = "";	
+	private String saved_script_5 = "", saved_script_6 = "", saved_script_7 = "";
+	private int decorationMax = 250;
+	private BigInteger decorationPointUnit = new BigInteger("10000");
 	
 	private transient boolean authority_mode = false;
 	private static transient boolean autoControl = false;
@@ -2283,9 +2284,21 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							e1.printStackTrace();
 						}	
 						
-						if(arena.decorates.size() <= arena.decorationMax && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
+						int decoSize = arena.decorates.size();
+						if(decoSize <= arena.decorationMax && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
 						{
-							arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, (int)(3 * Math.random() + 5 + (arena.difficulty / 500)), (int)(3 * Math.random() + 1), arena.file_path));
+							int decoSpeed = (int) (getPoint().divide(decorationPointUnit).longValue() * 3);
+							if(decoSpeed > 50) decoSpeed = 50;
+							decoSpeed = (int)((3 * Math.random()) + decoSpeed + (arena.difficulty / 500));
+							if(decoSpeed > 100) decoSpeed = 100;
+							arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, decoSpeed, (int)(3 * Math.random() + 1), arena.file_path));
+							if(arena.decorationMax - decoSize >= 6)
+							{
+								for(int i=0; i<5; i++)
+								{
+									arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, decoSpeed, (int)(3 * Math.random() + 1), arena.file_path));
+								}
+							}
 						}
 						for(int i=0; i<arena.decorates.size(); i++)
 						{
