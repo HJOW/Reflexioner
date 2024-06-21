@@ -560,7 +560,7 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 		}
 		contentLabels[0].setText(setting.getLang().getText(Language.NAME));
 		contentLabels[1].setText(setting.getLang().getText(Language.POINT));
-		contentLabels[2].setText(setting.getLang().getText(Language.CARD) + " " + setting.getLang().getText(Language.COUNT));
+		contentLabels[2].setText(setting.getLang().getText(Language.DIFFICULTY));
 		contentLabels[3].setText(setting.getLang().getText(Language.PLAYER) + " " + setting.getLang().getText(Language.COUNT));
 		contentLabels[4].setText(setting.getLang().getText(Language.VERSION));
 		contentLabels[5].setText(setting.getLang().getText(Language.AUTHORITY));

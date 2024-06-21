@@ -1,6 +1,7 @@
 package com.hjow.game.reflexioner.reflexioner;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -244,6 +245,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JPanel finish_upPanel;
 	private JPanel finish_downPanel;
 	private JPanel finish_centerPanel;
+	private CardLayout finish_layout;
+	private JTextArea finish_ta;
 	private JButton bt_finish_ok;
 	private JPanel finish_resultPanel;
 	private JLabel finish_resultLabel;
@@ -285,8 +288,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JLabel finish_nameLabel;
 	private JTextField finish_nameField;
 	private JLabel finish_authLabel;
-	private JTextField finish_authField;
-	private JButton bt_authCopy;
+	private JTextField finish_authField, finish_authField2;
+	private JButton bt_authCopy, bt_authCopy2;
 	private JMenuBar menuBar;
 	private JMenu menu_file;
 	private JMenuItem menu_file_exit;
@@ -382,13 +385,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JProgressBar progress_download;
 	private int download_limit = 0;
 	private JButton bt_exit5;
-	private transient boolean firstTime = false;
 	private JMenu menu_file_manage;
 	private JMenuItem menu_manage_uninstall;
 	private JCheckBoxMenuItem menu_manage_enableImage;
 	private JCheckBoxMenuItem menu_manage_enableSound;
-	private int mouse_serial_x = 0;
-	private int mouse_serial_y = 0;
 	private String[] ships;
 	private int[] shipKeys;
 	private JButton bt_autoComplete;
@@ -511,7 +511,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		this.sets = sets;
 		this.independence = independence;
 		window = new JFrame();
-		this.firstTime = firstTime;
 		init();
 	}
 	public Reflexioner(Setting sets, RunManager manager, String[] args, boolean independence, boolean firstTime)
@@ -520,7 +519,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		this.sets = sets;
 		this.independence = independence;
 		window = new JFrame();
-		this.firstTime = firstTime;
 		this.manager = manager;
 		this.arguments = args;
 		init();
@@ -1742,14 +1740,26 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		finish_resultPanel.add(finish_resultLabel);
 		finish_resultPanel.add(finish_resultField);
 		
+		JPanel pnFinCenter1, pnFinCenter2;
+		pnFinCenter1 = new JPanel();
+		pnFinCenter2 = new JPanel();
+		pnFinCenter1.setBackground(sets.getSelected_back());
+		pnFinCenter2.setBackground(sets.getSelected_back());
+		
+		finish_layout = new CardLayout();
+		finish_centerPanel.setLayout(finish_layout);
+		
+		finish_centerPanel.add(pnFinCenter1, "fin1");
+		finish_centerPanel.add(pnFinCenter2, "fin2");
+		
 		finish_pns = new JPanel[7];
-		finish_centerPanel.setLayout(new GridLayout(finish_pns.length, 1));
+		pnFinCenter1.setLayout(new GridLayout(finish_pns.length, 1));
 		for(int i=0; i<finish_pns.length; i++)
 		{
 			finish_pns[i] = new JPanel();
 			finish_pns[i].setBackground(sets.getSelected_back());
 			finish_pns[i].setLayout(new FlowLayout(FlowLayout.LEFT));			
-			finish_centerPanel.add(finish_pns[i]);
+			pnFinCenter1.add(finish_pns[i]);
 		}
 		
 		finish_nameLabel = new JLabel(sets.getLang().getText(Language.NAME));
@@ -1797,22 +1807,48 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		
 		finish_authLabel = new JLabel(sets.getLang().getText(Language.AUTHORITY));
 		finish_authField = new JTextField(20);
-		bt_authCopy = new JButton(sets.getLang().getText(Language.COPY_CLIPBOARD));
+		finish_authField2= new JTextField(20);
+		bt_authCopy  = new JButton(sets.getLang().getText(Language.COPY_CLIPBOARD));
+		bt_authCopy2 = new JButton(sets.getLang().getText(Language.COPY_CLIPBOARD));
 		bt_authCopy.addActionListener(this);
+		bt_authCopy2.addActionListener(this);
 		finish_authLabel.setForeground(sets.getSelected_fore());
 		finish_authField.setForeground(sets.getSelected_fore());
+		finish_authField2.setForeground(sets.getSelected_fore());
 		bt_authCopy.setForeground(sets.getSelected_fore());
+		bt_authCopy2.setForeground(sets.getSelected_fore());
 		finish_authField.setBackground(sets.getSelected_inside_back());
+		finish_authField2.setBackground(sets.getSelected_inside_back());
 		if(sets.getSelected_button() != null)
+		{
 			bt_authCopy.setBackground(sets.getSelected_button());
+			bt_authCopy2.setBackground(sets.getSelected_button());
+		}
 		finish_authField.setEditable(false);
 		finish_authField.setBorder(new EtchedBorder());
+		finish_authField2.setEditable(false);
+		finish_authField2.setBorder(new EtchedBorder());
 		if(usingFont != null)
 		{
 			finish_authLabel.setFont(usingFont);
 			finish_authField.setFont(usingFont);
+			finish_authField2.setFont(usingFont);
 			bt_authCopy.setFont(usingFont);
+			bt_authCopy2.setFont(usingFont);
 		}
+		
+		finish_ta = new JTextArea();
+		finish_ta.setEditable(false);
+		finish_ta.setBackground(sets.getSelected_back());
+		finish_ta.setForeground(sets.getSelected_fore());
+		pnFinCenter2.setLayout(new BorderLayout());
+		pnFinCenter2.add(new JScrollPane(finish_ta), BorderLayout.CENTER);
+		
+		JPanel fininsh_pnAuth = new JPanel();
+		fininsh_pnAuth.setLayout(new BorderLayout());
+		fininsh_pnAuth.add(finish_authField2, BorderLayout.CENTER);
+		fininsh_pnAuth.add(bt_authCopy2, BorderLayout.EAST);
+		pnFinCenter2.add(fininsh_pnAuth, BorderLayout.SOUTH);
 		
 		finish_pns[5].setLayout(new BorderLayout());
 		
@@ -3016,30 +3052,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 							e.printStackTrace();
 						}
 					}
-					/*
-					for(int j=0; j<sets.getOtherObjects().size(); j++)
-					{
-						try
-						{
-							delimToken = new StringTokenizer(sets.getOtherObjects().get(j), "|||");
-							key1 = delimToken.nextToken();
-							key2 = delimToken.nextToken();
-							contents = delimToken.nextToken();
-							if(key1.equalsIgnoreCase("reflexioner"))
-							{
-								if(key2.equalsIgnoreCase(star_target.getRandomCode().toString()))
-								{
-									oldPoints = new BigInteger(contents);
-									break;
-								}
-							}
-						} 
-						catch (Exception e)
-						{
-							
-						}
-					}
-					*/
 					boolean checking = arena.isSettingAuth(1937283 + 1001008, scenarios, sets);
 					if(oldPoints != null && checking)
 					{					
@@ -3590,10 +3602,12 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	public void finish()
 	{
 		arena.pause();
+		finish_ta.setText("");
 		finishDialog.setVisible(true);
 		BigInteger getPoints = arena.getPoint();
 		AReflexScenario arefrexScenario = null;
 		boolean pointSave_accept = true;
+		
 		if(arena.getScenario() != null && (! Arena.isAutoControlMode()))
 		{
 			if(arena.getScenario() instanceof AReflexScenario)
@@ -3633,47 +3647,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 						{
 							sets.getProperties().put(key1, getPoints.toString());
 						}
-						arena.setSettingAuth(1937283 + 1001008, scenarios, sets);	
-						/*
-						int index = -1;
-						StringTokenizer delimToken;
-						String key2;
-						for(int i=0; i<sets.getOtherObjects().size(); i++)
-						{
-							delimToken = new StringTokenizer(sets.getOtherObjects().get(i), "|||");
-							try
-							{
-								key1 = delimToken.nextToken();
-								key2 = delimToken.nextToken();
-								contents = delimToken.nextToken();
-								if(key1.equalsIgnoreCase("reflexioner"))
-								{
-									if(key2.equalsIgnoreCase(arefrexScenario.getRandomCode().toString()))
-									{
-										index = i;
-										break;
-									}
-								}
-							}
-							catch(Exception e)
-							{
-								
-							}
-						}
-						if(index == -1)
-						{
-							sets.getOtherObjects().add("reflexioner|||" + arefrexScenario.getRandomCode().toString() + "|||" + getPoints.toString());
-						}
-						else
-						{						
-							BigInteger oldOne = new BigInteger(contents);
-							if(getPoints.compareTo(oldOne) >= 1)
-							{
-								sets.getOtherObjects().set(index, "reflexioner|||" + arefrexScenario.getRandomCode().toString() + "|||" + getPoints.toString());
-							}
-						}
-						arena.setSettingAuth(1937283 + 1001008, scenarios, sets);	
-						*/
+						arena.setSettingAuth(1937283 + 1001008, scenarios, sets);
 					} 
 					catch (Exception e)
 					{
@@ -3695,11 +3669,21 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			@Override
 			public void run()
 			{
+				StringBuilder report = new StringBuilder("");
+				report = report.append(sets.getLang().getText(Language.RESULT)).append("\n\n");
+				
+				report = report.append(sets.getLang().getText(Language.NAME)).append("\t").append(arena.getName()).append("\n");
+				report = report.append(sets.getLang().getText(Language.POINT)).append("\t").append(arena.getPoint().toString()).append("\n");
+				report = report.append(sets.getLang().getText(Language.CATCH) + sets.getLang().getText(Language.ENEMY)).append("\t").append(arena.getCatchEnemy().toString()).append("\n");
+				report = report.append(sets.getLang().getText(Language.CATCH) + sets.getLang().getText(Language.ITEM )).append("\t").append(arena.getCatchItem().toString()).append("\n");
+				finish_layout.last(finish_centerPanel);
+				
 				finish_resultField.setText(arena.getPoint().toString());
 				finish_catchEnemyField.setText(arena.getCatchEnemy().toString());
 				finish_catchItemField.setText(arena.getCatchItem().toString());
 				finish_nameField.setText(arena.getName());
 				finish_authField.setText(arena.getAuth());
+				finish_authField2.setText(arena.getAuth());
 				if(! arena.getAuth().equals(sets.getLang().getText(Language.DESCRIPTIONS + 18)))
 				{
 					try
@@ -3772,6 +3756,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				{
 					bt_event_open.setVisible(false);
 				}
+				finish_ta.setText(report.toString().trim());
 			}			
 		});		
 		arena.setScenario(null);
@@ -4015,6 +4000,19 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 			try
 			{
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(finish_authField.getText()), null);
+				alert(sets.getLang().getText(Language.DESC_COPY_CLIPBOARD));
+			} 
+			catch (Exception e1)
+			{
+				if(sets.isError_printDetail()) e1.printStackTrace();
+				alert(sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
+			}
+		}
+		else if(ob == bt_authCopy2)
+		{
+			try
+			{
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(finish_authField2.getText()), null);
 				alert(sets.getLang().getText(Language.DESC_COPY_CLIPBOARD));
 			} 
 			catch (Exception e1)
