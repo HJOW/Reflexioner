@@ -857,7 +857,7 @@ public class ImageCache
 				if(inp != null) {
 					try 
 					{
-						img_ovalboom = ImageIO.read(inp);
+						img_itemuseboom = ImageIO.read(inp);
 					} 
 					finally 
 					{
@@ -866,7 +866,7 @@ public class ImageCache
 				}
 				else
 				{
-					img_ovalboom = null;
+					img_itemuseboom = null;
 				}
 			}
 		}

@@ -2,7 +2,6 @@ package com.hjow.game.reflexioner.reflexioner;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Vector;
 
 import com.hjow.game.reflexioner.mainClasses.RunManager;
@@ -15,7 +14,6 @@ public class SoundCache
 	public static SoundClip bgm = null;
 	private static int channels = 16;
 	private static SoundThread[] playThreads = null;
-	private static int nowState = 0;
 	
 	public static void clear()
 	{
@@ -148,7 +146,11 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/hit.wav");
-			if(res != null) hit = new SoundClip(res);
+			if(res != null)
+			{
+				hit = new SoundClip(res);
+				hit.setVolume(200.0);
+			}
 		}
 		
 		file = new File(RunManager.r65279(path + "boom.wav"));
@@ -167,7 +169,11 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/boom.wav");
-			if(res != null) boom = new SoundClip(res);
+			if(res != null)
+			{
+				boom = new SoundClip(res);
+				boom.setVolume(200.0);
+			}
 		}
 		
 		file = new File(RunManager.r65279(path + "takeitem.wav"));
@@ -186,7 +192,11 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/takeitem.wav");
-			if(res != null) takeItem = new SoundClip(res);
+			if(res != null)
+			{
+				takeItem = new SoundClip(res);
+				takeItem.setVolume(200.0);
+			}
 		}
 		
 		file = new File(RunManager.r65279(path + "clicks.wav"));
@@ -205,7 +215,11 @@ public class SoundCache
 		else
 		{
 			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/clicks.wav");
-			if(res != null) clicks = new SoundClip(res);
+			if(res != null)
+			{
+				clicks = new SoundClip(res);
+				clicks.setVolume(200.0);
+			}
 		}
 		
 		file = new File(RunManager.r65279(path + "bgm.wav"));
@@ -232,29 +246,15 @@ public class SoundCache
 		if(! Reflexioner.sound_allow) return;
 		if(playThreads == null) return;
 		if(playThreads.length <= 0) return;
-		boolean allEquals = true;
 		try
 		{
-			int allEqualChecker = playThreads[0].nowSize();
-			
 			for(int i=0; i<playThreads.length; i++)
 			{
-				if(allEqualChecker != playThreads[i].nowSize())
+				if(playThreads[i].nowSize() <= 0)
 				{
-					allEquals = false;
+					playThreads[i].addWork(commands);
 					break;
 				}
-			}
-			if(allEquals)
-			{
-				if(nowState >= playThreads.length) nowState = 0;
-				playThreads[nowState].addWork(commands);
-				nowState++;				
-			}
-			else
-			{
-				Arrays.sort(playThreads);
-				playThreads[0].addWork(commands);
 			}
 		} 
 		catch (Exception e)
