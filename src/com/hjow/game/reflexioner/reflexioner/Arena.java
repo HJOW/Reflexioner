@@ -10,7 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -34,6 +33,7 @@ import com.hjow.game.reflexioner.mainClasses.ThreadAccumulate;
 import com.hjow.game.reflexioner.mainClasses.ThreadControl;
 import com.hjow.game.reflexioner.pack.InstalledPack;
 import com.hjow.game.reflexioner.pack.Pack;
+import com.hjow.game.reflexioner.pack.SecuredDist;
 import com.hjow.game.reflexioner.setting.Difficulty;
 import com.hjow.game.reflexioner.setting.Lint;
 import com.hjow.game.reflexioner.setting.Setting;
@@ -819,10 +819,9 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 			GZIPOutputStream gzipper = null;
 			try
 			{
-				byte[] code1bin = code1Creator.toString().getBytes("UTF-8");
-				
-				MessageDigest digest = MessageDigest.getInstance("SHA-256");
-				code1bin = digest.digest(code1bin);
+				SecuredDist sp = new SecuredDist();
+				byte[] code1bin = (sp.getLeftPad() + code1Creator.toString() + sp.getRightPad()).getBytes("UTF-8");
+				code1bin = RXUtils.hash(code1bin);
 				
 				String code1 = RXUtils.hexString(code1bin);
 				code1Creator = null;

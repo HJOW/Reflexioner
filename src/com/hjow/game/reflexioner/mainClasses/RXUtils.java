@@ -1,12 +1,9 @@
 package com.hjow.game.reflexioner.mainClasses;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class RXUtils {
-	/**
-     * 바이너리를 16진수 형태의 문자열로 변환합니다. 문자열 형태로 바이너리 데이터를 전달하는 데 사용됩니다.
-     * 
-     * @param bytes : 바이너리
-     * @return 16진수 문자열
-     */
     public static String hexString(byte[] bytes) {
     	StringBuffer results = new StringBuffer("");
         
@@ -19,12 +16,6 @@ public class RXUtils {
         return String.valueOf(results);
     }
     
-    /**
-     * 16진수 문자열을 다시 바이너리로 변환합니다.
-     * 
-     * @param hexString : 바이너리 정보가 담긴 16진수 문자열 (모든 문자열이 호환되지 않음 ! 16진수 문자열만 사용 가능)
-     * @return 바이너리 원본
-     */
     public static  byte[] hexBytes(String hexString) {
     	byte[] results = new byte[hexString.length() / 2];
     	for(int idx=0; idx<hexString.length(); idx+=2) {
@@ -32,5 +23,17 @@ public class RXUtils {
     	}
     	
     	return results;
+    }
+    
+    public static byte[] hash(byte[] originals, String algorithm) throws NoSuchAlgorithmException
+    {
+    	MessageDigest digest = MessageDigest.getInstance(algorithm);
+		return digest.digest(originals);
+    }
+    
+    public static byte[] hash(byte[] originals)
+    {
+    	try { return hash(originals, "SHA-256"); } catch(NoSuchAlgorithmException e) {}
+    	return new byte[0];
     }
 }

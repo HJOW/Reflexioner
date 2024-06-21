@@ -18,7 +18,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import com.hjow.game.reflexioner.lang.Language;
+import com.hjow.game.reflexioner.pack.SecuredDist;
 import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 import com.hjow.game.reflexioner.setting.Setting;
 
@@ -370,24 +370,14 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 			report = report.append("Version"        ).append("\t: ").append(result.getProperty("Version"        )).append("\n");
 			report = report.append("Auto"           ).append("\t: ").append(result.getProperty("Auto"           )).append("\n");
 			report = report.append("TodayEvent"     ).append("\t: ").append(result.getProperty("TodayEvent"     )).append("\n");
-			report = report.append("\n");
-			report = report.append("Details").append("\n\n");
-			report = report.append("ShipKey"        ).append("\t: ").append(result.getProperty("ShipKey"        )).append("\n");
-			report = report.append("ShipCode"       ).append("\t: ").append(result.getProperty("ShipCode"       )).append("\n");
-			report = report.append("DifficultyValue").append("\t: ").append(result.getProperty("DifficultyValue")).append("\n");
-			report = report.append("PlayDateValue"  ).append("\t: ").append(result.getProperty("PlayDateValue"  )).append("\n");
-			report = report.append("Version1"       ).append("\t: ").append(result.getProperty("Version1"       )).append("\n");
-			report = report.append("Version2"       ).append("\t: ").append(result.getProperty("Version2"       )).append("\n");
-			report = report.append("Version3"       ).append("\t: ").append(result.getProperty("Version3"       )).append("\n");
-			report = report.append("Code1"          ).append("\t: ").append(result.getProperty("Code1"          )).append("\n");
+			
+			String code1 = result.getProperty("Code1");
+		    result.remove("Code1");
 			
 			boolean authRes = false;
 			
 			try
 			{
-			    String code1 = result.getProperty("Code1");
-			    result.remove("Code1");
-			    
 				Set<String> keys = result.stringPropertyNames();
 				List<String> keyList = new ArrayList<String>();
 				keyList.addAll(keys);
@@ -401,10 +391,9 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 				}
 				keyList = null;
 			    
-				byte[] code1bin = code1Creator.toString().getBytes("UTF-8");
-				
-				MessageDigest digest = MessageDigest.getInstance("SHA-256");
-				code1bin = digest.digest(code1bin);
+				SecuredDist sp = new SecuredDist();
+				byte[] code1bin = (sp.getLeftPad() + code1Creator.toString() + sp.getRightPad()).getBytes("UTF-8");
+				code1bin = RXUtils.hash(code1bin);
 				
 			    String code1re = RXUtils.hexString(code1bin);
 			    authRes = code1.equals(code1re);
@@ -417,6 +406,17 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 			
 			if(authRes) report = report.append(setting.getLang().getText(Language.AUTHORITY) + " " + setting.getLang().getText(Language.COMPLETE)).append("\n");
 			else        report = report.append(setting.getLang().getText(Language.AUTHORITY) + " " + setting.getLang().getText(Language.FAIL)).append("\n");
+			
+			report = report.append("\n");
+			report = report.append("Details").append("\n\n");
+			report = report.append("ShipKey"        ).append("\t: ").append(result.getProperty("ShipKey"        )).append("\n");
+			report = report.append("ShipCode"       ).append("\t: ").append(result.getProperty("ShipCode"       )).append("\n");
+			report = report.append("DifficultyValue").append("\t: ").append(result.getProperty("DifficultyValue")).append("\n");
+			report = report.append("PlayDateValue"  ).append("\t: ").append(result.getProperty("PlayDateValue"  )).append("\n");
+			report = report.append("Version1"       ).append("\t: ").append(result.getProperty("Version1"       )).append("\n");
+			report = report.append("Version2"       ).append("\t: ").append(result.getProperty("Version2"       )).append("\n");
+			report = report.append("Version3"       ).append("\t: ").append(result.getProperty("Version3"       )).append("\n");
+			report = report.append("Code1"          ).append("\t: ").append(code1).append("\n");
 		}
 		
 		

@@ -11,13 +11,15 @@ public class InstalledPack
 		packClasses.add("com.hjow.game.reflexioner.pack.Pack1");
 		
 		List<Pack> packs = new ArrayList<Pack>();
+		packs.addAll(new SecuredDist().getPacks());
+		
 		for(String cls : packClasses)
 		{
 			try
 			{
 				Class<? extends Pack> packClass = (Class<? extends Pack>) Class.forName(cls);
 				Pack pack = packClass.newInstance();
-				packs.add(pack);
+				if(packs.contains(pack)) packs.add(pack);
 			}
 			catch(ClassNotFoundException ex) 
 			{}
