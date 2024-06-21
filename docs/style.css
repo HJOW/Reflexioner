@@ -3,29 +3,14 @@ body
     margin:1px auto;
     padding-top:10px;   
     color:rgb(120, 120, 169);
-    text-align:center;
+    text-align:left;
     font-family:"NanumGothic", "NanumGothicCoding", "나눔고딕", "나눔고딕코딩", "Arial";
     background-color:rgb(190, 210, 235);
     
-    background-image:url(./calc/background.jpg);
+    background-image:url(./imagepacks/background.jpg);
     background-size:cover;
-    
-
-}
-/*
-.main_div 
-{
-    
-    background-image:url(back_image.jpg);
-    background-size:cover;
-    
 }
 
-p, li 
-{
-    background-color:rgba(80, 80, 139, 0.3) !important;
-}
-*/
 iframe 
 {
     border:none;
