@@ -159,6 +159,25 @@ public class SoundCache
 			if(res != null) boom = Applet.newAudioClip(res);
 		}
 		
+		file = new File(RunManager.r65279(path + "takeitem.wav"));
+		if(file.exists())
+		{
+			try
+			{
+				takeItem = Applet.newAudioClip(file.toURI().toURL());
+			} 
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				takeItem = null;
+			}
+		}
+		else
+		{
+			URL res = RunManager.getIndexClass().getClassLoader().getResource("resources/sound/takeitem.wav");
+			if(res != null) takeItem = Applet.newAudioClip(res);
+		}
+		
 		file = new File(RunManager.r65279(path + "clicks.wav"));
 		if(file.exists())
 		{
@@ -314,7 +333,7 @@ class SoundThread extends Thread implements Comparable<SoundThread>
 			}
 			try
 			{
-				calc_sleeps = 100 + (int)(Math.random() * 5);
+				calc_sleeps = 20 + (int)(Math.random() * 5);
 				if(sleeping >= 1) sleeping--;
 				Thread.sleep(calc_sleeps);				
 			}

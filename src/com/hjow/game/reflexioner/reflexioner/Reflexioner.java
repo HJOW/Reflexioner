@@ -5849,29 +5849,9 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				sound_allow = true;
 				if(frame_loaded)
 				{
-					String inputs = JOptionPane.showInputDialog(startDialog, "Channels", "8");
-					if(inputs != null) { inputs = inputs.trim(); if(inputs.equals("")) inputs = null; }
-					if(inputs == null)
-					{
-						sound_allow = false;
-						SoundCache.clear();
-						menu_manage_enableSound.setSelected(false);
-					}
-					else
-					{
-						try
-						{
-							SoundCache.prepareSound(sets, Integer.parseInt(inputs));
-							sound_allow = true;
-						} 
-						catch (NumberFormatException e1)
-						{						
-							sound_allow = false;
-							SoundCache.clear();
-							menu_manage_enableSound.setSelected(false);
-							JOptionPane.showMessageDialog(startDialog, sets.getLang().getText(Language.ERROR) + " : " + e1.getMessage());
-						}
-					}	
+					// TODO Custom sound channel feature
+					SoundCache.prepareSound(sets, 8);
+					sound_allow = true;
 				}
 				else
 				{
