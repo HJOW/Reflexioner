@@ -1,0 +1,70 @@
+body
+{
+    margin:1px auto;
+    padding-top:10px;   
+    color:rgb(120, 120, 169);
+    text-align:center;
+    font-family:"NanumGothic", "NanumGothicCoding", "나눔고딕", "나눔고딕코딩", "Arial";
+    background-color:rgb(190, 210, 235);
+    
+    background-image:url(./calc/background.jpg);
+    background-size:cover;
+    
+
+}
+/*
+.main_div 
+{
+    
+    background-image:url(back_image.jpg);
+    background-size:cover;
+    
+}
+
+p, li 
+{
+    background-color:rgba(80, 80, 139, 0.3) !important;
+}
+*/
+iframe 
+{
+    border:none;
+}
+A
+{
+    color:rgba(70, 70, 250, 0.5);
+    text-decoration:none;
+}
+.index_menu 
+{
+
+}
+.index_menu li 
+{
+    font-weight:bold;
+    background-color:rgba(255, 255, 255, 0.3);
+}
+.nav 
+{
+    width:30%;
+    font-size:15px;
+    text-align:left;
+    float:left;
+}
+.title_1 
+{
+    background-color:rgba(255, 255, 255, 0.3);
+}
+.board 
+{
+   
+}
+.login_cell 
+{
+   vertical-align:top;
+   background-color:rgba(255, 255, 255, 0.3);
+}
+.ads 
+{
+    
+}
