@@ -1530,6 +1530,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 											arena.newBoom.setX(arena.enemies.get(i).getX());
 											arena.newBoom.setY(arena.enemies.get(i).getY());
 											arena.booms.add(arena.newBoom);
+											SoundCache.play("boom");
 										}
 										arena.enemies.clear();
 										newBoss = Boss.getNewInstance(file_path, difficulty, true);										
@@ -1565,6 +1566,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
 										target_boom.loadImage(arena.file_path);
 										arena.booms.add(target_boom);
+										SoundCache.play("boom");
 									}
 								}
 								if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
@@ -1599,6 +1601,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
 										target_boom.loadImage(arena.file_path);
 										arena.booms.add(target_boom);
+										SoundCache.play("boom");
 									}
 								}
 								if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
@@ -1613,6 +1616,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 										arena.newBoom.setY(target_enemy.getY());
 										((OvalBoom) arena.newBoom).setRx((int)Math.round(target_enemy.getR() * 0.3));
 										arena.booms.add(arena.newBoom);
+										SoundCache.play("boom");
 									}
 								}
 									
@@ -1649,27 +1653,31 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 							target_missile = missile.get(k);
 							if (! missile.get(k).isLaunched())
 							{
-								arena.newBoom = new OvalBoom();
-								((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
-								arena.newBoom.loadImage(file_path);
-								arena.newBoom.setX(target_missile.getX());
-								arena.newBoom.setY(target_missile.getY());
-								((OvalBoom) arena.newBoom).setRx(4);
 								if(! (target_missile instanceof Beam))
+								{
+									arena.newBoom = new OvalBoom();
+									((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
+									arena.newBoom.loadImage(file_path);
+									arena.newBoom.setX(target_missile.getX());
+									arena.newBoom.setY(target_missile.getY());
+									((OvalBoom) arena.newBoom).setRx(4);
 									arena.booms.add(newBoom);
+								}
 								arena.missile.remove(k);		
 								SoundCache.play("boom");
 							} 
 							else if (arena.missile.get(k).getHp() <= 0)
 							{
-								arena.newBoom = new OvalBoom();
-								((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
-								arena.newBoom.loadImage(file_path);
-								arena.newBoom.setX(target_missile.getX());
-								arena.newBoom.setY(target_missile.getY());
-								((OvalBoom) arena.newBoom).setRx(4);
 								if(! (target_missile instanceof Beam))
+								{
+									arena.newBoom = new OvalBoom();
+									((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
+									arena.newBoom.loadImage(file_path);
+									arena.newBoom.setX(target_missile.getX());
+									arena.newBoom.setY(target_missile.getY());
+									((OvalBoom) arena.newBoom).setRx(4);
 									arena.booms.add(arena.newBoom);
+								}
 								if(arena.missile.get(k) instanceof EnemyMissile)
 								{
 									getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
@@ -2073,6 +2081,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 											target_boom.setX(target_missile.getX());
 											target_boom.setY(target_missile.getY());
 											arena.booms.add(target_boom);
+											SoundCache.play("boom");
 											target_missile.setHp(0);
 										}
 										else if(target_missile instanceof ReflexMissile)
@@ -2085,6 +2094,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 											target_boom.setX(target_missile.getX());
 											target_boom.setY(target_missile.getY());
 											arena.booms.add(target_boom);
+											SoundCache.play("boom");
 											if(((ReflexMissile) target_missile).getDx() == 0)
 											{
 												if(Math.random() >= 0.5)
@@ -2166,6 +2176,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									arena.newBoom.setX(target_enemy.getX());
 									arena.newBoom.setY(target_enemy.getY());
 									arena.booms.add(arena.newBoom);
+									SoundCache.play("boom");
 									target_enemy.setHp(0);
 								}
 							}
@@ -2188,7 +2199,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 									arena.booms.add(arena.newBoom);
 									arena.catchItems = arena.catchItems.add(Lint.big(1));
 									applyItem(arena.items.get(i).getType());
-									SoundCache.play("boom");
+									SoundCache.play("takeitem");
 								}
 							}
 							catch (Exception e)
@@ -2209,6 +2220,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 								arena.newBoom.setY(arena.spaceShip.getY());
 								arena.newBoom.loadImage(arena.file_path);
 								arena.booms.add(arena.newBoom);
+								SoundCache.play("boom");
 								arena.finish_count = (arena.spaceShip.getR() / 2) + 5;
 							}
 						}

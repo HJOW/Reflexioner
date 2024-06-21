@@ -5850,12 +5850,12 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				if(frame_loaded)
 				{
 					// TODO Custom sound channel feature
-					SoundCache.prepareSound(sets, 8);
+					SoundCache.prepareSound(sets, 32);
 					sound_allow = true;
 				}
 				else
 				{
-					SoundCache.prepareSound(sets, 8);
+					SoundCache.prepareSound(sets, 32);
 					sound_allow = true;
 				}
 			}
