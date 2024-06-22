@@ -79,7 +79,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import com.hjow.game.reflexioner.browser.OldBrowser;
-import com.hjow.game.reflexioner.lang.Language;
 import com.hjow.game.reflexioner.mainClasses.CodeChecker;
 import com.hjow.game.reflexioner.mainClasses.MessageShowable;
 import com.hjow.game.reflexioner.mainClasses.MouseDragCatcher;
@@ -104,7 +103,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static final int  version_sub_2 = 6;
     public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
     
-    public static Language lang = null;
     private static String file_path = null;
     private static int speed = 9, react_delay = 37, boss_delay = 5000, difficulty_delay = 5000, boss_beam_delay = 400;
     private static int spaceShip_r = 50;
@@ -197,12 +195,9 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static Font usingFont2B = null;
     public static int default_fontSize = 12;
     
-    private static transient int calc_grade = 0;
     public static transient String calc_grade_str = "Lite";
     
     private Setting setting;
-    private RunManager manager;
-    private String[] arguments;
     private Window window;
     private JPanel mainPanel;
     private Arena arena;
@@ -486,8 +481,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         super();
         this.sets = sets;
         this.independence = independence;
-        this.manager = manager;
-        this.arguments = args;
+        // this.manager = manager;
+        // this.arguments = args;
         window = new JFrame();        
         init();
     }
@@ -505,8 +500,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         this.sets = sets;
         this.independence = independence;
         window = new JFrame();
-        this.manager = manager;
-        this.arguments = args;
+        // this.manager = manager;
+        // this.arguments = args;
         init();
     }
     public Reflexioner(Window sp, Setting sets, boolean independence)
@@ -884,7 +879,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         start_noticePanel.setBackground(sets.getColor("ColorSelectedBack"));
         start_noticePanel.setForeground(sets.getColor("ColorSelectedFore"));
         start_noticePanel.setLayout(new BorderLayout());
-        mainTab.add(sets.trans("공지사항"), start_noticePanel);
+        mainTab.add(sets.trans("Notice"), start_noticePanel);
         start_notice_upPanel = new JPanel();
         start_notice_downPanel = new JPanel();
         start_notice_centerPanel = new JPanel();
@@ -1359,7 +1354,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         start_centerHelpScroll = new JScrollPane(start_centerHelpArea);
         start_centerHelpPanel.add(start_centerHelpScroll);
         
-        start_centerHelpArea.setText("Reflexioner\n\n"
+        start_centerHelpArea.setText(
+        "Reflexioner\n\n"
         + "You can play with keyboard.\n"
         + "If you using touch screen, press ▲ button to open other buttons to control.\n\n"                
         + "You will control the green circle. See following key you will press.\n\n"
@@ -1370,7 +1366,11 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         + "You can get points to earn points.\n\n"
         + "Sometimes, pink circles will appear, and you can improve the green circle\'s abilities.\n\n"
         + "The game will finish when the green circle is destroyed.\n"
-        + "You can see your points, and authority code for you to demonstrate your game skill to others.");
+        + "You can see your points, and authority code for you to demonstrate your game skill to others.\n"
+        + "\n"
+        + "Made by HJOW\n"
+        + "hujinone22@naver.com\n"
+        + "http://hjow.github.io/Reflexioner/");
         
         if(independence)
             start_upPanel.add(menuBar, BorderLayout.CENTER);
@@ -5450,10 +5450,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static int getSpeed()
     {
         return speed;
-    }
-    public static Language getLang()
-    {
-        return lang;
     }
     public static String getFile_path()
     {

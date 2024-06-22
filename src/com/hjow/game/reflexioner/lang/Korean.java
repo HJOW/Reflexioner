@@ -1,13 +1,108 @@
 package com.hjow.game.reflexioner.lang;
 
-import com.hjow.game.reflexioner.setting.Difficulty;
+import java.util.Properties;
 
-public class Korean extends Language
+public class Korean implements Language
 {
-    private static final long serialVersionUID = 3346721188515475503L;
-
+    private static final long serialVersionUID = 3346721188505475503L;
+    Properties prop = new Properties();
+    
     public Korean()
-    {                
+    {
+        prop.setProperty("Missile Speed"                                                                                           , "미사일 속도"                                                                                             );
+        prop.setProperty("Satellite"                                                                                               , "Satellite"                                                                                               );
+        prop.setProperty("Edit"                                                                                                    , "Edit"                                                                                                    );
+        prop.setProperty("Detail"                                                                                                  , "Detail"                                                                                                  );
+        prop.setProperty("Log"                                                                                                     , "Log"                                                                                                     );
+        prop.setProperty("is..."                                                                                                   , "는..."                                                                                                   );
+        prop.setProperty("Point"                                                                                                   , "점수"                                                                                                    );
+        prop.setProperty("AI"                                                                                                      , "인공지능"                                                                                                );
+        prop.setProperty("Replay Delay"                                                                                            , "리플레이 딜레이"                                                                                         );
+        prop.setProperty("Move →←↑↓, Break SHIFT, Fire SPACE, Change weapon 123, Toggle auto Fire 4, Pause L, Exit K"          , "이동 →←↑↓, 브레이크 SHIFT, 발사 SPACE, 무기 변경 123, 자동 발사 토글 4, 일시정지 L, 중단 K"          );  
+        prop.setProperty("There are some problems to uninstall...\n"                                                               , "삭제 중 문제가 발생하였습니다.\n"                                                                        );
+        prop.setProperty("Accept"                                                                                                  , "확인"                                                                                                    );
+        prop.setProperty("License"                                                                                                 , "라이센스"                                                                                                );
+        prop.setProperty("Speed"                                                                                                   , "속도"                                                                                                    );
+        prop.setProperty("Add"                                                                                                     , "추가"                                                                                                    );
+        prop.setProperty("Max"                                                                                                     , "최대"                                                                                                    );
+        prop.setProperty("Warship"                                                                                                 , "Warship"                                                                                                 );
+        prop.setProperty("Scenario Editor"                                                                                         , "시나리오 에디터"                                                                                         );
+        prop.setProperty("Energy Cunsume"                                                                                          , "에너지 소모량"                                                                                           );
+        prop.setProperty("Cooling Time"                                                                                            , "쿨타임"                                                                                                  );
+        prop.setProperty("Load"                                                                                                    , "불러오기"                                                                                                );
+        prop.setProperty("Start"                                                                                                   , "시작"                                                                                                    );
+        prop.setProperty("Today's Game"                                                                                            , "오늘의 게임"                                                                                             );
+        prop.setProperty("Custom"                                                                                                  , "사용자 정의"                                                                                             );
+        prop.setProperty("Ship"                                                                                                    , "함선"                                                                                                    );
+        prop.setProperty("Berserk"                                                                                                 , "Berserk"                                                                                                 );
+        prop.setProperty("Missile Type (normal, super, guide, reflex, reflex_perfect, beam, helper)"                               , "미사일 유형 (normal, super, guide, reflex, reflex_perfect, beam, helper)"                                );
+        prop.setProperty("Caution : Double-point effect is work at the game finish. This effect is not saved in state, and replay.", "Caution : Double-point effect is work at the game finish. This effect is not saved in state, and replay.");
+        prop.setProperty("Play"                                                                                                    , "재생"                                                                                                    );
+        prop.setProperty("Shape"                                                                                                   , "모양"                                                                                                    );
+        prop.setProperty("Carrier"                                                                                                 , "Carrier"                                                                                                 );
+        prop.setProperty("Reflexioner"                                                                                             , "Reflexioner"                                                                                             );
+        prop.setProperty("Interceptor Type"                                                                                        , "요격기 유형"                                                                                             );
+        prop.setProperty("Notice"                                                                                                  , "공지사항"                                                                                                );
+        prop.setProperty("Range"                                                                                                   , "범위"                                                                                                    );
+        prop.setProperty("Exit"                                                                                                    , "종료"                                                                                                    );
+        prop.setProperty("Copy to clipboard"                                                                                       , "클립보드로 복사"                                                                                         );
+        prop.setProperty("Management"                                                                                              , "관리"                                                                                                    );
+        prop.setProperty("Flex"                                                                                                    , "Flex"                                                                                                    );
+        prop.setProperty("Code Checker"                                                                                            , "인증코드 확인"                                                                                           );
+        prop.setProperty("Interval"                                                                                                , "주기"                                                                                                    );
+        prop.setProperty("Save"                                                                                                    , "저장"                                                                                                    );
+        prop.setProperty("Scenario"                                                                                                , "시나리오"                                                                                                );
+        prop.setProperty("Event"                                                                                                   , "이벤트"                                                                                                  );
+        prop.setProperty("Stop this game"                                                                                          , "게임 중단"                                                                                               );
+        prop.setProperty("Files will be located at"                                                                                , "파일이 생성됩니다. "                                                                                     );
+        prop.setProperty("Ship HP"                                                                                                 , "함선 HP"                                                                                                 );
+        prop.setProperty("File"                                                                                                    , "파일"                                                                                                    );
+        prop.setProperty("Replay Player"                                                                                           , "리플레이 플레이어"                                                                                       );
+        prop.setProperty("Day"                                                                                                     , "일"                                                                                                      );
+        prop.setProperty("Clipper"                                                                                                 , "Clipper"                                                                                                 );
+        prop.setProperty("Close"                                                                                                   , "닫기"                                                                                                    );
+        prop.setProperty("Do you trust this web address?"                                                                          , "이 웹 주소를 신뢰합니까?"                                                                                );
+        prop.setProperty("Difficulty"                                                                                              , "난이도"                                                                                                  );
+        prop.setProperty("Size"                                                                                                    , "크기"                                                                                                    );
+        prop.setProperty("Interceptor Count"                                                                                       , "요격기 갯수"                                                                                             );
+        prop.setProperty("Help (Asset file names)"                                                                                 , "도움말 (에셋 파일)"                                                                                      );
+        prop.setProperty("Continue"                                                                                                , "이어하기"                                                                                                );
+        prop.setProperty("Month"                                                                                                   , "월"                                                                                                      );
+        prop.setProperty("Help"                                                                                                    , "도움말"                                                                                                  );
+        prop.setProperty("Summary"                                                                                                 , "요약"                                                                                                    );
+        prop.setProperty("Missile Size"                                                                                            , "미사일 크기"                                                                                             );
+        prop.setProperty("\"Try to reserve deletion : "                                                                            , "삭제 예약 중 : "                                                                                         );
+        prop.setProperty("Guide"                                                                                                   , "유도"                                                                                                    );
+        prop.setProperty("URL"                                                                                                     , "URL"                                                                                                     );
+        prop.setProperty("Minimum"                                                                                                 , "최소"                                                                                                    );
+        prop.setProperty("Eliminated enemies"                                                                                      , "적 처치"                                                                                                 );
+        prop.setProperty("Game Prepared"                                                                                           , "게임 준비됨"                                                                                             );
+        prop.setProperty("Uninstall complete"                                                                                      , "삭제 완료"                                                                                               );
+        prop.setProperty("Start (Custom)"                                                                                          , "시작 (사용자 정의)"                                                                                      );
+        prop.setProperty("Name"                                                                                                    , "이름"                                                                                                    );
+        prop.setProperty("Year"                                                                                                    , "년"                                                                                                      );
+        prop.setProperty("Energy"                                                                                                  , "에너지"                                                                                                  );
+        prop.setProperty("Uninstall"                                                                                               , "삭제"                                                                                                    );
+        prop.setProperty("Player"                                                                                                  , "플레이어"                                                                                                );
+        prop.setProperty("Reinforcement at starts"                                                                                 , "시작 시 강화"                                                                                            );
+        prop.setProperty("Download"                                                                                                , "다운로드"                                                                                                );
+        prop.setProperty("Chaser"                                                                                                  , "Chaser"                                                                                                  );
+        prop.setProperty("Run"                                                                                                     , "실행"                                                                                                    );
+        prop.setProperty("Replay"                                                                                                  , "리플레이"                                                                                                );
+        prop.setProperty("HP"                                                                                                      , "HP"                                                                                                      );
+        prop.setProperty("Ship Name"                                                                                               , "함선 이름"                                                                                               );
+        prop.setProperty("Authority"                                                                                               , "인증"                                                                                                    );
+        prop.setProperty("Result"                                                                                                  , "결과"                                                                                                    );
+        prop.setProperty(" will be removed after the program end. Do you want to continue?"                                        , " 은/는 프로그램 종료 후 삭제됩니다. 그래도 하시겠습니까?"                                                );
+        prop.setProperty("View"                                                                                                    , "보기"                                                                                                    );
+        prop.setProperty("Weapon"                                                                                                  , "무기"                                                                                                    );
+        prop.setProperty("Taken items"                                                                                             , "오늘의 아이템"                                                                                           );
+        prop.setProperty("Damage"                                                                                                  , "피해량"                                                                                                  );
+        prop.setProperty("Shoot"                                                                                                   , "발사"                                                                                                    );
+        prop.setProperty("Standard"                                                                                                , "표준"                                                                                                    );
+
+    	
+    	/*
         title = "Calc";
         x = "X";
         file_created = "다음과 같은 파일들이 생성되었습니다.";
@@ -437,10 +532,24 @@ public class Korean extends Language
         description[30] = "검증을 시작합니다.";
         description[31] = "트럼프 모드 활성화";
         description[32] = "트럼프 모드 비활성화";
-     }    
-    @Override
-    public int getType()
-    {
-        return Language.LANG_KOREAN;
-    }    
+        */
+    }
+
+	@Override
+	public String language() {
+		return "ko";
+	}
+
+	@Override
+	public Properties properties() {
+		return prop;
+	}
+
+	public Properties getProp() {
+		return prop;
+	}
+
+	public void setProp(Properties prop) {
+		this.prop = prop;
+	}     
 }

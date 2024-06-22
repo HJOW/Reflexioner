@@ -12,13 +12,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.hjow.game.reflexioner.lang.English;
+import com.hjow.game.reflexioner.lang.Korean;
+import com.hjow.game.reflexioner.lang.Language;
 import com.hjow.game.reflexioner.mainClasses.RXUtils;
 import com.hjow.game.reflexioner.mainClasses.RunManager;
 
@@ -147,17 +151,13 @@ public class Setting implements CanBeClone
         return property.stringPropertyNames();
     }
     
-    private transient Set<String> warned = new HashSet<String>();
     public String trans(String english)
     {
         String contents = language.getProperty(english);
         if(contents == null)
         {
-            if(! warned.contains(english))
-            {
-                System.out.println("[LANG] " + english);
-                warned.add(english);
-            }
+        	System.out.println("[LANG] " + english);
+        	language.setProperty(english, english);
             return english;
         }
         return contents;
@@ -485,9 +485,13 @@ public class Setting implements CanBeClone
     public void inputBasics()
     {
         if(caller == null) caller = this.getClass();
+        String syslocale = System.getProperty("user.language");
         
         set("OS"      , System.getProperty("os.name"));
-        set("Language", System.getProperty("user.language"));
+        set("Language", syslocale);
+        
+        System.out.println("OS : " + get("OS"));
+        System.out.println("Language : " + syslocale);
         
         set("ErrorStackTraceConsole", "Y");
         
@@ -506,24 +510,32 @@ public class Setting implements CanBeClone
         set("FontSize"   , 12 + "");
         set("FontSizeBig", 20 + "");
         
+        usingFont = new Font("Arial", Font.PLAIN, getInt("FontSize"));
+        usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
+        usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
+        usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
+        
         InputStream inp1 = null;
         InputStream inp2 = null;
         try
         {
             inp1 = caller.getClassLoader().getResourceAsStream("resources/font/font.ttf");
-            inp2 = new BufferedInputStream(inp1);
-            usingFont = Font.createFont(Font.TRUETYPE_FONT, inp2);
-            inp2.close(); inp2 = null;
-            inp1.close(); inp1 = null;
-            
-            usingFont   = usingFont.deriveFont(Font.PLAIN, getInt("FontSize"));
-            usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
-            usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
-            usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
+            if(inp1 != null)
+            {
+            	inp2 = new BufferedInputStream(inp1);
+                usingFont = Font.createFont(Font.TRUETYPE_FONT, inp2);
+                inp2.close(); inp2 = null;
+                inp1.close(); inp1 = null;
+                
+                usingFont   = usingFont.deriveFont(Font.PLAIN, getInt("FontSize"));
+                usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
+                usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
+                usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
+            }
         }
         catch(Exception ex)
         {
-            throw new RuntimeException(ex.getMessage(), ex);
+            ex.printStackTrace();
         }
         
         set("LookAndFeel", "javax.swing.plaf.metal.MetalLookAndFeel");
@@ -565,54 +577,16 @@ public class Setting implements CanBeClone
         set("KEY_K"    , KeyEvent.VK_K);
         set("KEY_P"    , KeyEvent.VK_P);
         
-        language.setProperty("Reflexioner\n\n"
-        + "You can play with keyboard.\n"
-        + "If you using touch screen, press ▲ button to open other buttons to control.\n\n"                
-        + "You will control the green circle. See following key you will press.\n\n"
-        + "Move →←↑↓, Break SHIFT, Fire SPACE, Change weapon 123, Toggle auto Fire 4, Pause L, Exit K" + "\n\n"
-        + "After the game start, dark circles will appear, and they shoot some missiles.\n"
-        + "You will control the green circle to avoid these missiles.\n\n"
-        + "Also, you can shoot missiles to attack dark circles.\n"
-        + "You can get points to earn points.\n\n"
-        + "Sometimes, pink circles will appear, and you can improve the green circle\'s abilities.\n\n"
-        + "The game will finish when the green circle is destroyed.\n"
-        + "You can see your points, and authority code for you to demonstrate your game skill to others.",
-        "Reflexioner\n\n"
-        + "You can play with keyboard.\n"
-        + "If you using touch screen, press ▲ button to open other buttons to control.\n\n"                
-        + "You will control the green circle. See following key you will press.\n\n"
-        + "Move →←↑↓, Break SHIFT, Fire SPACE, Change weapon 123, Toggle auto Fire 4, Pause L, Exit K" + "\n\n"
-        + "After the game start, dark circles will appear, and they shoot some missiles.\n"
-        + "You will control the green circle to avoid these missiles.\n\n"
-        + "Also, you can shoot missiles to attack dark circles.\n"
-        + "You can get points to earn points.\n\n"
-        + "Sometimes, pink circles will appear, and you can improve the green circle\'s abilities.\n\n"
-        + "The game will finish when the green circle is destroyed.\n"
-        + "You can see your points, and authority code for you to demonstrate your game skill to others.");
+        List<Language> languagePacks = new ArrayList<Language>();
+        languagePacks.add(new Korean());
+        languagePacks.add(new English());
         
-        language.setProperty(
-        "Cannot read notice online.\n"
-        + "\n"
-        + "Visit http://hjow.github.io/Reflexioner/\n"
-        + "to check newest version and notices.",
-        "Cannot read notice online.\n"
-        + "\n"
-        + "Visit http://hjow.github.io/Reflexioner/\n"
-        + "to check newest version and notices."
-        );
-        
-        language.setProperty(
-        "Reflexioner\n"
-        + "\n"
-        + "\n"
-        + "Made by HJOW\n"
-        + "hujinone22@naver.com\n"
-        + "http://hjow.github.io/Reflexioner/",
-        "Reflexioner\n"
-        + "\n"
-        + "\n"
-        + "Made by HJOW\n"
-        + "hujinone22@naver.com\n"
-        + "http://hjow.github.io/Reflexioner/");
+        for(Language l : languagePacks)
+        {
+        	if(syslocale.equals(l.language()))
+        	{
+        		language.putAll(l.properties());
+        	}
+        }
     }
 }

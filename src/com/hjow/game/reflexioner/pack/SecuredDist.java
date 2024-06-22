@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hjow.game.reflexioner.lang.Language;
+
 public class SecuredDist implements Serializable {
     private static final long serialVersionUID = -7659331755330322341L;
     public String getRightPad(int versionMain, int versionSub1, int versionSub2)
@@ -20,6 +22,12 @@ public class SecuredDist implements Serializable {
     {
         // This value will be changed on release version
         return new ArrayList<Pack>();
+    }
+    
+    public List<Language> getLanguagePacks()
+    {
+    	// This value will be changed on release version
+    	return new ArrayList<Language>();
     }
     
     // This function will be changed on release version
