@@ -25,6 +25,8 @@ import com.hjow.game.reflexioner.lang.Korean;
 import com.hjow.game.reflexioner.lang.Language;
 import com.hjow.game.reflexioner.mainClasses.RXUtils;
 import com.hjow.game.reflexioner.mainClasses.RunManager;
+import com.hjow.game.reflexioner.pack.SecuredDist;
+import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 
 public class Setting implements CanBeClone
 {
@@ -32,6 +34,7 @@ public class Setting implements CanBeClone
     protected Properties property;
     protected Properties language;
     protected Font usingFont, usingFont2, usingFontB, usingFont2B;
+    protected transient boolean firsts = true;
     protected transient Class<?> caller;
     
     public Setting()
@@ -136,6 +139,12 @@ public class Setting implements CanBeClone
             return;
         }
         
+        if(val instanceof Properties)
+        {
+        	property.setProperty(key, Setting.serializeProperty((Properties) val));
+        	return;
+        }
+        
         if(val instanceof Color)
         {
             Color c = (Color) val;
@@ -149,6 +158,20 @@ public class Setting implements CanBeClone
     public Set<String> keys()
     {
         return property.stringPropertyNames();
+    }
+    
+    public String gets(String ... keys)
+    {
+    	Properties prop = property;
+    	String currentKey = null;
+    	for(int idx=0; idx<keys.length; idx++)
+    	{
+    		currentKey = keys[idx];
+    		String val = prop.getProperty(currentKey);
+    		if(idx == keys.length - 1) return val;
+    		prop = extractProperty(val);
+    	}
+    	return null;
     }
     
     public String trans(String english)
@@ -233,6 +256,37 @@ public class Setting implements CanBeClone
         return caller;
     }
     
+	public boolean isAuthorizedSetting() 
+    {
+    	if(firsts) return true;
+    	if(! contains("SettingAuthCode")) return false;
+    	
+    	StringBuilder collects = new StringBuilder("");
+    	for(String k : keys())
+    	{
+    		if(k.equals("SettingAuthCode")) continue;
+    		collects = collects.append(k).append(":").append(get(k)).append("\n");
+        }
+    	String c = collects.toString();
+    	collects = null;
+    	c = c.trim();
+    	
+    	SecuredDist sp = new SecuredDist();
+        String svm = get("VersionMain");
+        String sv1 = get("VersionSub1");
+        String sv2 = get("VersionSub2");
+        
+    	try 
+    	{ 
+    		int vm, v1, v2;
+    		vm = Integer.parseInt(svm);
+    		v1 = Integer.parseInt(sv1);
+    		v2 = Integer.parseInt(sv2);
+    		if(get("SettingAuthCode").equals(sp.getLeftPad(vm, v1, v2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(vm, v1, v2))) return true; 
+    	} catch(Exception ex) { ex.printStackTrace(); }
+    	return false;
+    }
+    
     public static Setting load()
     {
     	return load(RunManager.getIndexClass());
@@ -263,6 +317,8 @@ public class Setting implements CanBeClone
         
         Setting sets = new Setting(caller);
         File target;
+        
+        sets.firsts = false;
         
         FileInputStream inp = null;
         
@@ -337,7 +393,6 @@ public class Setting implements CanBeClone
                 if(inp != null) { try { inp.close(); } catch(Exception exc) {} }
             }
         }
-        // TODO System.getProperty("user.language")  ko en
         
         return sets;
     }
@@ -350,6 +405,27 @@ public class Setting implements CanBeClone
         }
         if(! directory.isDirectory()) throw new RuntimeException("No directory !");
         if(! directory.exists()) directory.mkdirs();
+        
+        SecuredDist sp = new SecuredDist();
+        DetailedVersionData v = new DetailedVersionData();
+        set("VersionMain", v.getV_m());
+        set("VersionSub1", v.getV_1());
+        set("VersionSub2", v.getV_2());
+        
+        if(isAuthorizedSetting())
+        {
+        	StringBuilder collects = new StringBuilder("");
+        	for(String k : keys())
+        	{
+        		if(k.equals("SettingAuthCode")) continue;
+        		collects = collects.append(k).append(":").append(get(k)).append("\n");
+            }
+        	String c = collects.toString();
+        	collects = null;
+        	c = c.trim();
+        	
+        	try { set("SettingAuthCode", sp.getLeftPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) ); } catch(Exception ex) { ex.printStackTrace(); }
+        }
         
         File target;
         
