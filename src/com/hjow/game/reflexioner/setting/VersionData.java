@@ -76,6 +76,18 @@ public class VersionData implements Serializable
 	{
 		this.v_t = v_t;
 	}
+	public long value()
+	{
+		long val = 0;
+		char vt = getV_t();
+		if(vt == ' ') val += 0;
+		else val += ((int) (vt - 'a')) + 1;
+		val += 0 * 10;
+		val += getV_2() * 10 * ((long) Math.pow(1000, 1));
+		val += getV_1() * 10 * ((long) Math.pow(1000, 2));
+		val += getV_m() * 10 * ((long) Math.pow(1000, 3));
+		return val;
+	}
 	@Override
 	public String toString()
 	{

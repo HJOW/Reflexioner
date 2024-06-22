@@ -72,6 +72,19 @@ public class DetailedVersionData extends VersionData
 		this.nightly = nightly;
 	}
 	@Override
+	public long value()
+	{
+		long val = 0;
+		char vt = getV_t();
+		if(vt == ' ') val += 0;
+		else val += ((int) (vt - 'a')) + 1;
+		val += getNightly() * 10;
+		val += getV_2() * 10 * ((long) Math.pow(1000, 1));
+		val += getV_1() * 10 * ((long) Math.pow(1000, 2));
+		val += getV_m() * 10 * ((long) Math.pow(1000, 3));
+		return val;
+	}
+	@Override
 	public String toString()
 	{
 		String val = super.toString();
