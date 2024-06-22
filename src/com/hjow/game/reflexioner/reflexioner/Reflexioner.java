@@ -90,7 +90,7 @@ import com.hjow.game.reflexioner.browser.OldBrowser;
 import com.hjow.game.reflexioner.lang.English;
 import com.hjow.game.reflexioner.lang.Korean;
 import com.hjow.game.reflexioner.lang.Language;
-import com.hjow.game.reflexioner.mainClasses.Code_Checker;
+import com.hjow.game.reflexioner.mainClasses.CodeChecker;
 import com.hjow.game.reflexioner.mainClasses.MessageShowable;
 import com.hjow.game.reflexioner.mainClasses.MouseDragCatcher;
 import com.hjow.game.reflexioner.mainClasses.Openable;
@@ -295,7 +295,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	private JMenuItem menu_file_exit;
 	private JMenu menu_view;
 	private JMenuItem menu_view_check;
-	private Code_Checker checker;
+	private CodeChecker checker;
 	private JPanel start_centerHelpPanel;
 	private JTextArea start_centerHelpArea;
 	private JScrollPane start_centerHelpScroll;
@@ -2843,7 +2843,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		try_transparent(startDialog, doubled);
 		try_transparent(messageDialog, value);
 		try_transparent(scenarioEditor, doubled);		
-		if(checker == null) checker = new Code_Checker(false, startDialog, sets);
+		if(checker == null) checker = new CodeChecker(false, startDialog, sets);
 		try_transparent(checker.getWindow(), doubled);
 		try_transparent(needfileDialog, doubled);
 	}
@@ -4011,7 +4011,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 		}
 		else if(ob == menu_view_check)
 		{
-			if(checker == null) checker = new Code_Checker(false, startDialog, sets);
+			if(checker == null) checker = new CodeChecker(false, startDialog, sets);
 			checker.open();
 		}
 		else if(ob == bt_saveState)
@@ -5264,25 +5264,21 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	@Override
 	public void windowDeactivated(WindowEvent arg0)
 	{
-		// TODO 자동 생성된 메소드 스텁
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0)
 	{
-		// TODO 자동 생성된 메소드 스텁
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0)
 	{
-		// TODO 자동 생성된 메소드 스텁
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0)
 	{
-		// TODO 자동 생성된 메소드 스텁
 		
 	}
 	

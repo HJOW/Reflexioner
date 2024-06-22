@@ -39,15 +39,17 @@ import com.hjow.game.reflexioner.pack.SecuredDist;
 import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 import com.hjow.game.reflexioner.setting.Setting;
 
-public class Code_Checker implements ActionListener, WindowListener, MouseListener, MouseMotionListener, Openable
+public class CodeChecker implements ActionListener, WindowListener, MouseListener, MouseMotionListener, Openable
 {
 	boolean independence = false;
 	boolean gui = false;
-	private JDialog checker_dialog;
-	private InputStreamReader inread;
-	private BufferedReader bfreader;
 	boolean while_loop = true;
 	Setting setting;
+	
+	private InputStreamReader inread;
+	private BufferedReader bfreader;
+	
+	private JDialog checker_dialog;
 	private JPanel mainPanel;
 	private JPanel centerPanel;
 	private JPanel upPanel;
@@ -65,33 +67,33 @@ public class Code_Checker implements ActionListener, WindowListener, MouseListen
 	private JButton closeButton;
 	private JPanel contentPanel;
 	
-	public Code_Checker(boolean independence)
+	public CodeChecker(boolean independence)
 	{
 		this.gui = false;
 		this.independence = independence;		
 	}
-	public Code_Checker(boolean independence, Setting setting)
+	public CodeChecker(boolean independence, Setting setting)
 	{
 		this.gui = true;
 		this.independence = independence;
 		this.setting = setting.clone();
 		init_frame();
 	}
-	public Code_Checker(boolean independence, JDialog upper, Setting setting)
+	public CodeChecker(boolean independence, JDialog upper, Setting setting)
 	{
 		this.gui = true;
 		this.independence = independence;
 		this.setting = setting.clone();
 		init_frame(upper);
 	}
-	public Code_Checker(boolean independence, Frame upper, Setting setting)
+	public CodeChecker(boolean independence, Frame upper, Setting setting)
 	{
 		this.gui = true;
 		this.independence = independence;
 		this.setting = setting.clone();
 		init_frame(upper);
 	}
-	public Code_Checker(boolean independence, Dialog upper, Setting setting)
+	public CodeChecker(boolean independence, Dialog upper, Setting setting)
 	{
 		this.gui = true;
 		this.independence = independence;
