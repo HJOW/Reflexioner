@@ -8,9 +8,9 @@ import com.hjow.game.reflexioner.reflexioner.SpaceShip;
 
 public interface Pack extends Serializable
 {
-	public long                 getSerial();
-	public String               getName();
-	public String               getDescription(String locale);
+    public long                 getSerial();
+    public String               getName();
+    public String               getDescription(String locale);
     public List<SpaceShip>      getSpaceShip();
     public List<ReflexScenario> getScenarios();
 }

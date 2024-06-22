@@ -3,5 +3,5 @@ import java.io.Serializable;
 
 public interface CanBeClone extends java.lang.Cloneable, Serializable
 {
-	public Object clone();
+    public Object clone();
 }
