@@ -108,10 +108,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 	
 	private static boolean frame_loaded = false;
 	
-	public static final long version_nightly = 33;
+	public static final long version_nightly = 34;
 	public static final int  version_main = 0;
 	public static final int  version_sub_1 = 9;
-	public static final int  version_sub_2 = 5;
+	public static final int  version_sub_2 = 6;
 	public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
 	
 	public static Language lang = null;
@@ -2608,18 +2608,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
 				{
 					if(sets.isError_printDetail()) e.printStackTrace();
 				}
-			}
-			if(sets.getProperties().containsKey("script_5"))
-			{
-				arena.setSaved_script_5(sets.getProperties().get("script_5"));
-			}
-			if(sets.getProperties().containsKey("script_6"))
-			{
-				arena.setSaved_script_6(sets.getProperties().get("script_6"));
-			}
-			if(sets.getProperties().containsKey("script_7"))
-			{
-				arena.setSaved_script_7(sets.getProperties().get("script_7"));
 			}
 		}
 		catch(Exception e)

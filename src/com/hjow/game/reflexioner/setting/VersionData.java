@@ -76,4 +76,9 @@ public class VersionData implements Serializable
 	{
 		this.v_t = v_t;
 	}
+	@Override
+	public String toString()
+	{
+		return getV_m() + "." + getV_1() + "." + getV_2();
+	}
 }

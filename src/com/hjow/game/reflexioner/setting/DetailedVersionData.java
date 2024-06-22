@@ -57,7 +57,6 @@ public class DetailedVersionData extends VersionData
 			setV_t(new Character(Reflexioner.version_test));
 			setNightly(new Long(Reflexioner.version_nightly));
 		}
-		
 	}
 	public DetailedVersionData clone()
 	{
@@ -71,5 +70,13 @@ public class DetailedVersionData extends VersionData
 	public void setNightly(Long nightly)
 	{
 		this.nightly = nightly;
+	}
+	@Override
+	public String toString()
+	{
+		String val = super.toString();
+		if(getV_t() != ' ') val += String.valueOf(getV_t());
+		val += "(" + getNightly() + ")";
+		return val;
 	}
 }

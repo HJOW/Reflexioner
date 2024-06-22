@@ -76,7 +76,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	private Setting sets;
 	private long difficulty_delay = 5000;
 	private long timeout = -1;
-	private String saved_script_5 = "", saved_script_6 = "", saved_script_7 = "";
 	private int decorationMax = 250;
 	private BigInteger decorationPointUnit = new BigInteger("10000");
 	
@@ -2707,30 +2706,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 	public void setAuthcode(String authcode)
 	{
 		this.authcode = authcode;
-	}
-	public String getSaved_script_5()
-	{
-		return saved_script_5;
-	}
-	public void setSaved_script_5(String saved_script_5)
-	{
-		this.saved_script_5 = saved_script_5;
-	}
-	public String getSaved_script_6()
-	{
-		return saved_script_6;
-	}
-	public void setSaved_script_6(String saved_script_6)
-	{
-		this.saved_script_6 = saved_script_6;
-	}
-	public String getSaved_script_7()
-	{
-		return saved_script_7;
-	}
-	public void setSaved_script_7(String saved_script_7)
-	{
-		this.saved_script_7 = saved_script_7;
 	}
 	public Setting getSets()
 	{
