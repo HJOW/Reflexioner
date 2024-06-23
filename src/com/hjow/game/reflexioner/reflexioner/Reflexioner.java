@@ -86,6 +86,7 @@ import com.hjow.game.reflexioner.mainClasses.Openable;
 import com.hjow.game.reflexioner.mainClasses.RunManager;
 import com.hjow.game.reflexioner.mainClasses.ThreadAccumulate;
 import com.hjow.game.reflexioner.mainClasses.Uninstaller;
+import com.hjow.game.reflexioner.pack.SecuredDist;
 import com.hjow.game.reflexioner.setting.Difficulty;
 import com.hjow.game.reflexioner.setting.Setting;
 
@@ -505,6 +506,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private void init()
     {
         Dimension scrSize = sets.getScreenSize();
+        SecuredDist dist = new SecuredDist();
         
         usingFont   = sets.getUsingFont();
         usingFont2  = sets.getUsingFont2();
@@ -1958,8 +1960,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         about_titleStringPanel.add(about_centerLabel);
         about_editionLabel = new JLabel();
         about_editionLabel.addMouseListener(this);
-        about_editionLabel.setText("BASIC");
-        about_editionLabel.setForeground(Color.GRAY);
+        about_editionLabel.setText(dist.getName());
+        about_editionLabel.setForeground(dist.getColor());
         about_editionStringPanel.add(about_editionLabel);
         about_versionPanel = new JPanel();
         about_versionPanel.setLayout(new FlowLayout());

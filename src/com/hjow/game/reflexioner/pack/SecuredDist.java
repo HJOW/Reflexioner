@@ -1,5 +1,6 @@
 package com.hjow.game.reflexioner.pack;
 
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,16 @@ public class SecuredDist implements Serializable {
     {
     	// This value will be changed on release version
     	return new ArrayList<Language>();
+    }
+    
+    public String getName()
+    {
+    	return "BASIC";
+    }
+    
+    public Color getColor()
+    {
+    	return Color.GRAY;
     }
     
     // This function will be changed on release version
