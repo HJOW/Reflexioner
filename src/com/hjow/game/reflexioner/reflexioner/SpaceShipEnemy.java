@@ -35,19 +35,19 @@ public class SpaceShipEnemy extends Boss
         ship.update();
         if(getX() < getR())
         {
-            ship.setAccel_x((int) ((Reflexioner.getSpeed() / 2) * Math.random()));
+            ship.setAccel_x((int) ((Arena.getGspeed() / 2) * Math.random()));
         }
         if(getX() > Arena.maxWidth() - getR())
         {
-            ship.setAccel_x((int) -((Reflexioner.getSpeed() / 2) * Math.random()));
+            ship.setAccel_x((int) -((Arena.getGspeed() / 2) * Math.random()));
         }
         if(getY() < getR())
         {
-            ship.setAccel_x((int) ((Reflexioner.getSpeed() / 2) * Math.random()));
+            ship.setAccel_x((int) ((Arena.getGspeed() / 2) * Math.random()));
         }
         if(getY() > (Arena.maxHeight() / 3) - getR())
         {
-            ship.setAccel_x((int) -((Reflexioner.getSpeed() / 2) * Math.random()));
+            ship.setAccel_x((int) -((Arena.getGspeed() / 2) * Math.random()));
         }
     }
     @Override
@@ -62,11 +62,11 @@ public class SpaceShipEnemy extends Boss
         {
             controlRandom = controlRandom + 0.3;
         }
-        if(enemies.size() >= Reflexioner.max_enemies * 0.8)
+        if(enemies.size() >= Arena.getGmaxEnemies() * 0.8)
         {
             controlRandom = controlRandom + 0.1;
         }
-        else if(enemies.size() >= Reflexioner.max_enemies * 0.5)
+        else if(enemies.size() >= Arena.getGmaxEnemies() * 0.5)
         {
             controlRandom = controlRandom + 0.05;
         }

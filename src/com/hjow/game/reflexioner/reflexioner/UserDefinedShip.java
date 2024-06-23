@@ -32,7 +32,7 @@ public class UserDefinedShip extends SpaceShip
         super();
         this.player_name = "";        
         hp_capacity = new Integer(1000);
-        speed_capacity = new Integer(Reflexioner.getSpeed());
+        speed_capacity = new Integer(Arena.getGspeed());
         shape = new Integer(0);
         authCode = new Long(0);
         init();
@@ -43,7 +43,7 @@ public class UserDefinedShip extends SpaceShip
         this.player_name = name;        
         hp_capacity = new Integer(1000);
         energy_capacity = new Integer(1000);
-        speed_capacity = new Integer(Reflexioner.getSpeed());
+        speed_capacity = new Integer(Arena.getGspeed());
         this.weapons = weapons;
         shape = new Integer(0);
         authCode = new Long(0);
@@ -54,7 +54,7 @@ public class UserDefinedShip extends SpaceShip
         super(enemies);
         this.player_name = name;        
         this.hp_capacity = new Integer(hp_capacity);
-        this.speed_capacity = new Integer((int) Math.round(Reflexioner.getSpeed() * speed_capacity));
+        this.speed_capacity = new Integer((int) Math.round(Arena.getGspeed() * speed_capacity));
         this.energy_capacity = new Integer(energy_capacity);
         this.weapons = weapons;
         shape = new Integer(0);

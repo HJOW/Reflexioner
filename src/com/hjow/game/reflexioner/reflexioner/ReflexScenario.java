@@ -1,11 +1,15 @@
 package com.hjow.game.reflexioner.reflexioner;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import com.hjow.game.reflexioner.mainClasses.RXUtils;
 import com.hjow.game.reflexioner.reflexioner.Arena.ArenaThread;
 import com.hjow.game.reflexioner.setting.Lint;
 
@@ -19,12 +23,12 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     }
     
     private long serials = 0L;
-    private String name, description, koreanDescription;
+    private String name, description, koreanDescription, authorizeCode;
     private String spaceShip;
     private Boolean spaceShipSelectable;
     private Integer startItemM, startItemD, startItemS, startItemA, startItemK, startItemE, startItemG; // IReflexScenario
     private Integer difficulty, enemyLimit;
-    private Long diffDelay, auth;
+    private Long diffDelay;
     private BigInteger deadLine;
     private boolean customPhase = false;
     private EnemyPattern[] patterns;
@@ -45,7 +49,6 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         difficulty = new Integer(1);
         enemyLimit = new Integer(20);
         diffDelay  = new Long(5000);
-        auth       = new Long(0);
         startItemM = new Integer(0);
         startItemD = new Integer(0);
         startItemS = new Integer(0);
@@ -117,12 +120,148 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     }
     public ReflexScenario(String serialized)
     {
+    	this(RXUtils.extractProperty(serialized));
+    }
+    public ReflexScenario(String serialized, boolean gzip)
+    {
+    	this(RXUtils.extractProperty(serialized, gzip));
+    }
+    public ReflexScenario(Properties serialized)
+    {
     	this();
-    	// TODO
+    	setSerials(Integer.parseInt(serialized.getProperty("Serial")));
+    	setName(serialized.getProperty("Name"));
+    	setDescription(serialized.getProperty("Description"));
+    	setKoreanDescription(serialized.getProperty("KoreanDescription"));
+    	setSpaceShip(serialized.getProperty("SpaceShip"));
+    	setSpaceShipSelectable(RXUtils.parseBoolean(serialized.getProperty("SpaceShipSelectable")));
+    	setStartItemM(Integer.parseInt(serialized.getProperty("StartItemM")));
+    	setStartItemD(Integer.parseInt(serialized.getProperty("StartItemD")));
+    	setStartItemS(Integer.parseInt(serialized.getProperty("StartItemS")));
+    	setStartItemA(Integer.parseInt(serialized.getProperty("StartItemA")));
+    	setStartItemK(Integer.parseInt(serialized.getProperty("StartItemK")));
+    	setStartItemE(Integer.parseInt(serialized.getProperty("StartItemE")));
+    	setStartItemG(Integer.parseInt(serialized.getProperty("StartItemG")));
+    	setDifficulty(Integer.parseInt(serialized.getProperty("Difficulty")));
+    	setEnemyLimit(Integer.parseInt(serialized.getProperty("EnemyLimit")));
+    	setDiffDelay(Long.parseLong(serialized.getProperty("DifficultDelay")));
+    	setDeadLine(new BigInteger(serialized.getProperty("DeadLine").replace(",", "").replace(" ", "")));
+    	setCustomPhase(RXUtils.parseBoolean(serialized.get("CustomPhase")));
+    	
+    	List<EnemyPattern> pts = new ArrayList<EnemyPattern>();
+    	String patternx = serialized.getProperty("EnemyPatterns");
+    	StringTokenizer ptTokenizer = new StringTokenizer(patternx, "||");
+    	while(ptTokenizer.hasMoreTokens())
+    	{
+    		String one = ptTokenizer.nextToken().trim();
+    		if(one.equals("")) continue;
+    		pts.add(new EnemyPattern(one));
+    	}
+    	EnemyPattern[] patterns = new EnemyPattern[pts.size()];
+    	for(int idx=0; idx<patterns.length; idx++)
+    	{
+    	    patterns[idx] = pts.get(idx);
+        }
+    	pts.clear();
+    	setPatterns(patterns);
+    	
+    	setDefaultPattern(new EnemyPattern(serialized.getProperty("DefaultEnemyPattern")));
+    	setAvailableContinues(Integer.parseInt(serialized.getProperty("AvailableContinues")));
+    	setContinueType(Integer.parseInt(serialized.getProperty("ContinueType")));
+    }
+    private Properties serializeTo(boolean withAuthCode)
+    {
+    	Properties serialized = new Properties();
+    	serialized.setProperty("Serial", "" + getSerials());
+    	serialized.setProperty("Name", getName());
+    	serialized.setProperty("Description", getDescription());
+    	serialized.setProperty("KoreanDescription", getKoreanDescription());
+    	serialized.setProperty("SpaceShip", getSpaceShip());
+    	serialized.setProperty("SpaceShipSelectable", "" + getSpaceShipSelectable());
+    	
+    	serialized.setProperty("StartItemM", "" + getStartItemM());
+    	serialized.setProperty("StartItemD", "" + getStartItemD());
+    	serialized.setProperty("StartItemS", "" + getStartItemS());
+    	serialized.setProperty("StartItemA", "" + getStartItemA());
+    	serialized.setProperty("StartItemK", "" + getStartItemK());
+    	serialized.setProperty("StartItemE", "" + getStartItemE());
+    	serialized.setProperty("StartItemG", "" + getStartItemG());
+    	serialized.setProperty("Difficulty", "" + getDifficulty());
+    	serialized.setProperty("EnemyLimit", "" + getEnemyLimit());
+    	serialized.setProperty("DifficultDelay", "" + getDiffDelay());
+    	serialized.setProperty("DeadLine", "" + getDeadLine());
+    	serialized.setProperty("CustomPhase", "" + isCustomPhase());
+    	
+    	StringBuilder res = new StringBuilder("");
+    	boolean firsts = true;
+    	for(EnemyPattern p : getPatterns())
+    	{
+    		if(! firsts) res = res.append("||");
+    		res = res.append(p.convertStr());
+    		firsts = false;
+    	}
+    	serialized.setProperty("EnemyPatterns", res.toString());
+    	res = null;
+    	
+    	serialized.setProperty("DefaultEnemyPattern", getDefaultPattern().convertStr());
+    	serialized.setProperty("AvailableContinues", "" + getAvailableContinues());
+    	serialized.setProperty("ContinueType", "" + getContinueType());
+    	
+    	if(withAuthCode)
+    	{
+    		createAuthorize();
+        	serialized.setProperty("AuthorizeCode", getAuthorizeCode());
+    	}
+    	
+    	return serialized;
+    }
+    public Properties serializeTo()
+    {
+    	return serializeTo(true);
+    }
+    public final void createAuthorize()
+    {
+        Properties serialized = serializeTo(false);
+        
+        StringBuilder coll = new StringBuilder("");
+        
+        coll = coll.append(serialized.getProperty("Serial"             )).append("|"); 
+    	coll = coll.append(serialized.getProperty("Name"               )).append("|"); 
+    	coll = coll.append(serialized.getProperty("Description"        )).append("|"); 
+    	coll = coll.append(serialized.getProperty("KoreanDescription"  )).append("|"); 
+    	coll = coll.append(serialized.getProperty("SpaceShip"          )).append("|"); 
+    	coll = coll.append(serialized.getProperty("SpaceShipSelectable")).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemM"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemD"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemS"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemA"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemK"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemE"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("StartItemG"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("Difficulty"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("EnemyLimit"         )).append("|"); 
+    	coll = coll.append(serialized.getProperty("DifficultDelay"     )).append("|"); 
+    	coll = coll.append(serialized.getProperty("DeadLine"           )).append("|"); 
+    	coll = coll.append(serialized.getProperty("CustomPhase"        )).append("|"); 
+    	coll = coll.append(serialized.getProperty("EnemyPatterns"      )).append("|"); 
+    	coll = coll.append(serialized.getProperty("DefaultEnemyPattern")).append("|"); 
+    	coll = coll.append(serialized.getProperty("AvailableContinues" )).append("|"); 
+    	coll = coll.append(serialized.getProperty("ContinueType"       )).append("|"); 
+        
+    	try
+    	{
+			setAuthorizeCode(RXUtils.hexString(RXUtils.hash(coll.toString().getBytes("UTF-8"))));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+    }
+    public String stringData(boolean gzip)
+    {
+    	return RXUtils.serializeProperty(serializeTo(), gzip);
     }
     public String stringData()
     {
-    	return ""; // TODO
+    	return stringData(true);
     }
     public String getName()
     {
@@ -156,15 +295,6 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     {
         this.diffDelay = diff_delay;
     }
-    public Long getAuth()
-    {
-        return auth;
-    }
-    public void setAuth(Long auth)
-    {
-        this.auth = auth;
-    }
-
     public EnemyPattern[] getPatterns()
     {
         return patterns;
@@ -175,257 +305,12 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         this.patterns = patterns;
     }
     
-    public long authorized(int password)
-    {
-        long results = 0;
-        for(char c : name.toCharArray())
-        {
-            results = results + (long) c;
-        }
-        for(char c : description.toCharArray())
-        {
-            results = results + (long) c;
-        }
-        for(char c : koreanDescription.toCharArray())
-        {
-            results = results + (long) c;
-        }
-        for(char c : spaceShip.toCharArray())
-        {
-            results = results + (long) c;
-        }
-        results = results + difficulty.intValue();
-        results = results - diffDelay.longValue();
-        results = results * enemyLimit.intValue();
-        results = (long) (results + (defaultPattern.getAddDamageRatio().longValue() * 1026));
-        results = (long) (results + (defaultPattern.getAddHPRatio().longValue() * 2732));
-        results = (long) (results + (defaultPattern.getAddHPRatio() * 2183));
-        results = (long) (results + (long) ((defaultPattern.getMax_delay().longValue() + defaultPattern.getMin_delay().longValue()) * defaultPattern.getRatio().doubleValue()));
-        results = results + defaultPattern.getEnemy().getDamage();
-        results = results + defaultPattern.getEnemy().getMissiles();
-        results = results + defaultPattern.getEnemy().getMax_energy();
-        results = results + defaultPattern.getEnemy().getMax_hp();
-        if(defaultPattern.getEnemy() instanceof Boss)
-        {
-            results = results + 5124;            
-        }
-        if(defaultPattern.getEnemy() instanceof BigEnemy)
-        {
-            results = results + 8362;
-            results = results + defaultPattern.getEnemy().getMissiles();
-            results = results + defaultPattern.getEnemy().getR();            
-        }
-        else results = results + 2615;
-        results = results + defaultPattern.getEnemy().getDy();
-        results = results + defaultPattern.getEnemy().getDx();
-        results = results + defaultPattern.getEnemy().getX();
-        results = results + defaultPattern.getEnemy().getY();
-        
-        results = results / 183;        
-        
-        return results;
-    }
     public final boolean isAuthorized()
     {
     	if(defaultScenario.equals(this)) return true;
-        if(auth == null) return false;
-        try
-        {
-            return (auth.longValue() == authorized(1937283 + 1001008));
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }        
+        return false;      
     }
     
-    public static String enemyToString(Enemy enemy)
-    {
-        String results = "";
-        //if(enemy == null) return "";
-        if(enemy instanceof HyperBoss)
-        {
-            results = results + "type" + Reflexioner.DELIM_ENEMY + "boss_3" + "\n";
-            results = results + "beamdelay" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getBeam_std()) + "\n";
-            results = results + "attack_ratio" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getRatio()) + "\n";
-            results = results + "guide" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isGuide()) + "\n";
-            results = results + "missiles" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getMissiles()) + "\n";
-            results = results + "unique" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isUnique()) + "\n";
-        }
-        else if(enemy instanceof ExtremeBoss)
-        {
-            results = results + "type" + Reflexioner.DELIM_ENEMY + "boss_2" + "\n";
-            results = results + "beamdelay" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getBeam_std()) + "\n";
-            results = results + "attack_ratio" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getRatio()) + "\n";
-            results = results + "guide" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isGuide()) + "\n";
-            results = results + "missiles" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getMissiles()) + "\n";
-            results = results + "unique" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isUnique()) + "\n";
-        }
-        else if(enemy instanceof Boss)
-        {
-            results = results + "type" + Reflexioner.DELIM_ENEMY + "boss" + "\n";
-            results = results + "beamdelay" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getBeam_std()) + "\n";
-            results = results + "attack_ratio" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getRatio()) + "\n";
-            results = results + "guide" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isGuide()) + "\n";
-            results = results + "missiles" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).getMissiles()) + "\n";
-            results = results + "unique" + Reflexioner.DELIM_ENEMY + String.valueOf(((Boss) enemy).isUnique()) + "\n";
-        }
-        else if(enemy instanceof BigEnemy)
-        {
-            results = results + "type" + Reflexioner.DELIM_ENEMY + "bigenemy" + "\n";
-            results = results + "guide" + Reflexioner.DELIM_ENEMY + String.valueOf(((BigEnemy) enemy).isGuide()) + "\n";
-            results = results + "missiles" + Reflexioner.DELIM_ENEMY + String.valueOf(((BigEnemy) enemy).getMissiles()) + "\n";
-        }
-        results = results + "hp" + Reflexioner.DELIM_ENEMY + enemy.getMax_hp() + "\n";
-        results = results + "size" + Reflexioner.DELIM_ENEMY + enemy.getR() + "\n";
-        results = results + "speed_x" + Reflexioner.DELIM_ENEMY + enemy.getDx() + "\n";
-        results = results + "speed_y" + Reflexioner.DELIM_ENEMY + enemy.getDy() + "\n";
-        results = results + "firedelay" + Reflexioner.DELIM_ENEMY + enemy.getMax_energy() + "\n";
-        results = results + "damage" + Reflexioner.DELIM_ENEMY + enemy.getDamage() + "\n";        
-        
-        return results;
-    }
-    
-    public static Enemy stringToEnemy(String str)
-    {
-        Enemy enemy = new Enemy();
-        enemy.setColor(Reflexioner.color_enemy);
-        enemy.setX(Arena.maxWidth());
-        enemy.setY(10);
-        enemy.setR(Reflexioner.getEnemy_r());
-        enemy.setColor(Reflexioner.color_enemy);
-        enemy.setHp(500);
-        enemy.setMax_hp(500);
-        enemy.setDamage((enemy.getHp() / 10));
-        
-        StringTokenizer stoken = new StringTokenizer(str, "\n");
-        StringTokenizer keyToken;
-        String lines = "", key = "", target = "";
-        while(stoken.hasMoreTokens())
-        {
-            lines = stoken.nextToken().trim();
-            if(lines.startsWith("#")) continue;
-            keyToken = new StringTokenizer(lines, Reflexioner.DELIM_ENEMY);
-            try
-            {
-                key = keyToken.nextToken();                
-                target = keyToken.nextToken();
-                if(key.equalsIgnoreCase("type"))
-                {
-                    if(target.equalsIgnoreCase("boss_3"))
-                    {
-                        enemy = new HyperBoss();
-                        enemy.setColor(Reflexioner.color_bigenemy);
-                        enemy.setX(Arena.maxWidth());
-                        enemy.setY(10);
-                        enemy.setR(Reflexioner.getEnemy_r() * 2);
-                        enemy.setColor(Reflexioner.color_enemy);
-                        enemy.setHp(5000);
-                        enemy.setMax_hp(5000);
-                        enemy.setDamage((enemy.getHp() / 10));
-                        ((Boss) enemy).setBeam_energy(300);
-                        ((Boss) enemy).setRatio(0.9);
-                    }
-                    else if(target.equalsIgnoreCase("boss_2"))
-                    {
-                        enemy = new ExtremeBoss();
-                        enemy.setColor(Reflexioner.color_bigenemy);
-                        enemy.setX(Arena.maxWidth());
-                        enemy.setY(10);
-                        enemy.setR(Reflexioner.getEnemy_r() * 2);
-                        enemy.setColor(Reflexioner.color_enemy);
-                        enemy.setHp(5000);
-                        enemy.setMax_hp(5000);
-                        enemy.setDamage((enemy.getHp() / 10));
-                        ((Boss) enemy).setBeam_energy(300);
-                        ((Boss) enemy).setRatio(0.9);
-                    }
-                    else if(target.equalsIgnoreCase("boss"))
-                    {
-                        enemy = new Boss();
-                        enemy.setColor(Reflexioner.color_bigenemy);
-                        enemy.setX(Arena.maxWidth());
-                        enemy.setY(10);
-                        enemy.setR(Reflexioner.getEnemy_r() * 2);
-                        enemy.setColor(Reflexioner.color_enemy);
-                        enemy.setHp(5000);
-                        enemy.setMax_hp(5000);
-                        enemy.setDamage((enemy.getHp() / 10));
-                        ((Boss) enemy).setBeam_energy(300);
-                        ((Boss) enemy).setRatio(0.9);
-                    }
-                    else if(target.equalsIgnoreCase("bigenemy"))
-                    {
-                        enemy = new BigEnemy();
-                        enemy.setColor(Reflexioner.color_bigenemy);
-                        enemy.setX(Arena.maxWidth());
-                        enemy.setY(10);
-                        enemy.setR(Reflexioner.getEnemy_r());
-                        enemy.setColor(Reflexioner.color_enemy);
-                        enemy.setHp(500);
-                        enemy.setMax_hp(500);
-                        enemy.setDamage((enemy.getHp() / 10));
-                    }
-                }
-                else if(key.equalsIgnoreCase("hp"))
-                {
-                    enemy.setMax_hp(Long.parseLong(target));
-                    enemy.setHp(Long.parseLong(target));
-                }
-                else if(key.equalsIgnoreCase("size"))
-                {
-                    enemy.setR(Integer.parseInt(target));
-                }
-                else if(key.equalsIgnoreCase("speed_x"))
-                {
-                    enemy.setDx(Integer.parseInt(target));
-                }
-                else if(key.equalsIgnoreCase("speed_y"))
-                {
-                    enemy.setDy(Integer.parseInt(target));
-                }
-                else if(key.equalsIgnoreCase("firedelay"))
-                {
-                    enemy.setMax_energy(Long.parseLong(target));
-                    enemy.setEnergy(Long.parseLong(target));
-                }
-                else if(key.equalsIgnoreCase("damage"))
-                {
-                    enemy.setDamage(Long.parseLong(target));
-                }
-                else if(key.equalsIgnoreCase("guide"))
-                {
-                    ((BigEnemy) enemy).setGuide(Boolean.parseBoolean(target));
-                }
-                else if(key.equalsIgnoreCase("missiles"))
-                {
-                    ((BigEnemy) enemy).setMissiles(Integer.parseInt(target));
-                }
-                else if(key.equalsIgnoreCase("beamdelay"))
-                {
-                    ((Boss) enemy).setBeam_std(Integer.parseInt(target));
-                    ((Boss) enemy).setBeam_energy(0);
-                }
-                else if(key.equalsIgnoreCase("attack_ratio"))
-                {
-                    ((Boss) enemy).setRatio(Double.parseDouble(target));
-                }
-                else if(key.equalsIgnoreCase("unique"))
-                {
-                    ((Boss) enemy).setUnique(Boolean.parseBoolean(target));
-                }
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        
-        
-        return enemy;
-    }
-
     public EnemyPattern getDefaultPattern()
     {
         return defaultPattern;
@@ -566,7 +451,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
             }
             if(defaultScenario.equals(this))
             {
-                if(arena.getBossCount() >= Reflexioner.getBoss_delay())
+                if(arena.getBossCount() >= Arena.getGbossDelay())
                 {                            
                     arena.setBossCount(0);
                     if(! arena.isUnique_exist())
@@ -732,7 +617,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 	List<Enemy> getEnemies = ((EnemyMissile) arena.getMissile().get(k)).getEnemies();
                     try
                     {
-                        while(getEnemies.size() + arena.getEnemies().size() > Reflexioner.max_enemies)
+                        while(getEnemies.size() + arena.getEnemies().size() > Arena.getGmaxEnemies())
                         {
                             getEnemies.remove(0);
                         }
@@ -748,7 +633,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 	List<Enemy> getEnemies = ((HelperSpread) arena.getMissile().get(k)).open(arena.getSpaceShip(), arena.getDifficulty_mode(), arena.getFile_path());
                     try
                     {
-                        while(getEnemies.size() + arena.getOurEnemy().size() > Reflexioner.max_enemies)
+                        while(getEnemies.size() + arena.getOurEnemy().size() > Arena.getGmaxEnemies())
                         {
                             getEnemies.remove(0);
                         }
@@ -771,7 +656,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                     List<Enemy> getEnemies = ((EnemyMissile) arena.getMissile().get(k)).getEnemies();
                     try
                     {
-                        while(getEnemies.size() + arena.getEnemies().size() > Reflexioner.max_enemies)
+                        while(getEnemies.size() + arena.getEnemies().size() > Arena.getGmaxEnemies())
                         {
                             getEnemies.remove(0);
                         }
@@ -793,7 +678,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                     List<Enemy> getEnemies = ((EnemyMissile) arena.getMissile().get(k)).getEnemies();
                     try
                     {
-                        while(getEnemies.size() + arena.getEnemies().size() > Reflexioner.max_enemies)
+                        while(getEnemies.size() + arena.getEnemies().size() > Arena.getGmaxEnemies())
                         {
                             getEnemies.remove(0);
                         }
@@ -940,7 +825,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 double newEnemyProbability = Math.random();
                 if(arena.getDifficulty() < arena.getDifficulty_delay())
                 {                                    
-                    if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newEnemy = new Enemy(arena.getFile_path());
                         newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
@@ -957,7 +842,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 }
                 else if(arena.getDifficulty() < arena.getDifficulty_delay() * 2)
                 {
-                    if (newEnemyProbability >= 0.98 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    if (newEnemyProbability >= 0.98 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newBigEnemy = new BigEnemy(arena.getFile_path());
                         newBigEnemy.setGuide(true);
@@ -971,7 +856,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         if(arena.getDifficulty_mode() >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
                         arena.getEnemies().add(newBigEnemy);
                     }
-                    else if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    else if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newBigEnemy = new BigEnemy(arena.getFile_path());
                         newBigEnemy.setGuide(false);
@@ -986,7 +871,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         if(arena.getDifficulty_mode() >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
                         arena.getEnemies().add(newBigEnemy);
                     }
-                    else if (newEnemyProbability >= 0.90 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    else if (newEnemyProbability >= 0.90 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newEnemy = new Enemy(arena.getFile_path());
                         newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
@@ -1002,7 +887,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 }
                 else
                 {
-                    if (newEnemyProbability >= 0.99 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    if (newEnemyProbability >= 0.99 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newEnemy = new SealedEnemy(arena.getFile_path());
                         newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
@@ -1017,7 +902,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         if(arena.getDifficulty_mode() >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
                         arena.getEnemies().add(newEnemy);
                     }
-                    else if (newEnemyProbability >= 0.97 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    else if (newEnemyProbability >= 0.97 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newBigEnemy = new BigEnemy(arena.getFile_path());
                         newBigEnemy.setGuide(true);
@@ -1032,7 +917,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         if(arena.getDifficulty_mode() >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
                         arena.getEnemies().add(newBigEnemy);
                     }
-                    else if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    else if (newEnemyProbability >= 0.95 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newBigEnemy = new BigEnemy(arena.getFile_path());
                         newBigEnemy.setMissiles(2 + (int) Math.round(Math.random() * 2.5));
@@ -1046,7 +931,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         if(arena.getDifficulty_mode() >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
                         arena.getEnemies().add(newBigEnemy);
                     }
-                    else if (newEnemyProbability >= 0.90 && arena.getEnemies().size() <= Reflexioner.max_enemies)
+                    else if (newEnemyProbability >= 0.90 && arena.getEnemies().size() <= Arena.getGmaxEnemies())
                     {
                         newEnemy = new Enemy(arena.getFile_path());
                         newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
@@ -1148,11 +1033,11 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                             {
                                 if(Math.random() >= 0.5)
                                 {
-                                    ((ReflexMissile) target_missile).setDx(Reflexioner.getSpeed());
+                                    ((ReflexMissile) target_missile).setDx(Arena.getGspeed());
                                 }
                                 else
                                 {
-                                    ((ReflexMissile) target_missile).setDx(-1 * Reflexioner.getSpeed());
+                                    ((ReflexMissile) target_missile).setDx(-1 * Arena.getGspeed());
                                 }
                             }
                         }
@@ -1339,9 +1224,9 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         }
         
         //showPlayerInfo();
-        if(Reflexioner.max_enemies <= 30 && arena.getDifficulty() % 5000 == 0)
+        if(Arena.getGmaxEnemies() <= 30 && arena.getDifficulty() % 5000 == 0)
         {
-            Reflexioner.max_enemies += 1;
+            Arena.setGmaxEnemies(Arena.getGmaxEnemies() + 1);
         }
         
         if(arena.getSpaceShip().getFire_delay() >= 1)
@@ -1438,8 +1323,8 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                         }
                     }
                 }
-                if(controlRandom >= 1.7 - arena.getSpaceShip().ai_advantage_mode3(arena.getEnemies().size(), Reflexioner.max_enemies, unders, boss_exist)) arena.getSpaceShip().setMode(3);
-                else if(controlRandom >= 1.7 - arena.getSpaceShip().ai_advantage_mode2(arena.getEnemies().size(), Reflexioner.max_enemies, unders, boss_exist)) arena.getSpaceShip().setMode(2);
+                if(controlRandom >= 1.7 - arena.getSpaceShip().ai_advantage_mode3(arena.getEnemies().size(), Arena.getGmaxEnemies(), unders, boss_exist)) arena.getSpaceShip().setMode(3);
+                else if(controlRandom >= 1.7 - arena.getSpaceShip().ai_advantage_mode2(arena.getEnemies().size(), Arena.getGmaxEnemies(), unders, boss_exist)) arena.getSpaceShip().setMode(2);
                 else arena.getSpaceShip().setMode(1);
                 if(arena.getSpaceShip().getFire_delay() <= 0)
                 {
@@ -1507,5 +1392,11 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
 			}
 		}
 		this.serials = serials;
+	}
+	public final String getAuthorizeCode() {
+		return authorizeCode;
+	}
+	public final void setAuthorizeCode(String authorizeCode) {
+		this.authorizeCode = authorizeCode;
 	}
 }

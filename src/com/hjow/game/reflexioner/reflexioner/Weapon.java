@@ -23,7 +23,7 @@ public class Weapon implements Serializable
     private int interval = 0;
     private int missile_hp = 0;
     private int need_e = 0;
-    private int delay = Reflexioner.fire_delay;
+    private int delay = Arena.getGfireDelay();
     private double damage_ratio = 0.0;
     private double size = 0.0;
     private double speed = 0.0;
@@ -482,7 +482,7 @@ public class Weapon implements Serializable
                 newMissile.setLaunched(true);                
                 if(owner == Missile.SPACESHIP)
                 {
-                    newMissile.setDy((int) - (Reflexioner.getSpeed() * speed));
+                    newMissile.setDy((int) - (Arena.getGspeed() * speed));
                     newMissile.setX(owner_x + (int) Math.round((center - i - 0.5) * 30));
                     newMissile.setY(owner_y - owner_r);
                     newMissile.setColor(Reflexioner.color_spaceShip_missile);
@@ -493,7 +493,7 @@ public class Weapon implements Serializable
                 }
                 else
                 {
-                    newMissile.setDy((int) (Reflexioner.getSpeed() * speed));
+                    newMissile.setDy((int) (Arena.getGspeed() * speed));
                     newMissile.setX(owner_x + (int) Math.round((center - i - 0.5) * 30));
                     newMissile.setY(owner_y + owner_r);
                     newMissile.setColor(Reflexioner.color_enemy_missile);

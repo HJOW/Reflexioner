@@ -1,10 +1,16 @@
 package com.hjow.game.reflexioner.mainClasses;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class RXUtils {
     public static String hexString(byte[] bytes) {
@@ -96,5 +102,84 @@ public class RXUtils {
             return ((Boolean) ob).booleanValue();
         }
         throw new RuntimeException(String.valueOf(ob));
+    }
+    
+    public static String serializeProperty(Properties prop, boolean gzip)
+    {
+        ByteArrayOutputStream coll = new ByteArrayOutputStream();
+        GZIPOutputStream gzipper = null;
+        try
+        {
+        	if(gzip)
+        	{
+        		gzipper = new GZIPOutputStream(coll);
+                prop.storeToXML(gzipper, "");
+                
+                gzipper.close();
+                gzipper = null;
+        	}
+        	else
+        	{
+        		prop.storeToXML(coll, "");
+        	}
+        }
+        catch(Exception exc)
+        { throw new RuntimeException(exc.getMessage(), exc); }
+        finally
+        {
+            if(gzipper != null) { try { gzipper.close(); } catch(Exception exc) {} }
+            if(coll    != null) { try { coll.close();    } catch(Exception exc) {} }
+        }
+        
+        if(gzip) return RXUtils.hexString(coll.toByteArray());
+		else try { return new String(coll.toByteArray(), "UTF-8"); } catch (UnsupportedEncodingException e) { throw new RuntimeException(e.getMessage(), e); }
+    }
+    
+    public static String serializeProperty(Properties prop)
+    {
+    	return serializeProperty(prop, true);
+    }
+    
+    public static Properties extractProperty(String serialized)
+    {
+    	return extractProperty(serialized, true);
+    }
+    
+    public static Properties extractProperty(String serialized, boolean gzip)
+    {
+        GZIPInputStream gzipper = null;
+        ByteArrayInputStream coll = null;
+        try
+        {
+            Properties prop = new Properties();
+            
+            if(gzip)
+            {
+            	coll = new ByteArrayInputStream(RXUtils.hexBytes(serialized));
+                serialized = null;
+                
+            	gzipper = new GZIPInputStream(coll);
+                prop.loadFromXML(gzipper);
+                gzipper.close(); gzipper = null;
+            }
+            else
+            {
+            	coll = new ByteArrayInputStream(serialized.getBytes("UTF-8"));
+                serialized = null;
+                
+            	prop.loadFromXML(coll);
+            }
+            
+            
+            coll = null;
+            return prop;
+        }
+        catch(Exception exc)
+        { throw new RuntimeException(exc.getMessage()); }
+        finally
+        {
+            if(gzipper != null) { try { gzipper.close(); } catch(Exception exc) {} }
+            if(coll    != null) { try { coll.close();    } catch(Exception exc) {} }
+        }
     }
 }

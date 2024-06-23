@@ -9,12 +9,12 @@ public class ReflexMissile extends DirectMissile
     {
         super();
         setHp(1000);
-        setDy(- (Reflexioner.getSpeed()));
+        setDy(- (Arena.getGspeed()));
         
         if(Math.random() >= 0.5)
-            setDx(-1 * (int)Math.round(Reflexioner.getSpeed() / 2));
+            setDx(-1 * (int)Math.round(Arena.getGspeed() / 2));
         else
-            setDx((int) Math.round(Reflexioner.getSpeed() / 2));
+            setDx((int) Math.round(Arena.getGspeed() / 2));
     }
     public ReflexMissile(String path)
     {
@@ -64,7 +64,7 @@ public class ReflexMissile extends DirectMissile
                 if(getY() < 0)
                 {
                     setY(0);
-                    setDy(1 * Reflexioner.getSpeed());
+                    setDy(1 * Arena.getGspeed());
                     if(getDx() == 0)
                     {
                         if(Math.random() >= 0.5)
@@ -77,7 +77,7 @@ public class ReflexMissile extends DirectMissile
                 else if(getY() > Arena.maxHeight())
                 {
                     setY(Arena.maxHeight());
-                    setDy(-1 * Reflexioner.getSpeed());
+                    setDy(-1 * Arena.getGspeed());
                     if(getDx() == 0)
                     {
                         if(Math.random() >= 0.5)
@@ -90,13 +90,13 @@ public class ReflexMissile extends DirectMissile
                 if(getX() < 0)
                 {                
                     setX(0);
-                    setDx(1 * Reflexioner.getSpeed());                
+                    setDx(1 * Arena.getGspeed());                
                     //System.out.println(this + " x is under 0 - " + getDx());
                 }
                 else if(getX() > Arena.maxWidth())
                 {
                     setX(Arena.maxWidth());
-                    setDx(-1 * Reflexioner.getSpeed());                
+                    setDx(-1 * Arena.getGspeed());                
                     //System.out.println(this + " x is up - " + getDx());
                 }
             }

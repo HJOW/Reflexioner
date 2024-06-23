@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,8 +15,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import com.hjow.game.reflexioner.lang.English;
 import com.hjow.game.reflexioner.lang.Korean;
@@ -141,7 +137,7 @@ public class Setting implements CanBeClone
         
         if(val instanceof Properties)
         {
-        	property.setProperty(key, Setting.serializeProperty((Properties) val));
+        	property.setProperty(key, RXUtils.serializeProperty((Properties) val));
         	return;
         }
         
@@ -169,7 +165,7 @@ public class Setting implements CanBeClone
     		currentKey = keys[idx];
     		String val = prop.getProperty(currentKey);
     		if(idx == keys.length - 1) return val;
-    		prop = extractProperty(val);
+    		prop = RXUtils.extractProperty(val);
     	}
     	return null;
     }
@@ -507,54 +503,6 @@ public class Setting implements CanBeClone
             {
                 if(out != null) { try { out.close(); } catch(Exception exc) {} }
             }
-        }
-    }
-    
-    public static String serializeProperty(Properties prop)
-    {
-        ByteArrayOutputStream coll = new ByteArrayOutputStream();
-        GZIPOutputStream gzipper = null;
-        try
-        {
-            gzipper = new GZIPOutputStream(coll);
-            prop.storeToXML(gzipper, "");
-            gzipper.close();
-            gzipper = null;
-        }
-        catch(Exception exc)
-        { throw new RuntimeException(exc.getMessage()); }
-        finally
-        {
-            if(gzipper != null) { try { gzipper.close(); } catch(Exception exc) {} }
-            if(coll    != null) { try { coll.close();    } catch(Exception exc) {} }
-        }
-        
-        return RXUtils.hexString(coll.toByteArray());
-    }
-    
-    public static Properties extractProperty(String serialized)
-    {
-        GZIPInputStream gzipper = null;
-        ByteArrayInputStream coll = null;
-        try
-        {
-            Properties prop = new Properties();
-            coll = new ByteArrayInputStream(RXUtils.hexBytes(serialized));
-            serialized = null;
-            
-            gzipper = new GZIPInputStream(coll);
-            prop.loadFromXML(gzipper);
-            
-            coll = null;
-            gzipper.close(); gzipper = null;
-            return prop;
-        }
-        catch(Exception exc)
-        { throw new RuntimeException(exc.getMessage()); }
-        finally
-        {
-            if(gzipper != null) { try { gzipper.close(); } catch(Exception exc) {} }
-            if(coll    != null) { try { coll.close();    } catch(Exception exc) {} }
         }
     }
     

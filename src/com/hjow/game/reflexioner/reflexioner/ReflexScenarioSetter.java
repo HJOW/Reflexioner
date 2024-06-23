@@ -91,19 +91,8 @@ public class ReflexScenarioSetter
         }
         newScenario.setPatterns(patternArray);          
         newScenario.setDeadLine(Lint.big(19999));
-        String newScript = " // 10 프레임 마다 프레임 번호를 출력합니다.\n";             
-        newScript = newScript + " if(reflexer.time() % 10 == 0) // 현재까지 진행된 프레임 수가 10으로 나누어 떨어질 때\n";
-        newScript = newScript + " {\n";
-        //newScript = newScript + " reflexer.addMessage( \"1234567891011121314151617181920나는단국대학생\" );\n";
-        newScript = newScript + " \t reflexer.clearMessage(); // 메시지 리스트를 비우기\n";
-        newScript = newScript + " \t reflexer.addMessage( reflexer.time() ); // 프레임 수를 메시지 리스트에 추가\n";
-        newScript = newScript + " }\n";
-        newScript = newScript + " if(reflexer.time() >= 10000) // 프레임이 10000 만큼 지났는지 확인\n";
-        newScript = newScript + " {\n";
-        newScript = newScript + " \t reflexer.addMessage(\"Great ! The time is over 10000\")\n";
-        newScript = newScript + " }\n";
         
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setSerials(new Long(3259827698746282L));
         scenarios.add(newScenario);
         
         
@@ -157,8 +146,8 @@ public class ReflexScenarioSetter
         {
             patternArray[i] = patterns.get(i);
         }
-        newScenario.setPatterns(patternArray);         
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setPatterns(patternArray);      
+        newScenario.setSerials(new Long(3259827698736282L));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
@@ -210,7 +199,7 @@ public class ReflexScenarioSetter
         }
         newScenario.setPatterns(patternArray);    
         
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setSerials(new Long(3259827698746212L));
         scenarios.add(newScenario);
         
         newScenario = new ReflexScenario();
@@ -245,7 +234,7 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setSerials(new Long(3252827698746282L));
         scenarios.add(newScenario);    
         
         patterns = new Vector<EnemyPattern>();
@@ -257,6 +246,7 @@ public class ReflexScenarioSetter
         newScenario.setDiffDelay(new Long(3000));
         newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("warship");
+        newScenario.setSpaceShipSelectable(false);
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -279,8 +269,8 @@ public class ReflexScenarioSetter
         {
             patternArray[i] = patterns.get(i);
         }
-        newScenario.setPatterns(patternArray);        
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setPatterns(patternArray);    
+        newScenario.setSerials(new Long(3259817698746212L));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
@@ -292,7 +282,7 @@ public class ReflexScenarioSetter
         newScenario.setDiffDelay(new Long(5500));
         newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("chaser");
-        
+        newScenario.setSpaceShipSelectable(false);
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -316,7 +306,7 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);        
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setSerials(new Long(3259827698646282L));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
@@ -328,6 +318,7 @@ public class ReflexScenarioSetter
         newScenario.setDiffDelay(new Long(5550));
         newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("carrier");
+        newScenario.setSpaceShipSelectable(false);
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -350,7 +341,7 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);        
-        newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
+        newScenario.setSerials(new Long(3159827698646212L));
         scenarios.add(newScenario);
         
         List<Pack> packs = InstalledPack.getPacks();

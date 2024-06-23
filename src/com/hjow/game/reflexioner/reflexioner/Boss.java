@@ -12,7 +12,7 @@ public class Boss extends BigEnemy
     private static final long serialVersionUID = -8833079238493004722L;
     private double ratio = 0.9;
     private int beam_energy = 0;
-    private long beam_std = Reflexioner.getBoss_beam_delay();
+    private long beam_std = Arena.getGbossBeamDelay();
     private boolean unique = true;
     public Boss()
     {

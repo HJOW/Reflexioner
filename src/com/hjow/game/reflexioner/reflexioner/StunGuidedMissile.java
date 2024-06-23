@@ -22,7 +22,7 @@ public class StunGuidedMissile extends GuidedMissile
         setHp(10000);
         setSpeed(32);
         setDamage(getDamage() / 2);
-        setDy(- (Reflexioner.getSpeed()));
+        setDy(- (Arena.getGspeed()));
         setColor(Reflexioner.color_spaceShip_missile);
     }
     public StunGuidedMissile(List<Enemy> enemyList, SpaceShip spaceShip, String path)
@@ -117,7 +117,7 @@ public class StunGuidedMissile extends GuidedMissile
             else
             {
                 //setDx(0);
-                setDy((int) Math.ceil(Reflexioner.getSpeed() / 16.0));
+                setDy((int) Math.ceil(Arena.getGspeed() / 16.0));
             }
         }
         else target = null;

@@ -34,7 +34,7 @@ public class Missile extends RectObject
         setY(-200);
         setW(5);
         setH(15);
-        setDy(- (Reflexioner.getSpeed() * 2));
+        setDy(- (Arena.getGspeed() * 2));
         setColor(Reflexioner.color_spaceShip_missile);
         if(Reflexioner.getFile_path() != null && Reflexioner.image_allow)
             loadImage(Reflexioner.getFile_path());

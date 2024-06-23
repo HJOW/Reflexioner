@@ -103,9 +103,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static final char version_test = ' '; // Complete : ' ', Test : 'a' 'b' 'c'
     
     private static String file_path = null;
-    private static int speed = 9, react_delay = 37, boss_delay = 5000, difficulty_delay = 5000, boss_beam_delay = 400;
-    private static int spaceShip_r = 50;
-    private static int enemy_r = 35;
     public static Color color_spaceShip, color_spaceShip_missile, color_enemy_missile, color_enemy, color_bigenemy, color_item, color_item_text, color_useItem;
     public static int KEY_1 = KeyEvent.VK_1;
     public static int KEY_2 = KeyEvent.VK_2;
@@ -129,8 +126,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static int KEY_A = KeyEvent.VK_A;
     public static int KEY_S = KeyEvent.VK_S;
     public static int KEY_D = KeyEvent.VK_D;
-    public static int max_enemies = 30;
-    public static int fire_delay = 5;
     public static final int AUTO_SHIPNAME = 0;
     public static final int AUTO_SHIP_HP = 1;
     public static final int AUTO_SHIP_ENERGY = 2;
@@ -181,10 +176,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static int replay_interval = 1;
     public static int replay_now_delay = 0;
     
-    public static String DELIM_SCEN = "|||||";
-    public static String DELIM_ENEMY_PATTERN = "!!!";
-    public static String DELIM_ENEMY = "???";
-    
     public static int AUTO_LAST = -1;
     public static boolean image_allow = true, sound_allow = true;
     
@@ -194,7 +185,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static Font usingFont2B = null;
     public static int default_fontSize = 12;
     
-    public static transient String calc_grade_str = "Lite";
+    public static transient String calc_grade_str = "Basic";
     
     private Setting setting;
     private Window window;
@@ -2866,10 +2857,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         result = result + "# Basic Energy" + "\n";
         result = result + "energy||1000" + "\n";
         result = result + "# Basic Speed" + "\n";
-        result = result + "speed||" + String.valueOf(speed) + "\n";
+        result = result + "speed||" + String.valueOf(Arena.getGspeed()) + "\n";
         result = result + "\n";
         result = result + "# Size" + "\n";
-        result = result + "size||" + String.valueOf(spaceShip_r) + "\n";
+        result = result + "size||" + String.valueOf(Arena.getGspaceShipR()) + "\n";
         result = result + "# Shape" + "\n";
         result = result + "#   circle, rectangle" + "\n";
         result = result + "shape||" + "circle" + "\n";
@@ -5196,46 +5187,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 SoundCache.clear();
             }
         }
-    }
-    public static int getSpaceShip_r()
-    {
-        return spaceShip_r;
-    }
-    public static int getFire_delay()
-    {
-        return fire_delay;
-    }
-    public static int getMax_enemies()
-    {
-        return max_enemies;
-    }
-    public static int getEnemy_r()
-    {
-        return enemy_r;
-    }
-    public static int getBoss_beam_delay()
-    {
-        return boss_beam_delay;
-    }
-    public static int getDifficulty_delay()
-    {
-        return difficulty_delay;
-    }
-    public static int getBoss_delay()
-    {
-        return boss_delay;
-    }
-    public static int getReact_delay()
-    {
-        return react_delay;
-    }
-    static void setReact_delay(int v)
-    {
-        react_delay = v;
-    }
-    public static int getSpeed()
-    {
-        return speed;
     }
     public static String getFile_path()
     {

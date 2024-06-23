@@ -8,8 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -53,6 +52,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
     private JMenuItem menu_file_exit;
     private JMenuItem menu_file_save;
     private JMenuItem menu_file_load;
+    private JMenuItem menu_file_sample;
     private JPanel titlePanel;
     private JLabel titleLabel;
     private JFileChooser fileChooser;
@@ -230,7 +230,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         menu_file.add(menu_file_save);
         
-        menu_file_load = new JMenuItem(sets.trans("Save"));
+        menu_file_load = new JMenuItem(sets.trans("Load"));
         menu_file_load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.CTRL_MASK));    
         menu_file_load.addActionListener(this);
         menu_file_load.setBackground(sets.getColor("ColorSelectedBack"));
@@ -240,6 +240,16 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
             menu_file_load.setFont(Reflexioner.usingFont);
         }
         menu_file.add(menu_file_load);
+        
+        menu_file_sample = new JMenuItem(sets.trans("Load Sample")); 
+        menu_file_sample.addActionListener(this);
+        menu_file_sample.setBackground(sets.getColor("ColorSelectedBack"));
+        menu_file_sample.setForeground(sets.getColor("ColorSelectedFore"));
+        if(Reflexioner.usingFont != null)
+        {
+        	menu_file_sample.setFont(Reflexioner.usingFont);
+        }
+        menu_file.add(menu_file_sample);
         
         menu_file_exit = new JMenuItem(sets.trans("Exit"));
         menu_file_exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_MASK));
@@ -300,6 +310,10 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         {
             save();
         }
+        else if(ob == menu_file_sample)
+        {
+        	loadSamples();
+        }
         else if(ob == bt_play)
         {
             sp.playScenario(new ReflexScenario(contents.getText()));
@@ -314,21 +328,11 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         else if(ob == menu_file_auth)
         {
-            int values = 0;
             try
             {
-                String gets = JOptionPane.showInputDialog(this, sets.trans("Authority"));
-                if(gets != null)
-                {
-                    values = Integer.parseInt(gets);                
-                    ReflexScenario bf = new ReflexScenario(contents.getText());
-                    bf.authorized(values);
-                    contents.setText(bf.stringData());
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + sets.trans("None"));
-                }
+            	ReflexScenario bf = new ReflexScenario(contents.getText());
+                bf.createAuthorize();
+                contents.setText(bf.stringData());
             }
             catch(Exception e1)
             {
@@ -336,26 +340,17 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
             }
         }
     }
-    private void saveScenario(File file, boolean xml)
+    private void saveScenario(File file)
     {
         FileOutputStream stream = null;
         OutputStreamWriter writer = null;
         BufferedWriter buffered = null;
-        XMLEncoder encoder = null;
         try
         {
             stream = new FileOutputStream(file);
-            if(xml)
-            {
-                encoder = new XMLEncoder(stream);
-                encoder.writeObject(new ReflexScenario(contents.getText()));
-            }
-            else
-            {
-                writer = new OutputStreamWriter(stream);
-                buffered = new BufferedWriter(writer);
-                buffered.write(contents.getText());
-            }
+            writer = new OutputStreamWriter(stream, "UTF-8");
+            buffered = new BufferedWriter(writer);
+            buffered.write(contents.getText());
         }
         catch(Exception e)
         {
@@ -364,14 +359,6 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         finally
         {
-            try
-            {
-                encoder.close();
-            } 
-            catch (Exception e)
-            {
-                
-            }
             try
             {
                 buffered.close();
@@ -398,33 +385,24 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
             }
         }
     }
-    private void loadScenario(File file, boolean xml)
+    private void loadScenario(File file)
     {
         FileInputStream stream = null;
         InputStreamReader reader = null;
         BufferedReader buffered = null;
-        XMLDecoder decoder = null;
         String lines = "", accum = "";
         try
         {
             stream = new FileInputStream(file);
-            if(xml)
+            reader = new InputStreamReader(stream, "UTF-8");
+            buffered = new BufferedReader(reader);
+            while(true)
             {
-                decoder = new XMLDecoder(stream);
-                setScenario((ReflexScenario) decoder.readObject());
+                lines = buffered.readLine();
+                if(lines == null) break;
+                accum = accum + lines + "\n";
             }
-            else
-            {
-                reader = new InputStreamReader(stream);
-                buffered = new BufferedReader(reader);
-                while(true)
-                {
-                    lines = buffered.readLine();
-                    if(lines == null) break;
-                    accum = accum + lines + "\n";
-                }
-                setScenario(new ReflexScenario(accum));
-            }
+            setScenario(new ReflexScenario(accum));
         }
         catch(Exception e)
         {
@@ -433,14 +411,6 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         finally
         {
-            try
-            {
-                decoder.close();
-            } 
-            catch (Exception e)
-            {
-                
-            }
             try
             {
                 buffered.close();
@@ -475,18 +445,14 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         if(fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             selectedFile = fileChooser.getSelectedFile();
-            if(selectedFile.getAbsolutePath().endsWith(".rfst") || selectedFile.getAbsolutePath().endsWith(".RFST") || selectedFile.getAbsolutePath().endsWith(".Rfst"))
+            if(selectedFile.getAbsolutePath().endsWith(".rscn") || selectedFile.getAbsolutePath().endsWith(".RSCN") || selectedFile.getAbsolutePath().endsWith(".Rscn"))
             {
-                saveScenario(selectedFile, false);
-            }
-            else if(selectedFile.getAbsolutePath().endsWith(".rfsx") || selectedFile.getAbsolutePath().endsWith(".RFSX") || selectedFile.getAbsolutePath().endsWith(".Rfsx"))
-            {
-                saveScenario(selectedFile, true);
+                saveScenario(selectedFile);
             }
             else
             {
-                selectedFile = new File(selectedFile.getAbsolutePath() + ".rfst");
-                saveScenario(selectedFile, false);
+                selectedFile = new File(selectedFile.getAbsolutePath() + ".rscn");
+                saveScenario(selectedFile);
             }
         }        
     }
@@ -498,27 +464,23 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             selectedFile = fileChooser.getSelectedFile();
-            if(selectedFile.getAbsolutePath().endsWith(".rfst") || selectedFile.getAbsolutePath().endsWith(".RFST") || selectedFile.getAbsolutePath().endsWith(".Rfst"))
+            if(selectedFile.getAbsolutePath().endsWith(".rscn") || selectedFile.getAbsolutePath().endsWith(".RSCN") || selectedFile.getAbsolutePath().endsWith(".Rscn"))
             {
-                loadScenario(selectedFile, false);
-            }
-            else if(selectedFile.getAbsolutePath().endsWith(".rfsx") || selectedFile.getAbsolutePath().endsWith(".RFSX") || selectedFile.getAbsolutePath().endsWith(".Rfsx"))
-            {
-                loadScenario(selectedFile, true);
+                loadScenario(selectedFile);
             }
             else
             {
-                selectedFile = new File(selectedFile.getAbsolutePath() + ".rfst");
+                selectedFile = new File(selectedFile.getAbsolutePath() + ".rscn");
                 if(selectedFile.exists())
                 {
-                    loadScenario(selectedFile, false);
+                    loadScenario(selectedFile);
                 }
                 else
                 {
-                    selectedFile = new File(selectedFile.getAbsolutePath() + ".rfsx");
+                    selectedFile = new File(selectedFile.getAbsolutePath() + ".rscn");
                     if(selectedFile.exists())
                     {
-                        loadScenario(selectedFile, true);
+                        loadScenario(selectedFile);
                     }
                     else
                     {
@@ -527,6 +489,18 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
                 }
             }
         }        
+    }
+    public void loadSamples()
+    {
+    	List<ReflexScenario> samples = ReflexScenarioSetter.standards();
+    	for(ReflexScenario sm : samples)
+    	{
+    		if(sm.getSerials() == 3259827698746282L)
+    		{
+    			setScenario(sm);
+    			break;
+    		}
+    	}
     }
     @Override
     public void open()
@@ -542,11 +516,11 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
     }
     public void setScenario(ReflexScenario scen)
     {
-        contents.setText(scen.stringData());
+        contents.setText(scen.stringData(false));
     }
     public ReflexScenario toScenario() throws Exception
     {
-        return new ReflexScenario(contents.getText());
+        return new ReflexScenario(contents.getText(), false);
     }
     @Override
     public void mouseDragged(MouseEvent e)

@@ -40,6 +40,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
 {
     private static final long serialVersionUID = 4261314730768659883L;
     
+    private static int gspeed = 9, greactDelay = 37, gbossDelay = 5000, gdifficultyDelay = 5000, gbossBeamDelay = 400;
+    private static int gspaceShipR = 50;
+    private static int genemyR = 35;
+    private static int gmaxEnemies = 30;
+    private static int gfireDelay = 5;
+    
     private double difficulty_mode = 1;
     private List<Enemy> enemies;
     private SpaceShip spaceShip;
@@ -648,17 +654,20 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         spaceShip.setY(Arena.maxHeight() - (Arena.maxHeight() / 4));
         difficulty = 0;
         bossCount = 0;
-        difficulty_delay = Reflexioner.getDifficulty_delay();
+        difficulty_delay = getGdifficultyDelay();
         if(difficulty_mode > 1.0)
             difficulty_delay = (long) Math.ceil(difficulty_delay / Math.pow(difficulty_mode, 1.2));
         //System.out.println(difficulty_delay + ", " + spaceShip.getMax_hp());// For TEST
-        Reflexioner.max_enemies = 15;
+        setGmaxEnemies(15);
         catchEnemies = Lint.big(0);
         catchItems = Lint.big(0);
 
         if(scenario == null) scenario = ReflexScenario.defaultScenario;
         difficulty_delay = scenario.getDiffDelay();
-        authority_mode = scenario.isAuthorized();
+        if(authority_mode)
+        {
+        	authority_mode = scenario.isAuthorized();
+        }
         
         if(scenario.getAvailableContinues() != null)
             continue_left = scenario.getAvailableContinues().intValue() - 1;
@@ -1416,8 +1425,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                 try
                 {
                     if(arena.game_xspeed <= 0) arena.game_xspeed = 1;
-                    if(Reflexioner.getReact_delay() <= 10) Reflexioner.setReact_delay(10);
-                    Thread.sleep(Reflexioner.getReact_delay() / arena.game_xspeed);
+                    if(getGreactDelay() <= 10) setGreactDelay(10);
+                    Thread.sleep(getGreactDelay() / arena.game_xspeed);
                 } 
                 catch (InterruptedException e)
                 {
@@ -2078,4 +2087,58 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         if(getScenario() != null) return getScenario().getDiffDelay().longValue();
         return 0;
     }
+	public static int getGspeed() {
+		return gspeed;
+	}
+	public static void setGspeed(int gspeed) {
+		Arena.gspeed = gspeed;
+	}
+	public static int getGreactDelay() {
+		return greactDelay;
+	}
+	public static void setGreactDelay(int greactDelay) {
+		Arena.greactDelay = greactDelay;
+	}
+	public static int getGbossDelay() {
+		return gbossDelay;
+	}
+	public static void setGbossDelay(int gbossDelay) {
+		Arena.gbossDelay = gbossDelay;
+	}
+	public static int getGdifficultyDelay() {
+		return gdifficultyDelay;
+	}
+	public static void setGdifficultyDelay(int gdifficultyDelay) {
+		Arena.gdifficultyDelay = gdifficultyDelay;
+	}
+	public static int getGbossBeamDelay() {
+		return gbossBeamDelay;
+	}
+	public static void setGbossBeamDelay(int gbossBeamDelay) {
+		Arena.gbossBeamDelay = gbossBeamDelay;
+	}
+	public static int getGspaceShipR() {
+		return gspaceShipR;
+	}
+	public static void setGspaceShipR(int gspaceShipR) {
+		Arena.gspaceShipR = gspaceShipR;
+	}
+	public static int getGenemyR() {
+		return genemyR;
+	}
+	public static void setGenemyR(int genemyR) {
+		Arena.genemyR = genemyR;
+	}
+	public static int getGmaxEnemies() {
+		return gmaxEnemies;
+	}
+	public static void setGmaxEnemies(int gmaxEnemies) {
+		Arena.gmaxEnemies = gmaxEnemies;
+	}
+	public static int getGfireDelay() {
+		return gfireDelay;
+	}
+	public static void setGfireDelay(int gfireDelay) {
+		Arena.gfireDelay = gfireDelay;
+	}
 }

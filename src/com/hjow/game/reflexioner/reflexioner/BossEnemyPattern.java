@@ -1,6 +1,8 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.util.StringTokenizer;
+import java.util.Properties;
+
+import com.hjow.game.reflexioner.mainClasses.RXUtils;
 
 public class BossEnemyPattern extends EnemyPattern
 {
@@ -23,62 +25,26 @@ public class BossEnemyPattern extends EnemyPattern
     }
     public BossEnemyPattern(String str)
     {
-        StringTokenizer lineToken = new StringTokenizer(str, "\n");
-        StringTokenizer splToken;
-        String lines, key, target;
-        while(lineToken.hasMoreTokens())
-        {
-            lines = lineToken.nextToken();
-            splToken = new StringTokenizer(lines, Reflexioner.DELIM_ENEMY_PATTERN);
-            try
-            {
-                key = splToken.nextToken();
-                target = splToken.nextToken();
-                if(key.equalsIgnoreCase("start_appear"))
-                {                    
-                    setMin_delay(new Long(target));
-                }
-                else if(key.equalsIgnoreCase("finish_appear"))
-                {
-                    setMax_delay(new Long(target));
-                }
-                else if(key.equalsIgnoreCase("appear_ratio"))
-                {
-                    setRatio(new Double(target));
-                }
-                else if(key.equalsIgnoreCase("hp_ratio"))
-                {
-                    setAddHPRatio(new Double(target));
-                }
-                else if(key.equalsIgnoreCase("damage_ratio"))
-                {
-                    setAddDamageRatio(new Double(target));
-                }
-                else if(key.equalsIgnoreCase("unique"))
-                {
-                    setUnique(new Boolean(target));
-                }
-            }
-            catch(Exception e)
-            {
-                
-            }
-        }
+    	Properties prop = RXUtils.extractProperty(str);
+    	setEnemy(null);
+    	setMin_delay(new Long(prop.getProperty("MinDelay")));
+        setMax_delay(new Long(prop.getProperty("MaxDelay")));
+        setRatio(new Double(prop.getProperty("Ratio")));
+        setAddDamageRatio(new Double(prop.getProperty("AddDamageRatio")));
+        setAddHPRatio(new Double(prop.getProperty("AddHPRatio")));
+        setUnique(RXUtils.parseBoolean(prop.getProperty("Unique")));
     }
-    public String convertStr()
+    @Override
+    public Properties convertProp()
     {
-        String results = "";
-        
-        results = results + "boss_pattern" + Reflexioner.DELIM_ENEMY_PATTERN + "\n";
-        results = results + "unique" + Reflexioner.DELIM_ENEMY_PATTERN + getUnique().toString() + "\n";
-        results = results + "start_appear" + Reflexioner.DELIM_ENEMY_PATTERN + getMin_delay().toString() + "\n";
-        results = results + "finish_appear" + Reflexioner.DELIM_ENEMY_PATTERN + getMax_delay().toString() + "\n";
-        results = results + "start_appear" + Reflexioner.DELIM_ENEMY_PATTERN + getMin_delay().toString() + "\n";
-        results = results + "appear_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + getRatio().toString() + "\n";
-        results = results + "hp_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + getAddHPRatio().toString() + "\n";
-        results = results + "damage_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + getAddDamageRatio().toString() + "\n";
-        
-        return results;
+    	Properties prop = new Properties();
+    	prop.setProperty("MinDelay"      , "" + getMin_delay()     );
+    	prop.setProperty("MaxDelay"      , "" + getMax_delay()     );
+    	prop.setProperty("Ratio"         , "" + getRatio()         );
+    	prop.setProperty("AddDamageRatio", "" + getAddDamageRatio());
+    	prop.setProperty("AddHPRatio"    , "" + getAddHPRatio()    );
+    	prop.setProperty("Unique"        , "" + getUnique()    );
+    	return prop;
     }
     @Override
     public Enemy createEnemy(String path, long difficulty)

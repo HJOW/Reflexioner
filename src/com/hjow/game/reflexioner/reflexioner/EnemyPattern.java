@@ -1,7 +1,9 @@
 package com.hjow.game.reflexioner.reflexioner;
 
 import java.io.Serializable;
-import java.util.StringTokenizer;
+import java.util.Properties;
+
+import com.hjow.game.reflexioner.mainClasses.RXUtils;
 
 public class EnemyPattern implements Serializable
 {
@@ -26,50 +28,14 @@ public class EnemyPattern implements Serializable
     }
     public EnemyPattern(String str)
     {
-        StringTokenizer lineToken = new StringTokenizer(str, "\n");
-        StringTokenizer splToken;
-        String lines, key, target;
-        String enemy = "";
-        while(lineToken.hasMoreTokens())
-        {
-            lines = lineToken.nextToken();
-            splToken = new StringTokenizer(lines, Reflexioner.DELIM_ENEMY_PATTERN);
-            try
-            {
-                key = splToken.nextToken();
-                target = splToken.nextToken();
-                if(key.equalsIgnoreCase("enemy"))
-                {
-                    enemy = enemy + target + "\n";
-                }
-                else if(key.equalsIgnoreCase("start_appear"))
-                {                    
-                    min_delay = new Long(target);
-                }
-                else if(key.equalsIgnoreCase("finish_appear"))
-                {
-                    max_delay = new Long(target);
-                }
-                else if(key.equalsIgnoreCase("appear_ratio"))
-                {
-                    ratio = new Double(target);
-                }
-                else if(key.equalsIgnoreCase("hp_ratio"))
-                {
-                    addHPRatio = new Double(target);
-                }
-                else if(key.equalsIgnoreCase("damage_ratio"))
-                {
-                    addDamageRatio = new Double(target);
-                }
-            }
-            catch(Exception e)
-            {
-                
-            }
-        }
-        enemy = enemy.trim();
-        this.enemy = ReflexScenario.stringToEnemy(enemy);
+    	Properties prop = RXUtils.extractProperty(str);
+    	String strEnemy     = prop.getProperty("Enemy");
+    	this.enemy          = Enemy.stringToEnemy(strEnemy);
+    	this.min_delay      = new Long(prop.getProperty("MinDelay"));
+        this.max_delay      = new Long(prop.getProperty("MaxDelay"));
+        this.ratio          = new Double(prop.getProperty("Ratio"));
+        this.addDamageRatio = new Double(prop.getProperty("AddDamageRatio"));
+        this.addHPRatio     = new Double(prop.getProperty("AddHPRatio"));
     }
     public static EnemyPattern convertPattern(String str)
     {
@@ -82,22 +48,21 @@ public class EnemyPattern implements Serializable
             return new EnemyPattern(str);
         }
     }
+    public Properties convertProp()
+    {
+    	Properties prop = new Properties();
+    	prop.setProperty("Enemy", Enemy.enemyToString(enemy));
+    	prop.setProperty("MinDelay", "" + min_delay);
+    	prop.setProperty("MaxDelay", "" + max_delay);
+    	prop.setProperty("Ratio"         , "" + ratio);
+    	prop.setProperty("AddDamageRatio", "" + addDamageRatio);
+    	prop.setProperty("AddHPRatio"    , "" + addHPRatio);
+    	return prop;
+    }
     public String convertStr()
     {
-        String results = "";
-        StringTokenizer lineToken = new StringTokenizer(ReflexScenario.enemyToString(getEnemy()), "\n");
-        while(lineToken.hasMoreTokens())
-        {
-            results = results + "enemy" + Reflexioner.DELIM_ENEMY_PATTERN + lineToken.nextToken() + "\n";
-        }
-        results = results + "start_appear" + Reflexioner.DELIM_ENEMY_PATTERN + min_delay.toString() + "\n";
-        results = results + "finish_appear" + Reflexioner.DELIM_ENEMY_PATTERN + max_delay.toString() + "\n";
-        results = results + "start_appear" + Reflexioner.DELIM_ENEMY_PATTERN + min_delay.toString() + "\n";
-        results = results + "appear_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + ratio.toString() + "\n";
-        results = results + "hp_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + addHPRatio.toString() + "\n";
-        results = results + "damage_ratio" + Reflexioner.DELIM_ENEMY_PATTERN + addDamageRatio.toString() + "\n";
-        
-        return results;
+    	Properties prop = convertProp();
+    	return RXUtils.serializeProperty(prop);
     }
     public Enemy createEnemy(String path, long difficulty)
     {
