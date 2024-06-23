@@ -87,7 +87,6 @@ import com.hjow.game.reflexioner.mainClasses.RunManager;
 import com.hjow.game.reflexioner.mainClasses.ThreadAccumulate;
 import com.hjow.game.reflexioner.mainClasses.Uninstaller;
 import com.hjow.game.reflexioner.setting.Difficulty;
-import com.hjow.game.reflexioner.setting.Lint;
 import com.hjow.game.reflexioner.setting.Setting;
 
 public class Reflexioner extends MouseDragCatcher implements Openable, WindowListener, ActionListener, MessageShowable, ListSelectionListener, ChangeListener, ItemListener
@@ -2550,13 +2549,13 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         
         bt_start_today.setEnabled(success);
     }
-    public void inputScenario(AReflexScenario scen)
+    public void inputScenario(ReflexScenario scen)
     {
         scenarios.add(scen);
         refresh_scenario(false);
         mainTab.setSelectedComponent(start_scenarioPanel);
     }
-    public void playScenario(AReflexScenario scen)
+    public void playScenario(ReflexScenario scen)
     {
         replay_save = menu_manage_saveReplay.isSelected();
         start(scen, scen.getSpaceShip());
@@ -2569,7 +2568,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         String adds = "", key1, key2;
         BigInteger oldPoints = null;
         StringTokenizer delimToken;
-        AReflexScenario star_target;
+        ReflexScenario star_target;
         int stars = 0;
         
         for(int i=0; i<scenarios.size(); i++)
@@ -2579,66 +2578,28 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             oldPoints = new BigInteger("0");
             try
             {
-                if(scenarios.get(i) instanceof AReflexScenario)
+            	star_target = scenarios.get(i);
+                adds = adds + " ";
+                
+                Set<String> keys = sets.keys();
+                for(String key : keys)
                 {
-                    star_target = (AReflexScenario) scenarios.get(i);
-                    adds = adds + " ";
-                    
-                    Set<String> keys = sets.keys();
-                    for(String key : keys)
+                    try
                     {
-                        try
-                        {
-                            delimToken = new StringTokenizer(key, "_");
-                            key1 = delimToken.nextToken();
-                            if(! delimToken.hasMoreTokens()) continue;
-                            key2 = delimToken.nextToken();
-                            if(key1.equalsIgnoreCase("reflexioner"))
-                            {
-                                if(key2.equalsIgnoreCase(star_target.getRandomCode().toString()))
-                                {
-                                    oldPoints = Lint.big(sets.get(key));
-                                    break;
-                                }
-                            }
-                        } 
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    if(oldPoints != null)
-                    {                    
-                        if(oldPoints.compareTo(Lint.big(star_target.getStar1().longValue())) >= 1)
-                        {
-                            stars++;
-                        }
-                        if(oldPoints.compareTo(Lint.big(star_target.getStar2().longValue())) >= 1)
-                        {
-                            stars++;
-                        }
-                        if(oldPoints.compareTo(Lint.big(star_target.getStar3().longValue())) >= 1)
-                        {
-                            stars++;
-                        }
-                        if(star_target instanceof XReflexScenario)
-                        {
-                            if(oldPoints.compareTo(((XReflexScenario) star_target).getStar4()) >= 1)
-                            {
-                                stars++;
-                            }
-                            if(oldPoints.compareTo(((XReflexScenario) star_target).getStar5()) >= 1)
-                            {
-                                stars++;
-                            }
-                        }
-                        adds = adds + Difficulty.starToString(stars);
+                        delimToken = new StringTokenizer(key, "_");
+                        key1 = delimToken.nextToken();
+                        if(! delimToken.hasMoreTokens()) continue;
+                        key2 = delimToken.nextToken();
+                    } 
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
             } 
             catch (Exception e)
             {
-                // TODO
+                e.printStackTrace();
             }
             
             listData.add(adds);    
@@ -2760,13 +2721,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                                 if(readLines == null) break;
                                 getScenario = getScenario + readLines + "\n";
                             }
-                            scenarios.add(new BReflexScenario(getScenario));
-                            /*
-                            for(ReflexScenario s : scenarios)
-                            {
-                                System.out.println("Now : " + s.getName());
-                            }
-                            */
+                            scenarios.add(new ReflexScenario(getScenario));
                         }
                         catch(Exception e)
                         {
@@ -2851,7 +2806,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                                 if(lineGets == null) break;
                                 accum = accum + lineGets + "\n";
                             }
-                            loadScen = new AReflexScenario(accum);
+                            loadScen = new ReflexScenario(accum);
                         }
                         else
                         {
@@ -2897,25 +2852,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         catch(Exception e)
         {
             if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
-        }
-        int i = 0;
-        while(i < scenarios.size())
-        {            
-            if(scenarios.get(i).getGrade_limit() != null)
-            {
-                if(scenarios.get(i).getGrade_limit().intValue() >= grade_mode + 1)
-                {
-                    //System.out.println("Remove : " + scenarios.get(i).getName() + ", " + scenarios.get(i).getGrade_limit());
-                    scenarios.remove(i);
-                    i = 0;
-                }
-                else i++;
-            }
-            else
-            {
-                i++;
-            }
-            
         }
     }
     private String userDefined_first()
@@ -3150,62 +3086,18 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         arena.pause();
         finish_ta.setText("");
         finishDialog.setVisible(true);
-        BigInteger getPoints = arena.getPoint();
-        AReflexScenario arefrexScenario = null;
-        boolean pointSave_accept = true;
         
         if(arena.getScenario() != null && (! Arena.isAutoControlMode()))
         {
-            if(arena.getScenario() instanceof AReflexScenario)
+            if(arena.getScenario() instanceof ReflexScenario)
             {
-                //String contents = "0";
-                if(arena.getScenario() instanceof DReflexScenario)
-                {
-                    DReflexScenario dreflex = (DReflexScenario) arena.getScenario();
-                    long passed_dif = arena.getDifficulty();
-                    if(dreflex.getStar1_least() != null)
-                    {
-                        if(passed_dif < dreflex.getStar1_least().longValue())
-                        {
-                            pointSave_accept = false;
-                        }
-                    }
-                }
-                
-                if(pointSave_accept)
-                {
-                    try
-                    {
-                        arefrexScenario = (AReflexScenario) arena.getScenario();                        
-                        String key1;
-                        
-                        key1 = "reflexioner_" + arefrexScenario.getRandomCode().toString();
-                        BigInteger oldOne;
-                        if(sets.contains(key1))
-                        {
-                            oldOne = Lint.big(sets.get(key1));
-                            if(getPoints.compareTo(oldOne) >= 1)
-                            {
-                                sets.set(key1, getPoints.toString());
-                            }
-                        }
-                        else
-                        {
-                            sets.set(key1, getPoints.toString());
-                        }
-                    } 
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }    
                 try
                 {
                     refresh_scenario(false);
                 }
                 catch(Exception e)
                 {
-                    
+                	e.printStackTrace();
                 }
             }
         }
@@ -3242,7 +3134,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     else
                     {
                         bt_saveState.setVisible(false);
-                        continue_label = sets.trans("Set the point to zero and continue");    
+                        continue_label = sets.trans("Continue (without Points)");    
                         continue_label = continue_label + " (" + String.valueOf(arena.continue_lefts() + ")");
                         continue_available = (arena.continue_lefts() >= 1);
                     }
@@ -3250,7 +3142,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 else
                 {
                     bt_saveState.setVisible(false);
-                    continue_label = sets.trans("Set the point to zero and continue");
+                    continue_label = sets.trans("Continue (without Points)");
                     continue_label = continue_label + " (" + String.valueOf(arena.continue_lefts() + ")");
                     continue_available = (arena.continue_lefts() >= 1);
                 }
@@ -3302,7 +3194,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         {
             try
             {
-                scenarioEditor.setScenario((AReflexScenario) scenarios.get(start_scenarioList.getSelectedIndex()));
+                scenarioEditor.setScenario(scenarios.get(start_scenarioList.getSelectedIndex()));
                 scenarioEditor.open();
             } 
             catch (Exception e1)
@@ -3378,33 +3270,26 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         {
             if(start_userDefined_isScenario.isSelected()) 
             {
-                AReflexScenario gets;
+                ReflexScenario gets;
                 try
                 {                    
-                    gets = new CReflexScenario(start_userDefinedArea.getText());
-                    if(gets instanceof CReflexScenario)
+                    gets = new ReflexScenario(start_userDefinedArea.getText());
+                    if(gets.getSpaceShipSelectable() != null)
                     {
-                        if(((CReflexScenario) gets).getSpaceShip_selectable() != null)
+                        if(gets.getSpaceShipSelectable().booleanValue())
                         {
-                            if(((CReflexScenario) gets).getSpaceShip_selectable().booleanValue())
-                            {
-                                selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
-                                start(gets, selected_scenario_ship);
-                            }
-                            else
-                            {
-                                start(gets);
-                            }
+                            selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
+                            start(gets, selected_scenario_ship);
                         }
                         else
                         {
                             start(gets);
-                        }                        
+                        }
                     }
                     else
                     {
                         start(gets);
-                    }    
+                    } 
                 } 
                 catch (Exception e1)
                 {
@@ -3423,24 +3308,17 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             if(getSelected >= 0 && getSelected < scenarios.size())
             {
                 selected_scenario = scenarios.get(getSelected);
-                if(selected_scenario instanceof CReflexScenario)
+                if(selected_scenario.getSpaceShipSelectable() != null)
                 {
-                    if(((CReflexScenario) selected_scenario).getSpaceShip_selectable() != null)
+                    if(selected_scenario.getSpaceShipSelectable().booleanValue())
                     {
-                        if(((CReflexScenario) selected_scenario).getSpaceShip_selectable().booleanValue())
-                        {
-                            selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
-                            start(selected_scenario, selected_scenario_ship);
-                        }
-                        else
-                        {
-                            start(selected_scenario);
-                        }
+                        selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
+                        start(selected_scenario, selected_scenario_ship);
                     }
                     else
                     {
                         start(selected_scenario);
-                    }                        
+                    }
                 }
                 else
                 {
@@ -3682,29 +3560,22 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             if(getSelected >= 0 && getSelected < scenarios.size())
             {
                 selected_scenario = scenarios.get(getSelected);
-                if(selected_scenario instanceof CReflexScenario)
+                if(selected_scenario.getSpaceShipSelectable() != null)
                 {
-                    if(((CReflexScenario) selected_scenario).getSpaceShip_selectable() != null)
+                    if(selected_scenario.getSpaceShipSelectable().booleanValue())
                     {
-                        if(((CReflexScenario) selected_scenario).getSpaceShip_selectable().booleanValue())
-                        {
-                            selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
-                            start(selected_scenario, selected_scenario_ship);
-                        }
-                        else
-                        {
-                            start(selected_scenario);
-                        }
+                        selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
+                        start(selected_scenario, selected_scenario_ship);
                     }
                     else
                     {
                         start(selected_scenario);
-                    }                        
+                    }
                 }
                 else
                 {
                     start(selected_scenario);
-                }
+                }    
             }
             else
             {
@@ -3715,10 +3586,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         {
             if(start_userDefined_isScenario.isSelected()) 
             {
-                AReflexScenario gets;
+                ReflexScenario gets;
                 try
                 {
-                    gets = new AReflexScenario(start_userDefinedArea.getText());
+                    gets = new ReflexScenario(start_userDefinedArea.getText());
                     start(gets);
                 } 
                 catch (Exception e1)
@@ -4579,19 +4450,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         
         
         int areflexScen_index = -1;
-        for(int i=0; i<scenarios.size(); i++)
-        {
-            if((scenarios.get(i) instanceof AReflexScenario))
-            {
-                if(((AReflexScenario) scenarios.get(i)).getRandomCode().longValue() == 82729313)
-                {
-                    areflexScen_index = i;
-                    break;
-                }                
-            }
-        }
         if(scenarioEditor != null && areflexScen_index >= 0) 
-            scenarioEditor.setScenario(((AReflexScenario) scenarios.get(areflexScen_index)));
+            scenarioEditor.setScenario(scenarios.get(areflexScen_index));
         
         loadAllImage();
         /*
@@ -5284,18 +5144,11 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 }
                 if(start_scenario_selectShipCombo != null)
                 {
-                    if(scenarios.get(sels) instanceof CReflexScenario)
+                	if(scenarios.get(sels).getSpaceShipSelectable() != null)
                     {
-                        if(((CReflexScenario) scenarios.get(sels)).getSpaceShip_selectable() != null)
+                        if(scenarios.get(sels).getSpaceShipSelectable().booleanValue())
                         {
-                            if(((CReflexScenario) scenarios.get(sels)).getSpaceShip_selectable().booleanValue())
-                            {
-                                start_scenario_selectShipCombo.setEnabled(true);
-                            }
-                            else
-                            {
-                                start_scenario_selectShipCombo.setEnabled(false);
-                            }
+                            start_scenario_selectShipCombo.setEnabled(true);
                         }
                         else
                         {

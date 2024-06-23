@@ -100,8 +100,10 @@ public class Korean implements Language
         prop.setProperty("Damage"                                                                                                  , "피해량"                                                                                                  );
         prop.setProperty("Shoot"                                                                                                   , "발사"                                                                                                    );
         prop.setProperty("Standard"                                                                                                , "표준"                                                                                                    );
-
-    	
+        prop.setProperty("Check the code"                                                                                          , "코드 확인"                                                                                               );
+        prop.setProperty("Check"                                                                                                   , "확인"                                                                                                    );
+        prop.setProperty("Input your point authorized code here."                                                                  , "이 곳에 인증 코드 입력"                                                                                  );
+        prop.setProperty("Continue (without Points)"                                                                               , "계속하기 (점수 초기화)"                                                                                  );
     	/*
         title = "Calc";
         x = "X";

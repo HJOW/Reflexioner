@@ -69,7 +69,7 @@ public class EnemyPattern implements Serializable
             }
         }
         enemy = enemy.trim();
-        this.enemy = AReflexScenario.stringToEnemy(enemy);
+        this.enemy = ReflexScenario.stringToEnemy(enemy);
     }
     public static EnemyPattern convertPattern(String str)
     {
@@ -85,7 +85,7 @@ public class EnemyPattern implements Serializable
     public String convertStr()
     {
         String results = "";
-        StringTokenizer lineToken = new StringTokenizer(AReflexScenario.enemyToString(getEnemy()), "\n");
+        StringTokenizer lineToken = new StringTokenizer(ReflexScenario.enemyToString(getEnemy()), "\n");
         while(lineToken.hasMoreTokens())
         {
             results = results + "enemy" + Reflexioner.DELIM_ENEMY_PATTERN + lineToken.nextToken() + "\n";

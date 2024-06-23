@@ -302,11 +302,11 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         else if(ob == bt_play)
         {
-            sp.playScenario(new DReflexScenario(contents.getText()));
+            sp.playScenario(new ReflexScenario(contents.getText()));
         }
         else if(ob == bt_add)
         {
-            sp.inputScenario(new DReflexScenario(contents.getText()));
+            sp.inputScenario(new ReflexScenario(contents.getText()));
         }
         else if(ob == bt_close)
         {
@@ -321,7 +321,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
                 if(gets != null)
                 {
                     values = Integer.parseInt(gets);                
-                    BReflexScenario bf = new DReflexScenario(contents.getText());
+                    ReflexScenario bf = new ReflexScenario(contents.getText());
                     bf.authorized(values);
                     contents.setText(bf.stringData());
                 }
@@ -348,7 +348,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
             if(xml)
             {
                 encoder = new XMLEncoder(stream);
-                encoder.writeObject(new DReflexScenario(contents.getText()));
+                encoder.writeObject(new ReflexScenario(contents.getText()));
             }
             else
             {
@@ -411,7 +411,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
             if(xml)
             {
                 decoder = new XMLDecoder(stream);
-                setScenario((AReflexScenario) decoder.readObject());
+                setScenario((ReflexScenario) decoder.readObject());
             }
             else
             {
@@ -423,7 +423,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
                     if(lines == null) break;
                     accum = accum + lines + "\n";
                 }
-                setScenario(new DReflexScenario(accum));
+                setScenario(new ReflexScenario(accum));
             }
         }
         catch(Exception e)
@@ -540,13 +540,13 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         this.setVisible(false);
         
     }
-    public void setScenario(AReflexScenario scen)
+    public void setScenario(ReflexScenario scen)
     {
         contents.setText(scen.stringData());
     }
-    public AReflexScenario toScenario() throws Exception
+    public ReflexScenario toScenario() throws Exception
     {
-        return new DReflexScenario(contents.getText());
+        return new ReflexScenario(contents.getText());
     }
     @Override
     public void mouseDragged(MouseEvent e)

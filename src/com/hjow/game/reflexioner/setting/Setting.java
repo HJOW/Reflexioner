@@ -586,13 +586,9 @@ public class Setting implements CanBeClone
         set("FontSize"   , 12 + "");
         set("FontSizeBig", 20 + "");
         
-        usingFont = new Font("Arial", Font.PLAIN, getInt("FontSize"));
-        usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
-        usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
-        usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
-        
         InputStream inp1 = null;
         InputStream inp2 = null;
+        String bundledFamily = null;
         try
         {
             inp1 = caller.getClassLoader().getResourceAsStream("resources/font/font.ttf");
@@ -607,11 +603,31 @@ public class Setting implements CanBeClone
                 usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
                 usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
                 usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
+                bundledFamily = usingFont.getFamily();
+                if(! contains("FontFamily")) set("FontFamily", bundledFamily);
+            }
+            else
+            {
+            	usingFont = new Font("Courier", Font.PLAIN, getInt("FontSize"));
+                usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
+                usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
+                usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
             }
         }
         catch(Exception ex)
         {
             ex.printStackTrace();
+        }
+        
+        if(contains("FontFamily"))
+        {
+        	if(bundledFamily != null && get("FontFamily").equals(bundledFamily))
+        	{
+        		usingFont = new Font(get("FontFamily"), Font.PLAIN, getInt("FontSize"));
+                usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
+                usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
+                usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
+        	}
         }
         
         set("LookAndFeel", "javax.swing.plaf.metal.MetalLookAndFeel");

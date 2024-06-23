@@ -34,22 +34,22 @@ public class ReflexScenarioSetter
     {
         Vector<ReflexScenario> scenarios = new Vector<ReflexScenario>();
         
-        BReflexScenario newScenario;
+        ReflexScenario newScenario;
         Vector<EnemyPattern> patterns = new Vector<EnemyPattern>();
         EnemyPattern[] patternArray;
         EnemyPattern newEnemyPattern;
         Enemy newEnemy;
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new DReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Easy to play");
         newScenario.setDescription("This is sample for scenario editor.");        
         newScenario.setKoreanDescription("시나리오 에디터를 위한 샘플입니다.");
         newScenario.setDifficulty(new Integer(1));
-        newScenario.setDiff_delay(new Long(7000));
-        newScenario.setEnemy_limit(new Integer(30));
+        newScenario.setDiffDelay(new Long(7000));
+        newScenario.setEnemyLimit(new Integer(30));
         newScenario.setSpaceShip("flex");
-        ((CReflexScenario) newScenario).setSpaceShip_selectable(new Boolean(true));
+        newScenario.setSpaceShipSelectable(new Boolean(true));
         
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
@@ -89,13 +89,8 @@ public class ReflexScenarioSetter
         {
             patternArray[i] = patterns.get(i);
         }
-        newScenario.setPatterns(patternArray);            
-        newScenario.setGrade_limit(new Integer(0));    
-        ((DReflexScenario) newScenario).setDeadline(Lint.big(19999));
-        ((DReflexScenario) newScenario).setStar1_least(new Long(10000));
-        newScenario.setStar1(new Long(0));
-        newScenario.setStar2(new Long(100000));
-        newScenario.setStar3(new Long(1000000));
+        newScenario.setPatterns(patternArray);          
+        newScenario.setDeadLine(Lint.big(19999));
         String newScript = " // 10 프레임 마다 프레임 번호를 출력합니다.\n";             
         newScript = newScript + " if(reflexer.time() % 10 == 0) // 현재까지 진행된 프레임 수가 10으로 나누어 떨어질 때\n";
         newScript = newScript + " {\n";
@@ -108,22 +103,20 @@ public class ReflexScenarioSetter
         newScript = newScript + " \t reflexer.addMessage(\"Great ! The time is over 10000\")\n";
         newScript = newScript + " }\n";
         
-        newScenario.setScript(newScript);
-        newScenario.setRandomCode(new Long(82729313));
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new CReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Hyper Flex");
         newScenario.setDescription("There are only bosses.");        
         newScenario.setKoreanDescription("처음부터 끝까지 대형 적만 등장합니다.");
         newScenario.setDifficulty(new Integer(15000));
-        newScenario.setDiff_delay(new Long(3000));
-        newScenario.setEnemy_limit(new Integer(3));
+        newScenario.setDiffDelay(new Long(3000));
+        newScenario.setEnemyLimit(new Integer(3));
         newScenario.setSpaceShip("flex");
-        ((CReflexScenario) newScenario).setSpaceShip_selectable(new Boolean(true));
+        newScenario.setSpaceShipSelectable(new Boolean(true));
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -164,22 +157,20 @@ public class ReflexScenarioSetter
         {
             patternArray[i] = patterns.get(i);
         }
-        newScenario.setPatterns(patternArray);            
-        newScenario.setGrade_limit(new Integer(0));    
-        newScenario.setRandomCode(new Long(4773723));
+        newScenario.setPatterns(patternArray);         
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new CReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("See Carefully");
         newScenario.setDescription("Enemies cre sealed from shadow.");        
         newScenario.setKoreanDescription("적들은 그림자에 가려져 있습니다.");
         newScenario.setDifficulty(new Integer(5100));
-        newScenario.setDiff_delay(new Long(3000));
-        newScenario.setEnemy_limit(new Integer(3));
+        newScenario.setDiffDelay(new Long(3000));
+        newScenario.setEnemyLimit(new Integer(3));
         newScenario.setSpaceShip("flex");
-        ((CReflexScenario) newScenario).setSpaceShip_selectable(new Boolean(true));
+        newScenario.setSpaceShipSelectable(new Boolean(true));
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -219,20 +210,18 @@ public class ReflexScenarioSetter
         }
         newScenario.setPatterns(patternArray);    
         
-        newScenario.setGrade_limit(new Integer(0));    
-        newScenario.setRandomCode(new Long(2984952));
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
-        newScenario = new CReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Clipper Experience");
         newScenario.setDescription("Try to control special ship called \'Clipper\'.");
         newScenario.setKoreanDescription("\'Clipper\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
         newScenario.setDifficulty(new Integer(50));
-        newScenario.setDiff_delay(new Long(3000));
-        newScenario.setEnemy_limit(new Integer(20));
+        newScenario.setDiffDelay(new Long(3000));
+        newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("clipper");
-        ((CReflexScenario) newScenario).setSpaceShip_selectable(new Boolean(false));
+        newScenario.setSpaceShipSelectable(new Boolean(false));
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
         newEnemyPattern.setMax_delay(new Long(-1));
@@ -255,20 +244,18 @@ public class ReflexScenarioSetter
         {
             patternArray[i] = patterns.get(i);
         }
-        newScenario.setPatterns(patternArray);        
-        newScenario.setGrade_limit(new Integer(0));    
-        newScenario.setRandomCode(new Long(92482914));
+        newScenario.setPatterns(patternArray);
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);    
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new BReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Warship Experience");
         newScenario.setDescription("Try to control special ship called \'Warship\'.");
         newScenario.setKoreanDescription("\'Warship\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
         newScenario.setDifficulty(new Integer(25));
-        newScenario.setDiff_delay(new Long(3000));
-        newScenario.setEnemy_limit(new Integer(20));
+        newScenario.setDiffDelay(new Long(3000));
+        newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("warship");
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
@@ -293,19 +280,17 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);        
-        newScenario.setGrade_limit(new Integer(1));    
-        newScenario.setRandomCode(new Long(7253672));
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new BReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Chaser Experience");
         newScenario.setDescription("Try to control special ship called \'Chaser\'.");
         newScenario.setKoreanDescription("\'Chaser\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
         newScenario.setDifficulty(new Integer(25));
-        newScenario.setDiff_delay(new Long(5500));
-        newScenario.setEnemy_limit(new Integer(20));
+        newScenario.setDiffDelay(new Long(5500));
+        newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("chaser");
         
         newEnemyPattern = new EnemyPattern();
@@ -331,19 +316,17 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);        
-        newScenario.setGrade_limit(new Integer(1));
-        newScenario.setRandomCode(new Long(16835231));
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
         patterns = new Vector<EnemyPattern>();
-        newScenario = new BReflexScenario();
+        newScenario = new ReflexScenario();
         newScenario.setName("Carrier Experience");
         newScenario.setDescription("Try to control special ship called \'Carrier\'.");
         newScenario.setKoreanDescription("\'Carrier\' 라는 특별한 함선을 체험해 보세요.\n함선 체험 시나리오는 난이도가 매우 높습니다.");
         newScenario.setDifficulty(new Integer(25));
-        newScenario.setDiff_delay(new Long(5550));
-        newScenario.setEnemy_limit(new Integer(20));
+        newScenario.setDiffDelay(new Long(5550));
+        newScenario.setEnemyLimit(new Integer(20));
         newScenario.setSpaceShip("carrier");
         newEnemyPattern = new EnemyPattern();
         newEnemyPattern.setMin_delay(new Long(0));
@@ -367,8 +350,6 @@ public class ReflexScenarioSetter
             patternArray[i] = patterns.get(i);
         }
         newScenario.setPatterns(patternArray);        
-        newScenario.setGrade_limit(new Integer(1));
-        newScenario.setRandomCode(new Long(83623842));
         newScenario.setAuth(new Long(newScenario.authorized(1937283 + 1001008)));
         scenarios.add(newScenario);
         
@@ -428,53 +409,50 @@ public class ReflexScenarioSetter
                             
                         }
                     }
-                    if(s instanceof AReflexScenario)
+                    try
+                    {
+                        target = new File(path + s.getName() + ".rfst");
+                        fout = new FileOutputStream(target);
+                        outWriter = new OutputStreamWriter(fout);
+                        writer = new BufferedWriter(outWriter);
+                        StringTokenizer lineToken = new StringTokenizer(s.stringData(), "\n");
+                        while(lineToken.hasMoreTokens())
+                        {
+                            writer.write(lineToken.nextToken());
+                            writer.newLine();
+                        }
+                        reports = reports + target.getAbsolutePath() + "\n";
+                    }
+                    catch (Exception e)
+                    {
+                        reports = reports + s.getName() + " (" + e.getMessage() + ")\n";
+                        e.printStackTrace();
+                    }    
+                    finally
                     {
                         try
                         {
-                            target = new File(path + s.getName() + ".rfst");
-                            fout = new FileOutputStream(target);
-                            outWriter = new OutputStreamWriter(fout);
-                            writer = new BufferedWriter(outWriter);
-                            StringTokenizer lineToken = new StringTokenizer(((AReflexScenario) s).stringData(), "\n");
-                            while(lineToken.hasMoreTokens())
-                            {
-                                writer.write(lineToken.nextToken());
-                                writer.newLine();
-                            }
-                            reports = reports + target.getAbsolutePath() + "\n";
-                        }
+                            writer.close();
+                        } 
                         catch (Exception e)
                         {
-                            reports = reports + s.getName() + " (" + e.getMessage() + ")\n";
-                            e.printStackTrace();
-                        }    
-                        finally
+                            
+                        }
+                        try
                         {
-                            try
-                            {
-                                writer.close();
-                            } 
-                            catch (Exception e)
-                            {
-                                
-                            }
-                            try
-                            {
-                                outWriter.close();
-                            } 
-                            catch (Exception e)
-                            {
-                                
-                            }
-                            try
-                            {
-                                fout.close();
-                            } 
-                            catch (Exception e)
-                            {
-                                
-                            }
+                            outWriter.close();
+                        } 
+                        catch (Exception e)
+                        {
+                            
+                        }
+                        try
+                        {
+                            fout.close();
+                        } 
+                        catch (Exception e)
+                        {
+                            
                         }
                     }
                 }

@@ -88,7 +88,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     transient int player_type = 0;
     private transient UserDefinedShip userDefinedShip = null;
     private transient List<Missile> fired_missile;
-    private transient Vector<ReflexTrigger> triggers;
     private transient String file_path = null;
     private transient long finish_count = -1;
     private transient int continue_left = 2;
@@ -110,7 +109,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         missile = new Vector<Missile>();
         booms = new Vector<Boom>();
         items = new Vector<Item>();
-        triggers = new Vector<ReflexTrigger>();
         decorates = new Vector<ReflexDecorate>();
         ourEnemy = new Vector<Enemy>();
         testEnemy = new Vector<Enemy>();
@@ -542,7 +540,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         missile.clear();
         booms.clear();
         items.clear();
-        triggers.clear();
         finish_count = -1;
         continue_left = 2;
         pause_left = 0;
@@ -636,100 +633,59 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         catchItems = Lint.big(0);
         if(scenario != null)
         {
-            difficulty_delay = scenario.getDiff_delay();
+            difficulty_delay = scenario.getDiffDelay();
             authority_mode = scenario.isAuthorized();
-            if((scenario instanceof AReflexScenario))
+            
+            if(scenario.getAvailableContinues() != null)
+                continue_left = scenario.getAvailableContinues().intValue() - 1;
+            
+            if(scenario.getStartItemA() != null)
             {
-                AReflexScenario ascen = (AReflexScenario) scenario;
-                if(ascen.getTrig() != null)
+                for(int i=0; i<scenario.getStartItemA().intValue(); i++)
                 {
-                    if(! ascen.getTrig().trim().equalsIgnoreCase(""))
-                    {
-                        ReflexTrigger[] ntriggers = ReflexTrigger.stringToTriggers(ascen.getTrig());
-                        if(ntriggers != null)
-                        {
-                            for(ReflexTrigger t : ntriggers)
-                            {
-                                if(t != null)
-                                {
-                                    triggers.add(t);
-                                }
-                            }
-                        }
-                    }
+                    applyItem(Item.A_HP_ADD);
                 }
             }
-            if(scenario instanceof BReflexScenario)
+            if(scenario.getStartItemD() != null)
             {
-                if(((BReflexScenario) scenario).getAvailable_continues() != null)
-                    continue_left = ((BReflexScenario) scenario).getAvailable_continues().intValue() - 1;
+                for(int i=0; i<scenario.getStartItemD().intValue(); i++)
+                {
+                    applyItem(Item.D_D_ADD);
+                }
             }
-            if(scenario instanceof IReflexScenario)
+            if(scenario.getStartItemE() != null)
             {
-                IReflexScenario is = (IReflexScenario) scenario;
-                if(is.getStart_time() != null)
+                for(int i=0; i<scenario.getStartItemE().intValue(); i++)
                 {
-                    difficulty = is.getStart_time().longValue();
+                    applyItem(Item.E_E_ADD);
                 }
-                if(is.getStart_item_a() != null)
+            }
+            if(scenario.getStartItemG() != null)
+            {
+                for(int i=0; i<scenario.getStartItemG().intValue(); i++)
                 {
-                    for(int i=0; i<is.getStart_item_a().intValue(); i++)
-                    {
-                        applyItem(Item.A_HP_ADD);
-                    }
+                    applyItem(Item.G_E_H_ADD);
                 }
-                if(is.getStart_item_d() != null)
+            }
+            if(scenario.getStartItemK() != null)
+            {
+                for(int i=0; i<scenario.getStartItemK().intValue(); i++)
                 {
-                    for(int i=0; i<is.getStart_item_d().intValue(); i++)
-                    {
-                        applyItem(Item.D_D_ADD);
-                    }
+                    applyItem(Item.K_HP_H_ADD);
                 }
-                if(is.getStart_item_e() != null)
+            }
+            if(scenario.getStartItemM() != null)
+            {
+                for(int i=0; i<scenario.getStartItemM().intValue(); i++)
                 {
-                    for(int i=0; i<is.getStart_item_e().intValue(); i++)
-                    {
-                        applyItem(Item.E_E_ADD);
-                    }
+                    applyItem(Item.M_M_ADD);
                 }
-                if(is.getStart_item_g() != null)
+            }
+            if(scenario.getStartItemS() != null)
+            {
+                for(int i=0; i<scenario.getStartItemS().intValue(); i++)
                 {
-                    for(int i=0; i<is.getStart_item_g().intValue(); i++)
-                    {
-                        applyItem(Item.G_E_H_ADD);
-                    }
-                }
-                if(is.getStart_item_k() != null)
-                {
-                    for(int i=0; i<is.getStart_item_k().intValue(); i++)
-                    {
-                        applyItem(Item.K_HP_H_ADD);
-                    }
-                }
-                if(is.getStart_item_m() != null)
-                {
-                    for(int i=0; i<is.getStart_item_m().intValue(); i++)
-                    {
-                        applyItem(Item.M_M_ADD);
-                    }
-                }
-                if(is.getStart_item_s() != null)
-                {
-                    for(int i=0; i<is.getStart_item_s().intValue(); i++)
-                    {
-                        applyItem(Item.S_S_ADD);
-                    }
-                }
-                if(is.getStart_script() != null)
-                {
-                    try
-                    {
-                        // TODO : is.getStart_script()
-                    } 
-                    catch (Exception e)
-                    {
-                        sp.message(sets.trans("Error") + " - (" + e.getClass().getSimpleName() + ") " + e.getMessage());
-                    }
+                    applyItem(Item.S_S_ADD);
                 }
             }
         }
@@ -849,127 +805,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
             }
             
             if(! authority_mode) authcode = sets.trans("Play authorized game for get authorized code.");
-            if(scenario != null)
-            {
-                if(scenario instanceof AReflexScenario)
-                {
-                    boolean accept_event = true;
-                    AReflexScenario aref = (AReflexScenario) scenario;
-                    if(aref.getEvent_exist() != null)
-                    {
-                        if(! aref.getEvent_exist().booleanValue())
-                        {
-                            accept_event = true;
-                            event_accepted = false;
-                        }
-                        else
-                        {
-                            Calendar cal = Calendar.getInstance();
-                            if(aref.getEvent_year() != null)
-                            {
-                                if(aref.getEvent_year().intValue() < cal.get(Calendar.YEAR))
-                                {
-                                    accept_event = false;
-                                    event_accepted = false;
-                                }
-                            }
-                            if(accept_event)
-                            {
-                                if(aref.getEvent_month() != null)
-                                {
-                                    if(aref.getEvent_month().intValue() < cal.get(Calendar.MONTH) + 1)
-                                    {
-                                        accept_event = false;
-                                        event_accepted = false;
-                                    }
-                                }
-                            }
-                            if(accept_event)
-                            {
-                                if(aref.getEvent_day() != null)
-                                {
-                                    if(aref.getEvent_day().intValue() < cal.get(Calendar.DAY_OF_MONTH))
-                                    {
-                                        accept_event = false;
-                                        event_accepted = false;
-                                    }
-                                }
-                            }
-                            if(accept_event)
-                            {
-                                if(aref.getEvent_hour() != null)
-                                {
-                                    if(aref.getEvent_hour().intValue() < cal.get(Calendar.HOUR_OF_DAY))
-                                    {
-                                        accept_event = false;
-                                        event_accepted = false;
-                                    }
-                                }
-                            }
-                            if(accept_event)
-                            {
-                                if(aref.getEvent_minute() != null)
-                                {
-                                    if(aref.getEvent_minute().intValue() < cal.get(Calendar.MINUTE))
-                                    {
-                                        accept_event = false;
-                                        event_accepted = false;
-                                    }
-                                }
-                            }
-                            if(accept_event)
-                            {
-                                if(aref.getEvent_second() != null)
-                                {
-                                    if(aref.getEvent_second().intValue() < cal.get(Calendar.SECOND))
-                                    {
-                                        accept_event = false;
-                                        event_accepted = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        accept_event = true;
-                        event_accepted = true;
-                        
-                    }
-                    if(event_accepted)
-                    {
-                        if(scenario instanceof AReflexScenario)
-                        {
-                            if(((AReflexScenario) scenario).getEvent_url() == null) event_accepted = false;
-                            else event_url = ((AReflexScenario) scenario).getEvent_url();
-                        }
-                        else event_accepted = false;
-                    }
-                    
-                    if(! accept_event)
-                    {
-                        authcode = sets.trans("Play authorized game for get authorized code.");
-                    }
-                }
-            }
             
-            try
-            {
-                if(scenario != null)
-                {
-                    if(scenario instanceof IReflexScenario)
-                    {
-                        if(((IReflexScenario) scenario).getFinish_script() != null  )
-                        {
-                            // TODO : ((IReflexScenario) scenario).getFinish_script()
-                        }
-                    }
-                }
-            }
-            catch(Exception e)
-            {
-                sp.message(sets.trans("Error") + " - (" + e.getClass().getSimpleName() + ") " + e.getMessage());
-            }
             sp.message("게임이 끝났습니다.", "Game is finished.");
             pause_left = 0;
             sp.finish();
@@ -2036,7 +1872,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                                     {
                                         if((arena.difficulty >= s.getMin_delay().longValue()) && (arena.difficulty <= s.getMax_delay().longValue() || s.getMax_delay().longValue() <= -1))
                                         {
-                                            if(Math.random() <= s.getRatio().doubleValue() && arena.enemies.size() <= arena.scenario.getEnemy_limit().intValue())
+                                            if(Math.random() <= s.getRatio().doubleValue() && arena.enemies.size() <= arena.scenario.getEnemyLimit().intValue())
                                             {
                                                 newEnemy = s.createEnemy(arena.file_path, arena.difficulty);
                                                 newEnemy.loadImage(arena.file_path);
@@ -2051,7 +1887,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                                 }
                                 if(arena.scenario.getDefaultPattern() != null && (! arena.unique_exist))
                                 {
-                                    if(Math.random() <= arena.scenario.getDefaultPattern().getRatio() && arena.enemies.size() <= arena.scenario.getEnemy_limit())
+                                    if(Math.random() <= arena.scenario.getDefaultPattern().getRatio() && arena.enemies.size() <= arena.scenario.getEnemyLimit())
                                     {
                                         newEnemy = arena.scenario.getDefaultPattern().createEnemy(arena.file_path, arena.difficulty);
                                         newEnemy.loadImage(arena.file_path);
@@ -2163,21 +1999,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                             }
                         }
                         
-                        for(ReflexTrigger t : arena.triggers)
-                        {
-                            if(t.isAccept(arena))
-                            {
-                                try
-                                {
-                                    t.action(arena);
-                                } 
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        
                         for (int i = 0; i < arena.enemies.size(); i++)
                         {
                             try
@@ -2254,15 +2075,9 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                         
                         if(arena.scenario != null)
                         {
-                            if(arena.scenario instanceof DReflexScenario)
+                        	if((Lint.big(0).compareTo(arena.scenario.getDeadLine()) <= 0) && Lint.big(arena.difficulty).compareTo(arena.scenario.getDeadLine()) >= 1)
                             {
-                                if(((DReflexScenario) arena.scenario).getDeadline() != null)
-                                {
-                                    if((Lint.big(0).compareTo(((DReflexScenario) arena.scenario).getDeadline()) <= 1) && Lint.big(arena.difficulty).compareTo(((DReflexScenario) arena.scenario).getDeadline()) >= 1)
-                                    {
-                                        arena.game_finish();
-                                    }
-                                }
+                                arena.game_finish();
                             }
                         }
                         
@@ -2338,21 +2153,6 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                         if(arena.spaceShip.getFire_delay() >= 1)
                         {
                             arena.spaceShip.setFire_delay(arena.spaceShip.getFire_delay() - 1);
-                        }
-                        
-                        if(arena.scenario != null)
-                        {
-                            if(arena.scenario instanceof XReflexScenario)
-                            {
-                                try
-                                {
-                                    // TODO : ((XReflexScenario) arena.scenario).getScript()
-                                }
-                                catch(Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-                            }
                         }
                         
                         for(int i=0; i<arena.enemies.size(); i++)
@@ -2880,10 +2680,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         replay.setName(getName());
         if(getScenario() != null)
         {
-            if(getScenario() instanceof AReflexScenario)
-            {
-                replay.setScenarioData(((AReflexScenario) getScenario()).stringData());
-            }        
+            replay.setScenarioData(getScenario().stringData());
             replay.setScenarioName(getScenario().getName());            
         }
         replay.setFinal_point(spaceShip.getPoint());        
@@ -3034,7 +2831,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     }
     public long scenario_difficulty_delay()
     {
-        if(getScenario() != null) return getScenario().getDiff_delay().longValue();
+        if(getScenario() != null) return getScenario().getDiffDelay().longValue();
         return 0;
     }
 }
