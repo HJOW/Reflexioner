@@ -28,7 +28,7 @@ public class EnemyPattern implements Serializable
     }
     public EnemyPattern(String str)
     {
-    	Properties prop = RXUtils.extractProperty(str);
+    	Properties prop = RXUtils.extractProperty(str, false);
     	String strEnemy     = prop.getProperty("Enemy");
     	this.enemy          = Enemy.stringToEnemy(strEnemy);
     	this.min_delay      = new Long(prop.getProperty("MinDelay"));
@@ -62,7 +62,7 @@ public class EnemyPattern implements Serializable
     public String convertStr()
     {
     	Properties prop = convertProp();
-    	return RXUtils.serializeProperty(prop);
+    	return RXUtils.serializeProperty(prop, false);
     }
     public Enemy createEnemy(String path, long difficulty)
     {

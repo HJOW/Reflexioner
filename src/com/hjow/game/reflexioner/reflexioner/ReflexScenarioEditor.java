@@ -279,15 +279,15 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
                 {
                     if(file1 != null)
                     {
-                        if(file1.isDirectory()) return true;
-                        if(file1.getAbsolutePath().endsWith(".rfst")) return true;
+                        if(file1.isDirectory()) return false;
+                        if(file1.getName().toLowerCase().endsWith(".rscn")) return true;
                     }
                     return false;
                 }
                 @Override
                 public String getDescription()
                 {                    
-                    return "Reflexioner - Scenario Script (.rfst)";
+                    return "Reflexioner - Scenario (.rscn)";
                 }
             };
         }
@@ -316,11 +316,28 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         else if(ob == bt_play)
         {
-            sp.playScenario(new ReflexScenario(contents.getText()));
+        	try
+        	{
+        		sp.playScenario(new ReflexScenario(contents.getText(), false));
+        	}
+        	catch(Exception ex)
+        	{
+        		ex.printStackTrace();
+        		JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
+        	}
+            
         }
         else if(ob == bt_add)
         {
-            sp.inputScenario(new ReflexScenario(contents.getText()));
+        	try
+        	{
+        		sp.inputScenario(new ReflexScenario(contents.getText(), false));
+        	}
+        	catch(Exception ex)
+        	{
+        		ex.printStackTrace();
+        		JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
+        	}
         }
         else if(ob == bt_close)
         {
@@ -347,10 +364,11 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         BufferedWriter buffered = null;
         try
         {
+        	ReflexScenario sc = new ReflexScenario(contents.getText());
             stream = new FileOutputStream(file);
             writer = new OutputStreamWriter(stream, "UTF-8");
             buffered = new BufferedWriter(writer);
-            buffered.write(contents.getText());
+            buffered.write(sc.stringData());
         }
         catch(Exception e)
         {

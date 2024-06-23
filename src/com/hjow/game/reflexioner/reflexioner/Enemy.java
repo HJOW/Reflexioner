@@ -413,7 +413,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 	    prop.setProperty("FireDelay", "" + enemy.getMax_energy());
 	    prop.setProperty("Damage"   , "" + enemy.getDamage()    );       
 	    
-	    return RXUtils.serializeProperty(prop);
+	    return RXUtils.serializeProperty(prop, false);
 	}
 	public static Enemy stringToEnemy(String str)
 	{
@@ -427,7 +427,7 @@ public class Enemy extends OvalObject implements HaveEnergy
 	    enemy.setMax_hp(500);
 	    enemy.setDamage((enemy.getHp() / 10));
 	    
-	    Properties prop = RXUtils.extractProperty(str);
+	    Properties prop = RXUtils.extractProperty(str, false);
 	    String type = prop.getProperty("Type");
 	    if(type.equals("boss_3"))
 	    {
@@ -486,16 +486,22 @@ public class Enemy extends OvalObject implements HaveEnergy
             ((Boss) enemy).setRatio(0.9);
 	    }
 	    
-	    enemy.setMax_hp(Long.parseLong(prop.getProperty(prop.getProperty("HP"))));
-	    enemy.setHp(enemy.getMax_hp());
+	    if(prop.containsKey("HP"   ))
+	    {
+	    	enemy.setMax_hp(Long.parseLong(prop.getProperty("HP")));
+	    	enemy.setHp(enemy.getMax_hp());
+	    }
 	    
-	    enemy.setMax_energy(Long.parseLong(prop.getProperty("FireDelay")));
-	    enemy.setEnergy(enemy.getMax_energy());
+	    if(prop.containsKey("FireDelay"))
+	    {
+	    	enemy.setMax_energy(Long.parseLong(prop.getProperty("FireDelay")));
+		    enemy.setEnergy(enemy.getMax_energy());
+	    }
 	    
-	    enemy.setR(Integer.parseInt(prop.getProperty("Size")));
-	    enemy.setDx(Integer.parseInt(prop.getProperty("SpeedX")));
-	    enemy.setDy(Integer.parseInt(prop.getProperty("SpeedY")));
-	    enemy.setDamage(Long.parseLong(prop.getProperty("Damage")));
+	    if(prop.containsKey("Size"  )) enemy.setR(Integer.parseInt(prop.getProperty("Size")));
+	    if(prop.containsKey("SpeedX")) enemy.setDx(Integer.parseInt(prop.getProperty("SpeedX")));
+	    if(prop.containsKey("SpeedY")) enemy.setDy(Integer.parseInt(prop.getProperty("SpeedY")));
+	    if(prop.containsKey("Damage")) enemy.setDamage(Long.parseLong(prop.getProperty("Damage")));
 	    
 	    if(prop.containsKey("Guide"))
 	    {

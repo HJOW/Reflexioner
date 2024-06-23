@@ -175,7 +175,7 @@ public class RXUtils {
             return prop;
         }
         catch(Exception exc)
-        { throw new RuntimeException(exc.getMessage()); }
+        { throw new RuntimeException(exc.getMessage(), exc); }
         finally
         {
             if(gzipper != null) { try { gzipper.close(); } catch(Exception exc) {} }

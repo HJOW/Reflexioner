@@ -1,12 +1,14 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.beans.XMLEncoder;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -354,15 +356,77 @@ public class ReflexScenarioSetter
             }
         }
         
+        File scnPath = null;
+        try
+        {
+        	Setting sets = Setting.load();
+            File defPath = new File(sets.getDefaultPath());
+            if(! defPath.exists()) defPath.mkdirs();
+            scnPath = new File(defPath.getAbsolutePath() + File.separator + "scenarios");
+            if(! scnPath.exists()) scnPath.mkdirs();
+            
+            File[] files = scnPath.listFiles(new FileFilter() 
+            {	
+				@Override
+				public boolean accept(File pathname) {
+					if(! pathname.exists()) return false;
+					if(pathname.isDirectory()) return false;
+					String name = pathname.getName().toLowerCase();
+					return name.endsWith(".rscn");
+				}
+			});
+            
+            FileInputStream stream = null;
+            InputStreamReader reader = null;
+            BufferedReader buffered = null;
+            String lines = "", accum = "";
+            for(File f : files)
+            {
+            	lines = "";
+            	accum = "";
+            	try
+            	{
+            		stream = new FileInputStream(f);
+                    reader = new InputStreamReader(stream, "UTF-8");
+                    buffered = new BufferedReader(reader);
+                    while(true)
+                    {
+                        lines = buffered.readLine();
+                        if(lines == null) break;
+                        accum = accum + lines + "\n";
+                    }
+                    buffered.close(); buffered = null;
+                    reader.close();   reader   = null;
+                    stream.close();   stream   = null;
+                    ReflexScenario scen = new ReflexScenario(accum);
+                    if(! scenarios.contains(scen)) scenarios.add(scen);
+            	}
+            	catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            	finally
+            	{
+            		try { if(buffered != null) buffered.close(); buffered = null; } catch(Exception exc) {}
+                    try { if(reader   != null) reader.close();   reader   = null; } catch(Exception exc) {}
+                    try { if(stream   != null) stream.close();   stream   = null; } catch(Exception exc) {}
+            	}
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
         if(alsoFiles)
         {
             try
             {
+            	if(path == null && scnPath != null) path = scnPath.getAbsolutePath();
                 File folder = new File(path);
                 if(! folder.exists()) folder.mkdir();
                 File target;
                 FileOutputStream fout = null;
-                XMLEncoder encoder = null;
                 OutputStreamWriter outWriter = null;
                 BufferedWriter writer = null;
                 String reports = Setting.load().trans("Following files are created.");
@@ -370,10 +434,11 @@ public class ReflexScenarioSetter
                 {
                     try
                     {
-                        target = new File(path + s.getName() + ".rfsx");
+                        target = new File(path + s.getName() + ".rscn");
                         fout = new FileOutputStream(target);
-                        encoder = new XMLEncoder(fout);
-                        encoder.writeObject(s);
+                        outWriter = new OutputStreamWriter(fout, "UTF-8");
+                        writer = new BufferedWriter(outWriter);
+                        writer.write(s.stringData());
                         reports = reports + target.getAbsolutePath() + "\n";
                     } 
                     catch (Exception e)
@@ -383,68 +448,9 @@ public class ReflexScenarioSetter
                     }    
                     finally
                     {
-                        try
-                        {
-                            encoder.close();
-                        } 
-                        catch (Exception e)
-                        {
-                            
-                        }
-                        try
-                        {
-                            fout.close();
-                        } 
-                        catch (Exception e)
-                        {
-                            
-                        }
-                    }
-                    try
-                    {
-                        target = new File(path + s.getName() + ".rfst");
-                        fout = new FileOutputStream(target);
-                        outWriter = new OutputStreamWriter(fout);
-                        writer = new BufferedWriter(outWriter);
-                        StringTokenizer lineToken = new StringTokenizer(s.stringData(), "\n");
-                        while(lineToken.hasMoreTokens())
-                        {
-                            writer.write(lineToken.nextToken());
-                            writer.newLine();
-                        }
-                        reports = reports + target.getAbsolutePath() + "\n";
-                    }
-                    catch (Exception e)
-                    {
-                        reports = reports + s.getName() + " (" + e.getMessage() + ")\n";
-                        e.printStackTrace();
-                    }    
-                    finally
-                    {
-                        try
-                        {
-                            writer.close();
-                        } 
-                        catch (Exception e)
-                        {
-                            
-                        }
-                        try
-                        {
-                            outWriter.close();
-                        } 
-                        catch (Exception e)
-                        {
-                            
-                        }
-                        try
-                        {
-                            fout.close();
-                        } 
-                        catch (Exception e)
-                        {
-                            
-                        }
+                    	try { writer.close();    } catch (Exception e) {}
+                    	try { outWriter.close(); } catch (Exception e) {}
+                        try { fout.close();      } catch (Exception e) {}
                     }
                 }
                 JOptionPane.showMessageDialog(null, reports);

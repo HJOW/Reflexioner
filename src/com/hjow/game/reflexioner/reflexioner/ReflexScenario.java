@@ -129,7 +129,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     public ReflexScenario(Properties serialized)
     {
     	this();
-    	setSerials(Integer.parseInt(serialized.getProperty("Serial")));
+    	setSerials(Long.parseLong(serialized.getProperty("Serial")));
     	setName(serialized.getProperty("Name"));
     	setDescription(serialized.getProperty("Description"));
     	setKoreanDescription(serialized.getProperty("KoreanDescription"));
