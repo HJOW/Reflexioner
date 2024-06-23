@@ -21,8 +21,8 @@ public class EnemyPattern implements Serializable
         this.min_delay = new Long(min);
         this.max_delay = new Long(max);
         this.ratio = new Double(ratio);
-        this.addDamageRatio = new Double(0.0);
-        this.addHPRatio = new Double(0.0);
+        this.addDamageRatio = new Double(0.01);
+        this.addHPRatio = new Double(0.02);
     }
     public EnemyPattern(String str)
     {

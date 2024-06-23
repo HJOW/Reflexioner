@@ -318,7 +318,13 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         }
         return null;
     }
-    public void setScenario(ReflexScenario scen)
+    public String getFile_path() {
+		return file_path;
+	}
+	public void setFile_path(String file_path) {
+		this.file_path = file_path;
+	}
+	public void setScenario(ReflexScenario scen)
     {
         this.scenario = scen;
     }
@@ -494,7 +500,19 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     {
         return catchEnemies;
     }
-    public BigInteger getPoint()
+    public long getBossCount() {
+		return bossCount;
+	}
+	public void setBossCount(long bossCount) {
+		this.bossCount = bossCount;
+	}
+	public boolean isAutoFire() {
+		return autoFire;
+	}
+	public void setAutoFire(boolean autoFire) {
+		this.autoFire = autoFire;
+	}
+	public BigInteger getPoint()
     {
         return spaceShip.getPoint();
     }
@@ -531,7 +549,13 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     {
         return difficulty_mode;
     }
-    public void reset()
+    public List<Enemy> getTestEnemy() {
+		return testEnemy;
+	}
+	public void setTestEnemy(List<Enemy> testEnemy) {
+		this.testEnemy = testEnemy;
+	}
+	public void reset()
     {
         pause();
         enemies.clear();
@@ -631,64 +655,64 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         Reflexioner.max_enemies = 15;
         catchEnemies = Lint.big(0);
         catchItems = Lint.big(0);
-        if(scenario != null)
+
+        if(scenario == null) scenario = ReflexScenario.defaultScenario;
+        difficulty_delay = scenario.getDiffDelay();
+        authority_mode = scenario.isAuthorized();
+        
+        if(scenario.getAvailableContinues() != null)
+            continue_left = scenario.getAvailableContinues().intValue() - 1;
+        
+        if(scenario.getStartItemA() != null)
         {
-            difficulty_delay = scenario.getDiffDelay();
-            authority_mode = scenario.isAuthorized();
-            
-            if(scenario.getAvailableContinues() != null)
-                continue_left = scenario.getAvailableContinues().intValue() - 1;
-            
-            if(scenario.getStartItemA() != null)
+            for(int i=0; i<scenario.getStartItemA().intValue(); i++)
             {
-                for(int i=0; i<scenario.getStartItemA().intValue(); i++)
-                {
-                    applyItem(Item.A_HP_ADD);
-                }
-            }
-            if(scenario.getStartItemD() != null)
-            {
-                for(int i=0; i<scenario.getStartItemD().intValue(); i++)
-                {
-                    applyItem(Item.D_D_ADD);
-                }
-            }
-            if(scenario.getStartItemE() != null)
-            {
-                for(int i=0; i<scenario.getStartItemE().intValue(); i++)
-                {
-                    applyItem(Item.E_E_ADD);
-                }
-            }
-            if(scenario.getStartItemG() != null)
-            {
-                for(int i=0; i<scenario.getStartItemG().intValue(); i++)
-                {
-                    applyItem(Item.G_E_H_ADD);
-                }
-            }
-            if(scenario.getStartItemK() != null)
-            {
-                for(int i=0; i<scenario.getStartItemK().intValue(); i++)
-                {
-                    applyItem(Item.K_HP_H_ADD);
-                }
-            }
-            if(scenario.getStartItemM() != null)
-            {
-                for(int i=0; i<scenario.getStartItemM().intValue(); i++)
-                {
-                    applyItem(Item.M_M_ADD);
-                }
-            }
-            if(scenario.getStartItemS() != null)
-            {
-                for(int i=0; i<scenario.getStartItemS().intValue(); i++)
-                {
-                    applyItem(Item.S_S_ADD);
-                }
+                applyItem(Item.A_HP_ADD);
             }
         }
+        if(scenario.getStartItemD() != null)
+        {
+            for(int i=0; i<scenario.getStartItemD().intValue(); i++)
+            {
+                applyItem(Item.D_D_ADD);
+            }
+        }
+        if(scenario.getStartItemE() != null)
+        {
+            for(int i=0; i<scenario.getStartItemE().intValue(); i++)
+            {
+                applyItem(Item.E_E_ADD);
+            }
+        }
+        if(scenario.getStartItemG() != null)
+        {
+            for(int i=0; i<scenario.getStartItemG().intValue(); i++)
+            {
+                applyItem(Item.G_E_H_ADD);
+            }
+        }
+        if(scenario.getStartItemK() != null)
+        {
+            for(int i=0; i<scenario.getStartItemK().intValue(); i++)
+            {
+                applyItem(Item.K_HP_H_ADD);
+            }
+        }
+        if(scenario.getStartItemM() != null)
+        {
+            for(int i=0; i<scenario.getStartItemM().intValue(); i++)
+            {
+                applyItem(Item.M_M_ADD);
+            }
+        }
+        if(scenario.getStartItemS() != null)
+        {
+            for(int i=0; i<scenario.getStartItemS().intValue(); i++)
+            {
+                applyItem(Item.S_S_ADD);
+            }
+        }
+        
         if(autoControl)
         {
             spaceShip.setAccel_x(spaceShip.getAccel());
@@ -751,8 +775,8 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
             propAuth.setProperty("Version"         , String.valueOf(Reflexioner.getVersionString(true)));
             propAuth.setProperty("Auto"            , String.valueOf(autoControl));
             propAuth.setProperty("TodayEvent"      , String.valueOf(todayEvent));
-            if(scenario == null) propAuth.setProperty("Scenario", "Standard");
-            else                 propAuth.setProperty("Scenario", scenario.getName());
+            if(scenario.equals(ReflexScenario.defaultScenario)) propAuth.setProperty("Scenario", "Standard");
+            else                                                propAuth.setProperty("Scenario", scenario.getName());
             
             propAuth.remove("Code1");
             Set<String> keys = propAuth.stringPropertyNames();
@@ -1228,7 +1252,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         if(target_checkBox == null) autoControl = false;
         else autoControl = target_checkBox.isSelected();
     }
-    private void applyItem(int itemCode)
+    public void applyItem(int itemCode)
     {
         switch(itemCode)
         {
@@ -1318,20 +1342,43 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     class ArenaThread extends Thread implements ThreadControl
     {        
         private transient Missile target_missile = null;
-        private transient Item target_item = null, newItem = null;
-        private transient Enemy target_enemy = null, newEnemy = null;
-        private transient BigEnemy newBigEnemy = null;
-        private transient Boss newBoss = null;
+        private transient Item target_item = null;
+        private transient Enemy target_enemy = null;
         private transient Boom target_boom = null;
         private transient Arena arena;
-        private transient List<Enemy> getEnemies;
-        private int unique_index = 0;
-        private int newItemCount = 0;
-        private double newItemCenter = 0.0;
-        private double newItemProbability = 0.0;    
-        private double newEnemyProbability = 0.0;        
+        private int unique_index = 0;      
         
-        public ArenaThread()
+        public Missile getTarget_missile() {
+			return target_missile;
+		}
+		public void setTarget_missile(Missile target_missile) {
+			this.target_missile = target_missile;
+		}
+		public Item getTarget_item() {
+			return target_item;
+		}
+		public void setTarget_item(Item target_item) {
+			this.target_item = target_item;
+		}
+		public Enemy getTarget_enemy() {
+			return target_enemy;
+		}
+		public void setTarget_enemy(Enemy target_enemy) {
+			this.target_enemy = target_enemy;
+		}
+		public Boom getTarget_boom() {
+			return target_boom;
+		}
+		public void setTarget_boom(Boom target_boom) {
+			this.target_boom = target_boom;
+		}
+		public int getUnique_index() {
+			return unique_index;
+		}
+		public void setUnique_index(int unique_index) {
+			this.unique_index = unique_index;
+		}
+		public ArenaThread()
         {
             super();
         }
@@ -1351,948 +1398,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
                 {
                     if((! arena.game_pause) && (arena.pause_left <= 0))
                     {
-                        try
-                        {
-                            arena.boss_exist = false;
-                            arena.unique_exist = false;
-                            for(Enemy e : arena.enemies)
-                            {
-                                if(e instanceof Boss)
-                                {                                
-                                    arena.boss_exist = true;
-                                    if(((Boss) e).isUnique())
-                                    {
-                                        arena.unique_exist = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(arena.scenario == null)
-                            {
-                                if(arena.bossCount >= Reflexioner.getBoss_delay())
-                                {                            
-                                    arena.bossCount = 0;
-                                    if(! arena.unique_exist)
-                                    {
-                                        for(int i=0; i<arena.enemies.size(); i++)
-                                        {
-                                            arena.newBoom = new OvalBoom(7);
-                                            ((OvalBoom) arena.newBoom).setMaker(i);
-                                            arena.newBoom.loadImage(file_path);
-                                            arena.newBoom.setX(arena.enemies.get(i).getX());
-                                            arena.newBoom.setY(arena.enemies.get(i).getY());
-                                            arena.booms.add(arena.newBoom);
-                                            SoundCache.play("boom");
-                                        }
-                                        arena.enemies.clear();
-                                        newBoss = Boss.getNewInstance(file_path, difficulty, true);                                        
-                                        arena.enemies.add(newBoss);
-                                    }                            
-                                }
-                                else bossCount = bossCount + 1;
-                            }
-                            //System.out.println(ourEnemy.size());
-                            for(int i=0; i<arena.ourEnemy.size(); i++)
-                            {
-                                target_enemy = arena.ourEnemy.get(i);
-                                target_enemy.update();
-                                if(target_enemy instanceof Boss)
-                                {
-                                    newBoss = (Boss) target_enemy;
-                                    
-                                    
-                                    if(newBoss.getBeam_energy() >= newBoss.getBeam_std())
-                                    {
-                                        ((Boss) target_enemy).setBeam_energy(0 - (int)(Math.random() * 100));                                            
-                                        arena.missile.addAll(((Boss)target_enemy).shootBeam(arena.difficulty, i, arena.spaceShip));
-                                    }
-                                    else if((newBoss.getBeam_energy() <= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 9.5)))
-                                            && (newBoss.getBeam_energy() >= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 8.5))))
-                                    {
-                                        target_boom = new CircleBoom(20);
-                                        ((OvalBoom) target_boom).setR(20);
-                                        ((OvalBoom) target_boom).setRx(1);
-                                        ((OvalBoom) target_boom).setHp(20);                                            
-                                        target_boom.setX(target_enemy.getX());
-                                        target_boom.setY(target_enemy.getY());
-                                        ((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
-                                        target_boom.loadImage(arena.file_path);
-                                        arena.booms.add(target_boom);
-                                        SoundCache.play("boom");
-                                    }
-                                }
-                                if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
-                                {
-                                    arena.missile.addAll(target_enemy.fire(arena.difficulty, i, arena.spaceShip, arena.enemies, arena.file_path));
-                                }
-                            }
-                            for (int i = 0; i < arena.enemies.size(); i++)
-                            {
-                                target_enemy = arena.enemies.get(i);
-                                target_enemy.update();
-                                //System.out.println(enemies.get(i).ready_to_fire);
-                                if(target_enemy instanceof Boss)
-                                {
-                                    newBoss = (Boss) target_enemy;
-                                    
-                                    
-                                    if(newBoss.getBeam_energy() >= newBoss.getBeam_std())
-                                    {
-                                        ((Boss)target_enemy).setBeam_energy(0 - (int)(Math.random() * 100));                                            
-                                        arena.missile.addAll(((Boss) target_enemy).shootBeam(arena.difficulty, i, arena.spaceShip));
-                                    }
-                                    else if((newBoss.getBeam_energy() <= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 9.5)))
-                                            && (newBoss.getBeam_energy() >= (newBoss.getBeam_std() - (newBoss.getBeam_std() / 8.5))))
-                                    {
-                                        target_boom = new CircleBoom(20);
-                                        ((OvalBoom) target_boom).setR(20);
-                                        ((OvalBoom) target_boom).setRx(1);
-                                        ((OvalBoom) target_boom).setHp(20);                                            
-                                        target_boom.setX(target_enemy.getX());
-                                        target_boom.setY(target_enemy.getY());
-                                        ((OvalBoom) target_boom).setColor(Reflexioner.color_spaceShip_missile);
-                                        target_boom.loadImage(arena.file_path);
-                                        arena.booms.add(target_boom);
-                                        SoundCache.play("boom");
-                                    }
-                                }
-                                if (target_enemy.getEnergy() >= target_enemy.getMax_energy())
-                                {
-                                    arena.missile.addAll(target_enemy.fire(arena.difficulty, i, arena.spaceShip, arena.enemies, arena.file_path));
-                                    if(target_enemy instanceof SealedEnemy)
-                                    {
-                                        arena.newBoom = new OvalBoom();
-                                        ((OvalBoom) arena.newBoom).setMaker(i);
-                                        arena.newBoom.loadImage(arena.file_path);
-                                        arena.newBoom.setX(target_enemy.getX());
-                                        arena.newBoom.setY(target_enemy.getY());
-                                        ((OvalBoom) arena.newBoom).setRx((int)Math.round(target_enemy.getR() * 0.3));
-                                        arena.booms.add(arena.newBoom);
-                                        SoundCache.play("boom");
-                                    }
-                                }
-                                    
-                            }
-                        } 
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }
-                        for (int i = 0; i < arena.booms.size(); i++)
-                        {
-                            try
-                            {
-                                arena.booms.get(i).update();
-                            } 
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        k = 0;
-                        while (k < arena.booms.size())
-                        {
-                            if (arena.booms.get(k).getHp() <= 0)
-                            {
-                                arena.booms.remove(k);
-                            } 
-                            else
-                                k++;
-                        }
-                        k = 0;
-                        while (k < missile.size())
-                        {                            
-                            target_missile = missile.get(k);
-                            if (! missile.get(k).isLaunched())
-                            {
-                                if(! (target_missile instanceof Beam))
-                                {
-                                    arena.newBoom = new OvalBoom();
-                                    ((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
-                                    arena.newBoom.loadImage(file_path);
-                                    arena.newBoom.setX(target_missile.getX());
-                                    arena.newBoom.setY(target_missile.getY());
-                                    ((OvalBoom) arena.newBoom).setRx(4);
-                                    arena.booms.add(newBoom);
-                                }
-                                arena.missile.remove(k);        
-                                SoundCache.play("boom");
-                            } 
-                            else if (arena.missile.get(k).getHp() <= 0)
-                            {
-                                if(! (target_missile instanceof Beam))
-                                {
-                                    arena.newBoom = new OvalBoom();
-                                    ((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
-                                    arena.newBoom.loadImage(file_path);
-                                    arena.newBoom.setX(target_missile.getX());
-                                    arena.newBoom.setY(target_missile.getY());
-                                    ((OvalBoom) arena.newBoom).setRx(4);
-                                    arena.booms.add(arena.newBoom);
-                                }
-                                if(arena.missile.get(k) instanceof EnemyMissile)
-                                {
-                                    getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
-                                    try
-                                    {
-                                        while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
-                                        {
-                                            getEnemies.remove(0);
-                                        }
-                                    } 
-                                    catch (Exception e)
-                                    {
-                                        
-                                    }
-                                    arena.enemies.addAll(getEnemies);
-                                }
-                                else if(arena.missile.get(k) instanceof HelperSpread)
-                                {
-                                    getEnemies = ((HelperSpread) arena.missile.get(k)).open(arena.spaceShip, arena.difficulty_mode, arena.file_path);
-                                    try
-                                    {
-                                        while(getEnemies.size() + arena.ourEnemy.size() > Reflexioner.max_enemies)
-                                        {
-                                            getEnemies.remove(0);
-                                        }
-                                    } 
-                                    catch (Exception e)
-                                    {
-                                        
-                                    }
-                                    arena.ourEnemy.addAll(getEnemies);
-                                }
-                                arena.missile.remove(k);            
-                                SoundCache.play("boom");
-                            } 
-                            else if(((target_missile instanceof GuidedMissile)) 
-                                    && (target_missile.getX() < -500 || target_missile.getX() >= Arena.maxWidth() + 500
-                                || target_missile.getY() < -500 || target_missile.getY() >= Arena.maxHeight() + 500))
-                            {
-                                if(arena.missile.get(k) instanceof EnemyMissile)
-                                {
-                                    List<Enemy> getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
-                                    try
-                                    {
-                                        while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
-                                        {
-                                            getEnemies.remove(0);
-                                        }
-                                    } 
-                                    catch (Exception e)
-                                    {
-                                        
-                                    }
-                                    arena.enemies.addAll(getEnemies);
-                                }
-                                arena.missile.remove(k);
-                            }
-                            else if((! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
-                                &&    (target_missile.getX() < -100 || target_missile.getX() >= Arena.maxWidth() + 100
-                                || target_missile.getY() < -100 || target_missile.getY() >= Arena.maxHeight() + 100))
-                            {
-                                if(arena.missile.get(k) instanceof EnemyMissile)
-                                {
-                                    List<Enemy> getEnemies = ((EnemyMissile) arena.missile.get(k)).getEnemies();
-                                    try
-                                    {
-                                        while(getEnemies.size() + arena.enemies.size() > Reflexioner.max_enemies)
-                                        {
-                                            getEnemies.remove(0);
-                                        }
-                                    } 
-                                    catch (Exception e)
-                                    {
-                                        
-                                    }
-                                    arena.enemies.addAll(getEnemies);
-                                }
-                                arena.missile.remove(k);
-                            }
-                            else k++;
-                        }
-                        k = 0;
-                        while (k < arena.items.size())
-                        {
-                            target_item = arena.items.get(k);
-                            if (target_item.getHp() <= 0)
-                            {
-                                arena.items.remove(k);                            
-                            } 
-                            else if(target_item.getX() < -10 || target_item.getX() >= Arena.maxWidth() + 10
-                                    || target_item.getY() < -10 || target_item.getY() >= Arena.maxHeight() + 10)
-                            {
-                                arena.items.remove(k);
-                            }
-                            else k++;
-                        }
-                        k = 0;
-                        while (k < arena.enemies.size())
-                        {
-                            target_enemy = arena.enemies.get(k);
-                            if (target_enemy.getHp() <= 0)
-                            {                            
-                                arena.spaceShip.setPoint(arena.spaceShip.getPoint().add(Lint.big((long) Math.round(target_enemy.getMax_hp() * arena.difficulty_mode))));
-                                newItemProbability = Math.random();
-                                newItemCount = target_enemy.makeItemCount(arena.difficulty, arena.difficulty_delay, newItemProbability);
-                                
-                                newItemCenter = newItemCount / 2.0;
-                                for(int it=0; it<newItemCount; it++)
-                                {
-                                    newItem = new Item((int)(Math.random() * 10), arena.file_path);
-                                    newItem.setX(target_enemy.getX() + (int)Math.round((it - newItemCenter) * 20));
-                                    newItem.setY(target_enemy.getY());
-                                    arena.items.add(newItem);
-                                }
-                                
-                                if(target_enemy instanceof Boss)
-                                {
-                                    arena.newBoom = new OvalBoom(10);
-                                    ((OvalBoom) arena.newBoom).setMaker(k);
-                                    arena.newBoom.loadImage(arena.file_path);
-                                }
-                                else
-                                {
-                                    arena.newBoom = new OvalBoom(7);
-                                    ((OvalBoom) arena.newBoom).setMaker(k);
-                                    arena.newBoom.loadImage(arena.file_path);
-                                }
-                                arena.newBoom.setX(target_enemy.getX());
-                                arena.newBoom.setY(target_enemy.getY());
-                                arena.booms.add(arena.newBoom);
-                                arena.enemies.remove(k);    
-                                SoundCache.play("boom");
-                                arena.catchEnemies = arena.catchEnemies.add(Lint.big(1));
-                            } 
-                            else k++;
-                        }
-                        k = 0;
-                        while (k < arena.ourEnemy.size())
-                        {
-                            target_enemy = arena.ourEnemy.get(k);
-                            if (target_enemy.getHp() <= 0)
-                            {                                                    
-                                if(target_enemy instanceof Boss)
-                                {
-                                    arena.newBoom = new OvalBoom(10);
-                                    ((OvalBoom) arena.newBoom).setMaker(arena.missile.get(k).getOwner());
-                                    arena.newBoom.loadImage(arena.file_path);
-                                }
-                                else
-                                {
-                                    arena.newBoom = new OvalBoom(7);
-                                    ((OvalBoom) arena.newBoom).setMaker(k);
-                                    arena.newBoom.loadImage(arena.file_path);
-                                }
-                                arena.newBoom.setX(target_enemy.getX());
-                                arena.newBoom.setY(target_enemy.getY());
-                                arena.booms.add(arena.newBoom);
-                                arena.ourEnemy.remove(k);    
-                                SoundCache.play("boom");
-                            } 
-                            else k++;
-                        }
-                        for(int i=0; i<arena.items.size(); i++)
-                        {
-                            try
-                            {
-                                if(Arena.autoControl)
-                                {
-                                    arena.items.get(i).update(arena.spaceShip.getX(), arena.spaceShip.getY());
-                                }
-                                else
-                                {
-                                    arena.items.get(i).update();
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        for (int i = 0; i < arena.missile.size(); i++)
-                        {
-                            try
-                            {
-                                arena.missile.get(i).update();
-                            } 
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        try
-                        {
-                            arena.spaceShip.update();
-                        } 
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }
-                        if(arena.difficulty == 100)
-                        {
-                            if(arena.testEnemy.size() >= 1)
-                            {                
-                                arena.enemies.addAll(arena.testEnemy);
-                            }
-                        }
-                        try
-                        {
-                            if((! arena.unique_exist) && (arena.scenario == null))
-                            {
-                                newEnemyProbability = Math.random();
-                                if(arena.difficulty < arena.difficulty_delay)
-                                {                                    
-                                    if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newEnemy = new Enemy(arena.file_path);
-                                        newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 200));
-                                        newEnemy.setMax_hp(newEnemy.getHp());
-                                        newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000.0));                                        
-                                        newEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        
-                                        arena.enemies.add(newEnemy);
-                                    }
-                                }
-                                else if(arena.difficulty < arena.difficulty_delay * 2)
-                                {
-                                    if (newEnemyProbability >= 0.98 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newBigEnemy = new BigEnemy(arena.file_path);
-                                        newBigEnemy.setGuide(true);
-                                        newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
-                                        newBigEnemy.setMax_hp(newBigEnemy.getHp());
-                                        newBigEnemy.setMax_energy(200 - (int) (arena.difficulty / 1000));
-                                        newBigEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newBigEnemy);
-                                    }
-                                    else if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newBigEnemy = new BigEnemy(arena.file_path);
-                                        newBigEnemy.setGuide(false);
-                                        newBigEnemy.setMissiles(1 + (int)Math.round(Math.random() * 1.5));
-                                        newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newBigEnemy.setHp((int)((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
-                                        newBigEnemy.setMax_hp(newBigEnemy.getHp());
-                                        newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newBigEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newBigEnemy);
-                                    }
-                                    else if (newEnemyProbability >= 0.90 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newEnemy = new Enemy(arena.file_path);
-                                        newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newEnemy.setHp((int)((newEnemy.getHp() + (int) (arena.difficulty / 200)) * 1.25));
-                                        newEnemy.setMax_hp(newEnemy.getHp());
-                                        newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newEnemy);
-                                    }
-                                }
-                                else
-                                {
-                                    if (newEnemyProbability >= 0.99 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newEnemy = new SealedEnemy(arena.file_path);
-                                        newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 300));
-                                        newEnemy.setMax_hp(newEnemy.getHp());
-                                        newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        ((SealedEnemy) newEnemy).setSeal_weakness(50 - (int)(arena.difficulty / 100000.0));
-                                        if(((SealedEnemy) newEnemy).getSeal_weakness() < 20) ((SealedEnemy) newEnemy).setSeal_weakness(20); 
-                                        if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newEnemy);
-                                    }
-                                    else if (newEnemyProbability >= 0.97 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newBigEnemy = new BigEnemy(arena.file_path);
-                                        newBigEnemy.setGuide(true);
-                                        newBigEnemy.setMissiles(1 + (int)Math.round(Math.random() * 1.5));
-                                        newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newBigEnemy.setHp((newBigEnemy.getHp() + (int) (arena.difficulty / 200)) * 2);
-                                        newBigEnemy.setMax_hp(newBigEnemy.getHp());
-                                        newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newBigEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newBigEnemy);
-                                    }
-                                    else if (newEnemyProbability >= 0.95 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newBigEnemy = new BigEnemy(arena.file_path);
-                                        newBigEnemy.setMissiles(2 + (int) Math.round(Math.random() * 2.5));
-                                        newBigEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newBigEnemy.setHp((newBigEnemy.getHp() + (int) (difficulty / 200)) * 2);
-                                        newBigEnemy.setMax_hp(newBigEnemy.getHp());
-                                        newBigEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newBigEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newBigEnemy.getMax_energy() < 100) newBigEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newBigEnemy.setMax_energy(newBigEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newBigEnemy);
-                                    }
-                                    else if (newEnemyProbability >= 0.90 && arena.enemies.size() <= Reflexioner.max_enemies)
-                                    {
-                                        newEnemy = new Enemy(arena.file_path);
-                                        newEnemy.setX((int) (Math.random() * Arena.maxWidth()));
-                                        newEnemy.setHp(newEnemy.getHp() + (int) (arena.difficulty / 200));
-                                        newEnemy.setMax_hp(newEnemy.getHp());
-                                        newEnemy.setMax_energy(200 - (int)(arena.difficulty / 1000));
-                                        newEnemy.setDamage(50 + (arena.difficulty / 100));
-                                        if(newEnemy.getMax_energy() < 100) newEnemy.setMax_energy(100);
-                                        if(arena.difficulty_mode >= 3.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        if(arena.difficulty_mode >= 4.0) newEnemy.setMax_energy(newEnemy.getMax_energy() / 2);
-                                        arena.enemies.add(newEnemy);
-                                    }
-                                }
-                            }
-                            else if(arena.scenario != null)
-                            {
-                                if(arena.scenario.getPatterns() != null && (! arena.unique_exist))
-                                {
-                                    for(EnemyPattern s : arena.scenario.getPatterns())
-                                    {
-                                        if((arena.difficulty >= s.getMin_delay().longValue()) && (arena.difficulty <= s.getMax_delay().longValue() || s.getMax_delay().longValue() <= -1))
-                                        {
-                                            if(Math.random() <= s.getRatio().doubleValue() && arena.enemies.size() <= arena.scenario.getEnemyLimit().intValue())
-                                            {
-                                                newEnemy = s.createEnemy(arena.file_path, arena.difficulty);
-                                                newEnemy.loadImage(arena.file_path);
-                                                newEnemy.setDamage(Math.round(newEnemy.getDamage() + (s.getAddDamageRatio().doubleValue() * arena.difficulty)));
-                                                newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (s.getAddHPRatio().doubleValue() * arena.difficulty)));
-                                                newEnemy.setHp(newEnemy.getMax_hp());
-                                                newEnemy.init();
-                                                arena.enemies.add(newEnemy);
-                                            }
-                                        }
-                                    }
-                                }
-                                if(arena.scenario.getDefaultPattern() != null && (! arena.unique_exist))
-                                {
-                                    if(Math.random() <= arena.scenario.getDefaultPattern().getRatio() && arena.enemies.size() <= arena.scenario.getEnemyLimit())
-                                    {
-                                        newEnemy = arena.scenario.getDefaultPattern().createEnemy(arena.file_path, arena.difficulty);
-                                        newEnemy.loadImage(arena.file_path);
-                                        newEnemy.setDamage(Math.round(newEnemy.getDamage() + (scenario.getDefaultPattern().getAddDamageRatio() * arena.difficulty)));
-                                        newEnemy.setMax_hp(Math.round(newEnemy.getMax_hp() + (scenario.getDefaultPattern().getAddHPRatio()     * arena.difficulty)));
-                                        newEnemy.setHp(newEnemy.getMax_hp());
-                                        newEnemy.init();
-                                        arena.enemies.add(newEnemy);
-                                    }
-                                }
-                            }
-                        } 
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }
-                        for (int j = 0; j < arena.missile.size(); j++)
-                        {
-                            //System.out.println(j + " : " + missile.get(j).getOwner());
-                            try
-                            {
-                                target_missile = arena.missile.get(j);
-                            } 
-                            catch (Exception e1)
-                            {
-                                e1.printStackTrace();
-                                continue;
-                            }
-                            
-                            for (int i = 0; i < arena.enemies.size(); i++)
-                            {
-                                try
-                                {
-                                    target_enemy = arena.enemies.get(i);
-                                    if (target_missile.getOwner() == Missile.SPACESHIP && target_enemy.collapse(target_missile))
-                                    {
-                                        target_enemy.setHp(target_enemy.getHp() - target_missile.getDamage());
-                                        if(target_missile instanceof PulseMissile)
-                                        {
-                                            target_boom = new OvalBoom(target_missile.getW());
-                                            ((OvalBoom) target_boom).setMaker(missile.get(j).getOwner());
-                                            target_boom.loadImage(arena.file_path);
-                                            target_boom.setX(target_missile.getX());
-                                            target_boom.setY(target_missile.getY());
-                                            arena.booms.add(target_boom);
-                                            SoundCache.play("boom");
-                                            target_missile.setHp(0);
-                                        }
-                                        else if(target_missile instanceof ReflexMissile)
-                                        {
-                                            target_missile.setHp(target_missile.getHp() - 100);
-                                            target_missile.setDy(-1 * target_missile.getDy());
-                                            target_boom = new OvalBoom(3);
-                                            ((OvalBoom) target_boom).setMaker(missile.get(j).getOwner());
-                                            target_boom.loadImage(arena.file_path);
-                                            target_boom.setX(target_missile.getX());
-                                            target_boom.setY(target_missile.getY());
-                                            arena.booms.add(target_boom);
-                                            SoundCache.play("boom");
-                                            if(((ReflexMissile) target_missile).getDx() == 0)
-                                            {
-                                                if(Math.random() >= 0.5)
-                                                {
-                                                    ((ReflexMissile) target_missile).setDx(Reflexioner.getSpeed());
-                                                }
-                                                else
-                                                {
-                                                    ((ReflexMissile) target_missile).setDx(-1 * Reflexioner.getSpeed());
-                                                }
-                                            }
-                                        }
-                                        else if(! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
-                                        {
-                                            target_missile.setHp(0);
-                                        }
-                                    }
-                                } 
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-                            }
-                            try
-                            {
-                                if (target_missile.getOwner() != Missile.SPACESHIP && arena.spaceShip.collapse(target_missile))
-                                {
-                                    arena.spaceShip.setHp(arena.spaceShip.getHp() - target_missile.getDamage());
-                                    if(! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
-                                        target_missile.setHp(0);
-                                }
-                            } 
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }    
-                            try
-                            {
-                                for(int l=0; l<arena.ourEnemy.size(); l++)
-                                if(target_missile.getOwner() != Missile.SPACESHIP && arena.ourEnemy.get(l).collapse(target_missile))
-                                {
-                                    arena.ourEnemy.get(l).setHp(arena.ourEnemy.get(l).getHp() - target_missile.getDamage());
-                                    if(! ((target_missile instanceof Beam) || (target_missile instanceof Raser)))
-                                        target_missile.setHp(0);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        
-                        for (int i = 0; i < arena.enemies.size(); i++)
-                        {
-                            try
-                            {
-                                target_enemy = arena.enemies.get(i);
-                                if(arena.spaceShip.collapse(target_enemy))
-                                {
-                                    arena.spaceShip.setHp(arena.spaceShip.getHp() - target_enemy.getHp());
-                                    arena.newBoom = new OvalBoom(7);
-                                    ((OvalBoom) arena.newBoom).setMaker(i);
-                                    arena.newBoom.loadImage(arena.file_path);
-                                    arena.newBoom.setX(target_enemy.getX());
-                                    arena.newBoom.setY(target_enemy.getY());
-                                    arena.booms.add(arena.newBoom);
-                                    SoundCache.play("boom");
-                                    target_enemy.setHp(0);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        for(int i=0; i<arena.items.size(); i++)
-                        {
-                            try
-                            {
-                                if(arena.spaceShip.collapse(arena.items.get(i)))
-                                {
-                                    arena.items.get(i).setHp(0);
-                                    arena.newBoom = new ItemUseBoom(6);
-                                    arena.newBoom.loadImage(arena.file_path);
-                                    arena.newBoom.setX(arena.items.get(i).getX());
-                                    arena.newBoom.setY(arena.items.get(i).getY());
-                                    arena.booms.add(arena.newBoom);
-                                    arena.catchItems = arena.catchItems.add(Lint.big(1));
-                                    applyItem(arena.items.get(i).getType());
-                                    SoundCache.play("takeitem");
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        try
-                        {
-                            if(arena.spaceShip.getHp() <= 0 && arena.finish_count < 0)
-                            {
-                                for(int l=0; l<arena.ourEnemy.size(); l++)
-                                {
-                                    arena.ourEnemy.get(l).setHp(0);
-                                }
-                                arena.newBoom = new OvalBoom(arena.spaceShip.getR() / 2, Missile.SPACESHIP);
-                                arena.newBoom.setX(arena.spaceShip.getX());
-                                arena.newBoom.setY(arena.spaceShip.getY());
-                                arena.newBoom.loadImage(arena.file_path);
-                                arena.booms.add(arena.newBoom);
-                                SoundCache.play("boom");
-                                arena.finish_count = (arena.spaceShip.getR() / 2) + 5;
-                            }
-                        }
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }
-                        
-                        
-                        if(arena.finish_count == 0)
-                        {
-                            arena.game_finish();
-                        }
-                        arena.decreaseFinishCount();
-                        
-                        if(arena.scenario != null)
-                        {
-                        	if((Lint.big(0).compareTo(arena.scenario.getDeadLine()) <= 0) && Lint.big(arena.difficulty).compareTo(arena.scenario.getDeadLine()) >= 1)
-                            {
-                                arena.game_finish();
-                            }
-                        }
-                        
-                        try
-                        {
-                            if (arena.sp != null)
-                                arena.sp.update(arena.spaceShip.getHp(), arena.spaceShip.getMax_hp(), arena.spaceShip.getPoint(), arena.spaceShip.getEnergy(), arena.spaceShip.getMax_energy());
-                        } 
-                        catch (Exception e1)
-                        {
-                            e1.printStackTrace();
-                        }    
-                        
-                        int decoSize = arena.decorates.size();
-                        if(decoSize <= arena.decorationMax && Math.random() >= (0.7 - (arena.difficulty / 100000.0)))
-                        {
-                            int decoSpeed = (int) (getPoint().divide(decorationPointUnit).longValue() * 3);
-                            if(decoSpeed > 50) decoSpeed = 50;
-                            decoSpeed = (int)((3 * Math.random()) + decoSpeed + (arena.difficulty / 500));
-                            if(decoSpeed > 100) decoSpeed = 100;
-                            arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, decoSpeed, (int)(3 * Math.random() + 1), arena.file_path));
-                            if(arena.decorationMax - decoSize >= 6)
-                            {
-                                for(int i=0; i<5; i++)
-                                {
-                                    arena.decorates.add(new ReflexDecorate("star", (int) (Math.random() * Arena.maxWidth()), 0, decoSpeed, (int)(3 * Math.random() + 1), arena.file_path));
-                                }
-                            }
-                        }
-                        for(int i=0; i<arena.decorates.size(); i++)
-                        {
-                            if(arena.decorates.get(i) != null)
-                            {
-                                arena.decorates.get(i).update();
-                                if(arena.decorates.get(i).getX() < -10 || arena.decorates.get(i).getX() > Arena.maxWidth()
-                                        || arena.decorates.get(i).getY() < -10 || arena.decorates.get(i).getY() > Arena.maxHeight())
-                                    arena.decorates.get(i).setHp(0);
-                            }
-                        }
-                        k = 0;
-                        while (k < arena.decorates.size())
-                        {
-                            if (arena.decorates.get(k).getHp() <= 0)
-                            {
-                                arena.decorates.remove(k);
-                            } 
-                            else
-                                k++;
-                        }
-                        
-                        if(arena.difficulty < (Integer.MAX_VALUE * (long)100) - 1)
-                        {
-                            if(! arena.unique_exist)
-                            {
-                                arena.difficulty = arena.difficulty + 1;
-                            }
-                        }
-                        
-                        if(arena.timeout >= 0)
-                        {
-                            if(arena.difficulty >= arena.timeout)
-                            {
-                                arena.game_finish();
-                            }
-                        }
-                        
-                        //showPlayerInfo();
-                        if(Reflexioner.max_enemies <= 30 && arena.difficulty % 5000 == 0)
-                        {
-                            Reflexioner.max_enemies += 1;
-                        }
-                        
-                        if(arena.spaceShip.getFire_delay() >= 1)
-                        {
-                            arena.spaceShip.setFire_delay(arena.spaceShip.getFire_delay() - 1);
-                        }
-                        
-                        for(int i=0; i<arena.enemies.size(); i++)
-                        {
-                            unique_index = -2;
-                            if(arena.enemies.get(i) instanceof Boss)
-                            {
-                                if(((Boss) arena.enemies.get(i)).isUnique())
-                                {
-                                    //System.out.println(enemies.get(i) + ", " + ((Boss) enemies.get(i)).isUnique());
-                                    unique_index = i;
-                                    break;
-                                }
-                            }
-                        }
-                        if(unique_index >= 0)
-                        {
-                            for(int i=0; i<arena.enemies.size(); i++)
-                            {
-                                if(i != unique_index) 
-                                {
-                                    if(! arena.enemies.get(i).isOwn_unique())
-                                    {
-                                        arena.enemies.get(i).setHp(0);
-                                    }
-                                }
-                            }
-                        }
-                        
-                        if(! arena.unique_exist)
-                        {
-                            for(int i=0; i<arena.enemies.size(); i++)
-                            {
-                                if(arena.enemies.get(i).isOwn_unique())
-                                {
-                                    arena.enemies.get(i).setHp(0);
-                                }
-                            }
-                        }
-                        
-                        if(Reflexioner.replay_save)
-                        {
-                            if(arena.replay.getScenes().size() < Integer.MAX_VALUE)
-                            {                                
-                                if(Reflexioner.replay_now_delay == 0)
-                                {
-                                    arena.replay.addScene(nowState(true));
-                                }
-                                Reflexioner.replay_now_delay++;
-                                if(Reflexioner.replay_now_delay >= Reflexioner.replay_interval)
-                                {
-                                    Reflexioner.replay_now_delay = 0;
-                                }
-                            }
-                        }
-                        
-                        if(Arena.swift_delay >= 1)
-                        {
-                            Arena.swift_delay--;
-                        }
-                                                
-                        if(Arena.autoControl)
-                        {
-                            if(arena.active && (! arena.game_pause))
-                            {
-                                double controlRandom = Math.random();
-                                boolean boss_exist = false;
-                                int unders = 0;
-                                if(arena.spaceShip.getEnergy() / (double) arena.spaceShip.getMax_energy() >= 0.5)
-                                {
-                                    controlRandom = controlRandom + 0.4;
-                                }
-                                else if(spaceShip.getEnergy() / (double)spaceShip.getMax_energy() >= 0.2)
-                                {
-                                    controlRandom = controlRandom + 0.2;
-                                }
-                                for(Enemy e : arena.enemies)
-                                {
-                                    if(e != null)
-                                    {
-                                        if(Math.abs(arena.spaceShip.getX() - e.getX()) < 2)
-                                        {
-                                            unders++;
-                                        }
-                                        if(e instanceof Boss)
-                                        {
-                                            boss_exist = true;
-                                        }
-                                    }
-                                }
-                                if(controlRandom >= 1.7 - arena.spaceShip.ai_advantage_mode3(arena.enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) arena.spaceShip.setMode(3);
-                                else if(controlRandom >= 1.7 - arena.spaceShip.ai_advantage_mode2(arena.enemies.size(), Reflexioner.max_enemies, unders, boss_exist)) arena.spaceShip.setMode(2);
-                                else arena.spaceShip.setMode(1);
-                                if(arena.spaceShip.getFire_delay() <= 0)
-                                {
-                                    arena.fired_missile = arena.spaceShip.fire();
-                                    if(arena.fired_missile != null)
-                                        arena.missile.addAll(arena.fired_missile);
-                                    //System.out.println(spaceShip.fire());
-                                    arena.spaceShip.setFire_delay(arena.spaceShip.afterFireDelay());
-                                }
-                                
-                                if(arena.autoControlDelay <= 0)
-                                {
-                                    arena.control_auto();
-                                    arena.autoControlDelay = 3;
-                                }
-                                else arena.autoControlDelay--;
-                            }
-                        }
-                        else if(arena.autoFire)
-                        {
-                            if(arena.spaceShip.getFire_delay() <= 0)
-                            {
-                                arena.fired_missile = arena.spaceShip.fire();
-                                if(arena.fired_missile != null)
-                                    arena.missile.addAll(arena.fired_missile);
-                                //System.out.println(spaceShip.fire());
-                                arena.spaceShip.setFire_delay(arena.spaceShip.afterFireDelay());
-                            }
-                        }
-                        if(arena.messages.size() >= 1)
-                        {
-                            try
-                            {
-                                if(arena.message_delay <= 0)
-                                {
-                                    arena.messages.remove(0);
-                                    arena.message_delay = 50;
-                                }
-                                else
-                                {
-                                    arena.message_delay--;
-                                }
-                            } 
-                            catch (Exception e)
-                            {
-                                
-                            }
-                        }
+                        scenario.actPhase(arena, this);
                     }
                     else if(arena.pause_left >= 1)
                     {
@@ -2495,7 +1601,19 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     {
         this.boss_exist = boss_exist;
     }
-    public String getAuthcode()
+    public boolean isUnique_exist() {
+		return unique_exist;
+	}
+	public void setUnique_exist(boolean unique_exist) {
+		this.unique_exist = unique_exist;
+	}
+	public UserDefinedShip getUserDefinedShip() {
+		return userDefinedShip;
+	}
+	public void setUserDefinedShip(UserDefinedShip userDefinedShip) {
+		this.userDefinedShip = userDefinedShip;
+	}
+	public String getAuthcode()
     {
         return authcode;
     }
@@ -2519,7 +1637,133 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     {
         this.difficulty_delay = difficulty_delay;
     }
-    public void applyState(ReflexReplay loadReplay, int index)
+    public List<ReflexDecorate> getDecorates() {
+		return decorates;
+	}
+	public void setDecorates(List<ReflexDecorate> decorates) {
+		this.decorates = decorates;
+	}
+	public List<Enemy> getOurEnemy() {
+		return ourEnemy;
+	}
+	public void setOurEnemy(List<Enemy> ourEnemy) {
+		this.ourEnemy = ourEnemy;
+	}
+	public Vector<String> getMessages() {
+		return messages;
+	}
+	public void setMessages(Vector<String> messages) {
+		this.messages = messages;
+	}
+	public boolean isHud() {
+		return hud;
+	}
+	public void setHud(boolean hud) {
+		this.hud = hud;
+	}
+	public int getMessage_delay() {
+		return message_delay;
+	}
+	public void setMessage_delay(int message_delay) {
+		this.message_delay = message_delay;
+	}
+	public int getGame_xspeed() {
+		return game_xspeed;
+	}
+	public void setGame_xspeed(int game_xspeed) {
+		this.game_xspeed = game_xspeed;
+	}
+	public int getGetKeyCode() {
+		return getKeyCode;
+	}
+	public void setGetKeyCode(int getKeyCode) {
+		this.getKeyCode = getKeyCode;
+	}
+	public int getDecorationMax() {
+		return decorationMax;
+	}
+	public void setDecorationMax(int decorationMax) {
+		this.decorationMax = decorationMax;
+	}
+	public BigInteger getDecorationPointUnit() {
+		return decorationPointUnit;
+	}
+	public void setDecorationPointUnit(BigInteger decorationPointUnit) {
+		this.decorationPointUnit = decorationPointUnit;
+	}
+	public boolean isAuthority_mode() {
+		return authority_mode;
+	}
+	public void setAuthority_mode(boolean authority_mode) {
+		this.authority_mode = authority_mode;
+	}
+	public static boolean isAutoControl() {
+		return autoControl;
+	}
+	public static void setAutoControl(boolean autoControl) {
+		Arena.autoControl = autoControl;
+	}
+	public BufferedImage getBackgroundImage() {
+		return backgroundImage;
+	}
+	public void setBackgroundImage(BufferedImage backgroundImage) {
+		this.backgroundImage = backgroundImage;
+	}
+	public BigInteger getCatchEnemies() {
+		return catchEnemies;
+	}
+	public void setCatchEnemies(BigInteger catchEnemies) {
+		this.catchEnemies = catchEnemies;
+	}
+	public BigInteger getCatchItems() {
+		return catchItems;
+	}
+	public void setCatchItems(BigInteger catchItems) {
+		this.catchItems = catchItems;
+	}
+	public int getPlayer_type() {
+		return player_type;
+	}
+	public void setPlayer_type(int player_type) {
+		this.player_type = player_type;
+	}
+	public List<Missile> getFired_missile() {
+		return fired_missile;
+	}
+	public void setFired_missile(List<Missile> fired_missile) {
+		this.fired_missile = fired_missile;
+	}
+	public long getFinish_count() {
+		return finish_count;
+	}
+	public void setFinish_count(long finish_count) {
+		this.finish_count = finish_count;
+	}
+	public static int getSwift_delay() {
+		return swift_delay;
+	}
+	public static void setSwift_delay(int swift_delay) {
+		Arena.swift_delay = swift_delay;
+	}
+	public int getAutoControlDelay() {
+		return autoControlDelay;
+	}
+	public void setAutoControlDelay(int autoControlDelay) {
+		this.autoControlDelay = autoControlDelay;
+	}
+	public int[] getStartItems() {
+		return startItems;
+	}
+	public void setStartItems(int[] startItems) {
+		this.startItems = startItems;
+	}
+	public AReflexReplay getReplay() {
+		return replay;
+	}
+	public void setReplay(AReflexReplay replay) {
+		this.replay = replay;
+	}
+	public void applyState(ReflexReplay loadReplay, int index)
     {
         pause();
         try

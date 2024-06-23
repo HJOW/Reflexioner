@@ -28,6 +28,7 @@ import java.util.zip.GZIPInputStream;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -143,6 +144,7 @@ public class CodeChecker implements ActionListener, WindowListener, MouseListene
         catch(Exception e)
         {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(getWindow(), setting.trans("Error") + " - " + e.getMessage());
             return null;
         }
         finally

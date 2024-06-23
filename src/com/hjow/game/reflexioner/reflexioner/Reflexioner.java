@@ -3087,18 +3087,15 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         finish_ta.setText("");
         finishDialog.setVisible(true);
         
-        if(arena.getScenario() != null && (! Arena.isAutoControlMode()))
+        if(arena.getScenario() != null && (! arena.getScenario().equals(ReflexScenario.defaultScenario)) && (! Arena.isAutoControlMode()))
         {
-            if(arena.getScenario() instanceof ReflexScenario)
+        	try
             {
-                try
-                {
-                    refresh_scenario(false);
-                }
-                catch(Exception e)
-                {
-                	e.printStackTrace();
-                }
+                refresh_scenario(false);
+            }
+            catch(Exception e)
+            {
+            	e.printStackTrace();
             }
         }
         SwingUtilities.invokeLater(new Runnable()
@@ -3173,7 +3170,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 finish_ta.setText(report.toString().trim());
             }            
         });        
-        arena.setScenario(null);
+        arena.setScenario(ReflexScenario.defaultScenario);
     }
     public void actionPerformed(ActionEvent e)
     {
@@ -3608,70 +3605,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             if(bt_start_today.isEnabled())
                 start(today_ship, today_difficulty, startItem, start_today_nameField.getText());
         }
-        
-        /*
-        switch(mainTab.getSelectedIndex())
-        {
-            case 1:
-                start();
-                break;
-            case 2:
-                int getSelected = start_scenarioList.getSelectedIndex();
-                if(getSelected >= 0 && getSelected < scenarios.size())
-                {
-                    selected_scenario = scenarios.get(getSelected);
-                    if(selected_scenario instanceof CReflexScenario)
-                    {
-                        if(((CReflexScenario) selected_scenario).getSpaceShip_selectable() != null)
-                        {
-                            if(((CReflexScenario) selected_scenario).getSpaceShip_selectable().booleanValue())
-                            {
-                                selected_scenario_ship = (String) start_scenario_selectShipCombo.getSelectedItem();
-                                start(selected_scenario, selected_scenario_ship);
-                            }
-                            else
-                            {
-                                start(selected_scenario);
-                            }
-                        }
-                        else
-                        {
-                            start(selected_scenario);
-                        }                        
-                    }
-                    else
-                    {
-                        start(selected_scenario);
-                    }
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(startDialog, sets.trans("Error") + " : null");
-                }
-                break;
-            case 3:
-                if(start_userDefined_isScenario.isSelected()) 
-                {
-                    AReflexScenario gets;
-                    try
-                    {
-                        gets = new AReflexScenario(start_userDefinedArea.getText());
-                        start(gets);
-                    } 
-                    catch (Exception e1)
-                    {
-                        JOptionPane.showMessageDialog(startDialog, sets.trans("Error") + " : " + e1.getMessage());
-                    }            
-                                
-                }
-                else
-                {
-                    start(start_userDefinedArea.getText());
-                }
-                break;
-        }
-        */
-        
     }
     private void loadAutoUserDefined()
     {
