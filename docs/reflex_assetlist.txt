@@ -1,0 +1,11 @@
+﻿assets/reflex_imagepack_license.txt
+assets/background.jpg
+assets/deco_default.png
+assets/default_space_w1.png
+assets/default_space_w2.png
+assets/default_space_w3.png
+assets/enemy_default.png
+assets/enemy_missile_normal.png
+assets/itemboom.png
+assets/missile_normal.png
+assets/ovalboom.png

@@ -1137,7 +1137,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         
         
         start_downloadPanel = new JPanel();
-        // mainTab.add(sets.getLang().getText(Language.DOWNLOAD_PACK), start_downloadPanel);
+        mainTab.add(sets.trans("Download Additional Assets"), start_downloadPanel);
         start_downloadPanel.setLayout(new BorderLayout());
         start_downloadPanel.setBackground(sets.getColor("ColorSelectedBack"));
         start_download_upPanel = new JPanel();
@@ -3442,7 +3442,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         else if(ob == bt_download)
         {
-            try_download_imagepack(download_url1, download_url2);
+            tryDownloadAssets(download_url1, download_url2);
         }
         else if(ob == menu_manage_uninstall)
         {
@@ -4013,7 +4013,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         return sets.trans("License") + "\n" + RunManager.r65279(results);
     }
-    private void try_download_imagepack(String url, String url2)
+    private void tryDownloadAssets(String url, String url2)
     {
         Vector<String> urlList = new Vector<String>();
         String reads = "";
@@ -4032,7 +4032,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         try
         {
             success_url = url;
-            inputStream = new URL(RunManager.r65279(url + "reflex_imagelist.txt")).openStream();
+            inputStream = new URL(RunManager.r65279(url + "reflex_assetlist.txt")).openStream();
         }
         catch(Exception e)
         {
@@ -4047,7 +4047,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             try
             {
                 success_url = url2;
-                inputStream = new URL(RunManager.r65279(url2 + "reflex_imagelist.txt")).openStream();
+                inputStream = new URL(RunManager.r65279(url2 + "reflex_assetlist.txt")).openStream();
             } 
             catch (Exception e1)
             {
