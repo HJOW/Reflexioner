@@ -235,7 +235,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     public void flushReplay()
     {
         replay = new BReflexReplay();
-        replay.setReplay_interval(new Integer(Reflexioner.replay_interval));
+        replay.setReplay_interval(new Integer(Reflexioner.replayInterval));
         System.gc();
     }
     public void addEnemy(Enemy enemy)
@@ -576,7 +576,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         message_delay = 50;
         autoFire = false;
         replay = new BReflexReplay();
-        replay.setReplay_interval(new Integer(Reflexioner.replay_interval));
+        replay.setReplay_interval(new Integer(Reflexioner.replayInterval));
         Reflexioner.replay_now_delay = 0;
         autoControlDelay = 0;
         simpleTuto = 80;
@@ -846,7 +846,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     }
     public void game_start_by_reflex()
     {
-        sp.start_findby_tab();
+        sp.startFindbyTab();
     }
     public void game_start()
     {
@@ -1944,11 +1944,11 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
     }
     public void try_save_properties(boolean details) throws Exception
     {
-        Reflexioner.try_save_properties(sets, details);
+        Reflexioner.trySaveProperties(sets, details);
     }
     public void try_apply_properties() throws Exception
     {
-        sp.try_apply_properties();
+        sp.tryApplyProperties();
     }
     public void pause_time(long time)
     {

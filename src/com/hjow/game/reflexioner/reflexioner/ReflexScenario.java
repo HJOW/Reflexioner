@@ -1282,7 +1282,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                     arena.getReplay().addScene(arena.nowState(true));
                 }
                 Reflexioner.replay_now_delay++;
-                if(Reflexioner.replay_now_delay >= Reflexioner.replay_interval)
+                if(Reflexioner.replay_now_delay >= Reflexioner.replayInterval)
                 {
                     Reflexioner.replay_now_delay = 0;
                 }

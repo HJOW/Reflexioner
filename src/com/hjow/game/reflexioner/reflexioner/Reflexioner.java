@@ -170,11 +170,11 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public static final int AUTO_WEAPON_3_HELPER_TYPE = 40;
     public static final int AUTO_WEAPON_3_HELPER_COUNT = 41;
     
-    private static boolean use_transparent = true;
+    private static boolean useTransparent = true;
     private static float transparent_opacity = 0.9f;
     
     public static boolean replay_save = false;
-    public static int replay_interval = 1;
+    public static int replayInterval = 1;
     public static int replay_now_delay = 0;
     
     public static int AUTO_LAST = -1;
@@ -1294,7 +1294,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             start_scenario_selectShipCombo.setFont(usingFont);
         start_scenario_descriptionPanel.add(start_scenario_selectShipCombo, BorderLayout.SOUTH);
         
-        refresh_scenario(true);
+        refreshScenario(true);
         
         bt_start.setForeground(sets.getColor("ColorSelectedFore"));
         bt_exit.setForeground(sets.getColor("ColorSelectedFore"));
@@ -1534,7 +1534,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         menu_file_manage.add(menu_manage_saveReplay);
         
-        menu_manage_setIntervalReplay = new JMenuItem(sets.trans("Replay Delay"));
+        menu_manage_setIntervalReplay = new JMenuItem(sets.trans("Replay Interval"));
         menu_manage_setIntervalReplay.addActionListener(this);
         menu_manage_setIntervalReplay.setBackground(sets.getColor("ColorSelectedBack"));
         menu_manage_setIntervalReplay.setForeground(sets.getColor("ColorSelectedFore"));
@@ -2260,13 +2260,13 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         autoUserDefined_labels[AUTO_WEAPON_3_SPEED].setText(sets.trans("Weapon") + " 3 " + sets.trans("Missile Speed"));
         autoUserDefined_labels[AUTO_WEAPON_3_TYPE].setText(sets.trans("Weapon") + " 3 " + sets.trans("Missile Type (normal, super, guide, reflex, reflex_perfect, beam, helper)"));
         
-        try_apply_properties();
+        tryApplyProperties();
         try
         {
             if(sets.getBool("SaveProperties"))
             {
-                try_key_to_property(sets);
-                try_save_properties(sets, true);
+                tryKeyToProperty(sets);
+                trySaveProperties(sets, true);
             }
         }
         catch(Exception e)
@@ -2278,16 +2278,16 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         touchSetting();    
         frame_loaded = true;
         
-        refresh_todayEvent();
+        refreshTodayEvent();
         
         message();
         message(sets.trans("Reflexioner") + " " + getVersionString(true));
         message();
         message(sets.trans("Game Prepared"));
         
-        if(use_transparent) refresh_transparency();
+        if(useTransparent) refreshTransparency();
     }
-    void try_apply_properties()
+    void tryApplyProperties()
     {
         try
         {            
@@ -2319,7 +2319,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
         }        
     }
-    public static void try_key_to_property(Setting sets)
+    public static void tryKeyToProperty(Setting sets)
     {
         KEY_1     = sets.getInt("KEY_1");
         KEY_2     = sets.getInt("KEY_2");
@@ -2368,25 +2368,25 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         sets.set("KEY_9"    , KEY_9    );     
         sets.set("KEY_0"    , KEY_0    );     
     }
-    public static void try_save_properties(Setting sets, boolean details)
+    public static void trySaveProperties(Setting sets, boolean details)
     {
         if(details)
         {
-            try_key_to_property(sets);
+            tryKeyToProperty(sets);
         }
         
         sets.save(RunManager.getIndexClass());
     }
-    public static void try_load_properties(Setting sets)
+    public static void tryLoadProperties(Setting sets)
     {
         sets = Setting.load(RunManager.getIndexClass());
-        try_key_to_property(sets);
+        tryKeyToProperty(sets);
     }
-    public void refresh_transparency()
+    public void refreshTransparency()
     {
         float value = transparent_opacity;
         float doubled = transparent_opacity + ((1.0f - transparent_opacity) * 0.5f);
-        if(use_transparent)
+        if(useTransparent)
         {
             value = transparent_opacity;
         }
@@ -2406,7 +2406,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         try_transparent(checker.getWindow(), doubled);
         try_transparent(needfileDialog, doubled);
     }
-    private void refresh_todayEvent()
+    private void refreshTodayEvent()
     {
         boolean success = false;
         startItem = null;
@@ -2545,7 +2545,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     public void inputScenario(ReflexScenario scen)
     {
         scenarios.add(scen);
-        refresh_scenario(false);
+        refreshScenario(false);
         mainTab.setSelectedComponent(start_scenarioPanel);
     }
     public void playScenario(ReflexScenario scen)
@@ -2553,48 +2553,16 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         replay_save = menu_manage_saveReplay.isSelected();
         start(scen, scen.getSpaceShip());
     }
-    private void refresh_scenario(boolean delete_befores)
+    private void refreshScenario(boolean delete_befores)
     {
-        load_scenarios(delete_befores);
+        loadScenarios(delete_befores);
         Vector<String> listData = new Vector<String>();
         String[] listArray;
-        String adds = "", key1, key2;
-        BigInteger oldPoints = null;
-        StringTokenizer delimToken;
-        ReflexScenario star_target;
-        int stars = 0;
+        String adds = "";
         
         for(int i=0; i<scenarios.size(); i++)
         {
             adds = scenarios.get(i).getName();
-            stars = 0;
-            oldPoints = new BigInteger("0");
-            try
-            {
-            	star_target = scenarios.get(i);
-                adds = adds + " ";
-                
-                Set<String> keys = sets.keys();
-                for(String key : keys)
-                {
-                    try
-                    {
-                        delimToken = new StringTokenizer(key, "_");
-                        key1 = delimToken.nextToken();
-                        if(! delimToken.hasMoreTokens()) continue;
-                        key2 = delimToken.nextToken();
-                    } 
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            } 
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            
             listData.add(adds);    
         }
         
@@ -2607,7 +2575,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         start_scenarioList.setListData(listArray);
         start_scenarioList.setSelectedIndex(0);
     }
-    private void load_scenarios(boolean delete_befores)
+    private void loadScenarios(boolean delete_befores)
     {
         if(delete_befores) scenarios.clear();        
         
@@ -3084,7 +3052,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         {
         	try
             {
-                refresh_scenario(false);
+                refreshScenario(false);
             }
             catch(Exception e)
             {
@@ -3218,7 +3186,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     } 
                     catch (Exception e)
                     {
-                        
+                        e.printStackTrace();
                     }
                 }
             });    
@@ -3234,7 +3202,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         else if(ob == menu_help_files)
         {
-            update_needfiles();
+            updateNeedfiles();
             needfileDialog.setVisible(true);
         }
         else if(ob == menu_view_editor)
@@ -3247,7 +3215,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         else if(ob == menu_file_start)
         {
-            start_findby_tab();
+            startFindbyTab();
             
         }
         else if(ob == bt_start_userDefined)
@@ -3484,10 +3452,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         {
             String inputs, message;
             message = sets.trans("Input number to skip frames when saving replays.\nInput big number to make replay file smaller.\nToo big number occurs unnatural play.");
-            inputs = JOptionPane.showInputDialog(startDialog, message, String.valueOf(replay_interval));
+            inputs = JOptionPane.showInputDialog(startDialog, message, String.valueOf(replayInterval));
             try
             {
-                replay_interval = Integer.parseInt(inputs);
+                replayInterval = Integer.parseInt(inputs);
             }
             catch(NumberFormatException e1)
             {
@@ -3495,7 +3463,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
         }
     }    
-    private void update_needfiles()
+    private void updateNeedfiles()
     {
         List<String> needFileList, existFileList;
         needFileList = ImageCache.needFiles(sets, true);
@@ -3537,7 +3505,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         needfile_descList.setCaretPosition(0);
         needfile_split.setDividerLocation((int)(needfileDialog.getWidth() / 1.5));
     }
-    public void start_findby_tab()
+    public void startFindbyTab()
     {
         Component comp = mainTab.getSelectedComponent();
         if(comp == start_standardPanel)
