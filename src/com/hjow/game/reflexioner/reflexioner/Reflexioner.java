@@ -21,7 +21,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -39,7 +38,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -1641,7 +1639,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             menu_help_files.setFont(usingFont);
         }
         menu_help.add(menu_help_files);
-        menu_help_files.setText(sets.trans("Help (Asset file names)"));
+        menu_help_files.setText(sets.trans("Asset files information (Written in Korean)"));
         
         menu_help_about = new JMenuItem(sets.trans("Reflexioner") + " " + sets.trans("is..."));
         menu_help_about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.CTRL_MASK));
@@ -2650,7 +2648,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             webList = "";
             try
             {
-                webTarget = new URL(sets.get("ServerURL1") + "reflex_scenlist.txt");
+                webTarget      = new URL(sets.get("ServerURL1") + "reflex_scenlist.txt");
+                message(sets.trans("Access") + " " + webTarget.toString());
                 inputStream    = webTarget.openStream();
                 inputReader    = new InputStreamReader(inputStream, "UTF-8");
                 bufferedReader = new BufferedReader(inputReader);
@@ -2685,7 +2684,9 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 {
                     try
                     {
-                        url = tokens.nextToken();
+                        url = RunManager.r65279(tokens.nextToken().trim());
+                        if(url.equals("")) continue;
+                        message(sets.trans("Access") + " " + url);
                         
                         String lines = "";
                     	StringBuilder accum = new StringBuilder("");
@@ -3855,6 +3856,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         int not_infinite_loop = 0;
         try
         {
+        	message(sets.trans("Access") + " " + RunManager.r65279(download_url1 + "reflex_asset_license.txt"));
             inputStream = new URL(RunManager.r65279(download_url1 + "reflex_asset_license.txt")).openStream();
         }
         catch(Exception e)
@@ -3869,6 +3871,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
             try
             {
+            	message(sets.trans("Access") + " " + download_url2 + "reflex_asset_license.txt");
                 inputStream = new URL(RunManager.r65279(download_url2 + "reflex_asset_license.txt")).openStream();
             } 
             catch (Exception e1)
@@ -3941,25 +3944,21 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         try
         {
             success_url = url;
+            message(sets.trans("Access") + " " + url + "reflex_assetlist.txt");
             inputStream = new URL(RunManager.r65279(url + "reflex_assetlist.txt")).openStream();
         }
         catch(Exception e)
         {
-            try
-            {
-                inputStream.close();
-            }
-            catch(Exception e1)
-            {
-                
-            }
+            try { inputStream.close(); } catch(Exception e1) { }
             try
             {
                 success_url = url2;
+                message(sets.trans("Access") + " " + url2 + "reflex_assetlist.txt");
                 inputStream = new URL(RunManager.r65279(url2 + "reflex_assetlist.txt")).openStream();
             } 
             catch (Exception e1)
             {
+            	if(sets.getBool("ErrorStackTraceConsole")) e1.printStackTrace();
                 return;
             }
         }
@@ -3971,7 +3970,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         catch(Exception e)
         {
-            
+        	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
         }
         if(inputStream != null)
         {
@@ -3979,6 +3978,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             {
                 inputReader = new InputStreamReader(inputStream);
                 bufferedReader = new BufferedReader(inputReader);
+                String lower;
                 while(true)
                 {
                     if(not_infinite_loop >= 1000) break;
@@ -3988,7 +3988,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                         reads = bufferedReader.readLine();
                         if(reads == null) break;
                         if(reads.startsWith("#")) continue;
-                        if(reads.endsWith(".png") || reads.endsWith(".PNG") || reads.endsWith(".jpg") || reads.endsWith(".JPG"))
+                        lower = reads.toLowerCase();
+                        if(lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".txt") || lower.endsWith(".wav") || lower.endsWith(".mp3"))
                         {
                             urlList.add(reads.trim());
                             start_download_message.append(reads + "\n");
@@ -3996,7 +3997,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     }
                     catch(Exception e)
                     {
-                        
+                    	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
                     }
                 }
             }
@@ -4007,14 +4008,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
         }
         else return;
-        try
-        {
-            inputStream.close();
-        }
-        catch(Exception e)
-        {
-            
-        }
+        try { inputStream.close(); } catch(Exception e) { }
         
         String[] files = new String[urlList.size()];        
         
@@ -4045,50 +4039,43 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
             catch(Exception e)
             {
-                
+            	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
             }
             try
             {            
                 download_url = null;
                 //Downloader.download(sets, files[i]);
-                download_target = new File(RunManager.r65279(sets.getDefaultPath() + files[i]));
+                download_target = new File(RunManager.r65279(sets.getDefaultPath() + File.separator + "assets"));
+                if(! download_target.exists()) download_target.mkdirs();
+                download_target = new File(RunManager.r65279(download_target.getAbsolutePath() + File.separator + files[i]));
                 if(success_url.equals(url))
                 {
-                    download_url = new URL(RunManager.r65279(url + files[i].trim()));
+                    download_url = new URL(RunManager.r65279(url + "assets/" + files[i].trim()));
                 }
                 else if(success_url.equals(url2))
                 {
-                    download_url = new URL(RunManager.r65279(url2 + files[i].trim()));                    
+                    download_url = new URL(RunManager.r65279(url2 + "assets/" + files[i].trim()));                    
                 }
                 if(download_url != null)
                 {                    
+                	message(sets.trans("Access") + " " + download_url);
                     connection = (HttpURLConnection) download_url.openConnection();
-                    //connection.connect();
-                    inputStream = connection.getInputStream();                    
-                    //inputStream = download_url.openStream();
+                    inputStream = connection.getInputStream();   
                     bufferedStream = new BufferedInputStream(inputStream);
                     saveStream = new FileOutputStream(download_target);
                     saveBufferedStream = new BufferedOutputStream(saveStream);
                     while(true)
                     {
-                        
                         readInt = bufferedStream.read(readBytes);
                         if(readInt == -1) break;
                         saveBufferedStream.write(readBytes, 0, readInt);
-                    }            
-                    try
-                    {
-                        saveBufferedStream.close();
-                        saveStream.close();
-                        bufferedStream.close();
-                        inputStream.close();
-                        connection.disconnect();
                     }
-                    catch(Exception e)
-                    {
-                        
-                    }
-                
+                    try { if(saveBufferedStream != null) { saveBufferedStream.close(); } } catch(Exception ex) {}
+                    try { if(saveStream         != null) { saveStream.close();         } } catch(Exception ex) {}
+                    try { if(bufferedStream     != null) { bufferedStream.close();     } } catch(Exception ex) {}
+                    try { if(inputStream        != null) { inputStream.close();        } } catch(Exception ex) {}
+                    try { if(connection         != null) { connection.disconnect();    } } catch(Exception ex) {}
+                    
                     start_download_message.append(RunManager.r65279(files[i]) + " " + sets.trans("Complete") + "\n");
                     progress_download.setValue((int) Math.round((i / files.length) * 990.0));
                 }
@@ -4097,49 +4084,15 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             {
                 start_download_message.append(files[i] + " " + sets.trans("Error") + " : " + e.getMessage() + "\n");
                 progress_download.setValue((int) Math.round((i / files.length) * 990.0));
+                if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
             }        
             finally
             {
-                try
-                {
-                    saveBufferedStream.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }
-                try
-                {
-                    saveStream.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }                
-                try
-                {
-                    bufferedStream.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }
-                try
-                {
-                    inputStream.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }
-                try
-                {
-                    connection.disconnect();
-                }
-                catch(Exception e)
-                {
-                    
-                }
+            	try { if(saveBufferedStream != null) { saveBufferedStream.close(); } } catch(Exception ex) {}
+                try { if(saveStream         != null) { saveStream.close();         } } catch(Exception ex) {}
+                try { if(bufferedStream     != null) { bufferedStream.close();     } } catch(Exception ex) {}
+                try { if(inputStream        != null) { inputStream.close();        } } catch(Exception ex) {}
+                try { if(connection         != null) { connection.disconnect();    } } catch(Exception ex) {}
             }
         }
         //waitTime(1000);
@@ -4182,9 +4135,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             wait(i);
         }
         catch(Exception e)
-        {
-            
-        }        
+        {}        
     }
     private void loadAllImage()
     {

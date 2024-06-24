@@ -48,7 +48,10 @@ public class SoundCache
     public static void prepareSound(Setting sets, int channels)
     {
         File file = null;
-        String path = sets.getDefaultPath();
+        String path = sets.getDefaultPath() + File.separator + "assets";
+        File dir = new File(path);
+        if(! dir.exists()) dir.mkdirs();
+        path += File.separator;
         SoundCache.channels = channels;
                 
         clear();

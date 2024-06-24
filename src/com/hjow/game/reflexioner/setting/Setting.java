@@ -590,7 +590,7 @@ public class Setting implements CanBeClone
         set("ColorUnselectedFore"      , thmSet.getUnselected_fore());
         set("ColorUnselectedButton"    , thmSet.getUnselected_button());
         
-        set("ServerURL1", "http://hjow.github.io/Reflexioner/");
+        set("ServerURL1", "http://netstorm.woobi.co.kr/nreflexioner/");
         set("ServerURL2", "http://hjow.github.io/Reflexioner/");
         
         set("KEY_0"    , KeyEvent.VK_0);

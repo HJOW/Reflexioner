@@ -1,16 +1,12 @@
 package com.hjow.game.reflexioner.network;
 
-import java.beans.XMLDecoder;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 import com.hjow.game.reflexioner.setting.SaveInt;
-import com.hjow.game.reflexioner.setting.Setting;
 
 public class OnlineContentURLList implements Serializable
 {
@@ -159,14 +155,6 @@ public class OnlineContentURLList implements Serializable
             chars[i] = changes;
         }
         return new String(chars);
-    }
-    public Setting readSetting(int index) throws Exception
-    {
-        URL url = new URL(setting_contents.get(index));
-        InputStream inp = url.openStream();
-        XMLDecoder decoder = new XMLDecoder(inp);
-        Setting result = (Setting) decoder.readObject();
-        return result;
     }
     public Vector<String> getAi_contents()
     {
