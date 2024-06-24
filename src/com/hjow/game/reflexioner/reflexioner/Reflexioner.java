@@ -2592,116 +2592,58 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         BufferedReader bufferedReader = null;
         InputStreamReader inputReader = null;        
         InputStream inputStream = null;
-        ObjectInputStream objectStream = null;
-        XMLDecoder decoder = null;
         URL webTarget = null;
         String webList, readLines, getScenario = "";
         try
         {
-            loads = new File(sets.getDefaultPath());
+            loads = new File(sets.getDefaultPath() + File.separator + "scenarios");
+            if(! loads.exists()) loads.mkdirs();
             if(loads.exists())
             {
-                lists = loads.listFiles();
+                lists = loads.listFiles(new java.io.FileFilter() 
+                {	
+    				@Override
+    				public boolean accept(File pathname) {
+    					if(! pathname.exists()) return false;
+    					if(pathname.isDirectory()) return false;
+    					String name = pathname.getName().toLowerCase();
+    					return name.endsWith(".rscn");
+    				}
+    			});
                 for(int i=0; i<lists.length; i++)
                 {
                     loads = lists[i];
-                    if(loads.getAbsolutePath().endsWith(".rfsc") || loads.getAbsolutePath().endsWith(".RFSC")
-                            || loads.getAbsolutePath().endsWith(".Rfsc"))
+                    
+                    String lines = "";
+                	StringBuilder accum = new StringBuilder("");
+                	try
+                	{
+                		inputStream = new FileInputStream(loads);
+                		inputReader = new InputStreamReader(inputStream, "UTF-8");
+                		bufferedReader = new BufferedReader(inputReader);
+                        while(true)
+                        {
+                            lines = bufferedReader.readLine();
+                            if(lines == null) break;
+                            accum = accum.append(lines).append("\n");
+                        }
+                        bufferedReader.close(); bufferedReader = null;
+                        inputReader.close();    inputReader    = null;
+                        inputStream.close();    inputStream    = null;
+                        ReflexScenario scen = new ReflexScenario(accum.toString().trim());
+                        accum = null;
+                        if(! scenarios.contains(scen)) scenarios.add(scen);
+                	}
+                	catch (Exception ex)
                     {
-                        try
-                        {                        
-                            inputStream = new FileInputStream(loads);
-                            objectStream = new ObjectInputStream(inputStream);
-                            loadScen = (ReflexScenario) objectStream.readObject();
-                            if(loadScen != null)
-                            {
-                                scenarios.add(loadScen);
-                            }
-                        }
-                        catch(Exception e)
-                        {
-                            if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
-                        }
-                        finally
-                        {
-                            try
-                            {
-                                objectStream.close();
-                            }
-                            catch(Exception e){}
-                            try
-                            {
-                                inputStream.close();
-                            }
-                            catch(Exception e){}
-                        }
+                        ex.printStackTrace();
                     }
-                    else if(loads.getAbsolutePath().endsWith(".rfsx") || loads.getAbsolutePath().endsWith(".RFSX")
-                            || loads.getAbsolutePath().endsWith(".Rfsx"))
-                    {
-                        try
-                        {                        
-                            inputStream = new FileInputStream(loads);
-                            decoder = new XMLDecoder(inputStream);
-                            loadScen = (ReflexScenario) decoder.readObject();
-                            if(loadScen != null)
-                            {
-                                scenarios.add(loadScen);
-                            }
-                        }
-                        catch(Exception e)
-                        {
-                            if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
-                        }
-                        finally
-                        {
-                            try
-                            {
-                                decoder.close();
-                            }
-                            catch(Exception e){}
-                            try
-                            {
-                                inputStream.close();
-                            }
-                            catch(Exception e){}
-                        }
-                    }
-                    else if(loads.getAbsolutePath().endsWith(".rfst") || loads.getAbsolutePath().endsWith(".RFST")
-                            || loads.getAbsolutePath().endsWith(".Rfst"))
-                    {
-                        try
-                        {                        
-                            inputStream = new FileInputStream(loads);
-                            inputReader = new InputStreamReader(inputStream);
-                            bufferedReader = new BufferedReader(inputReader);
-                            getScenario = "";
-                            while(true)
-                            {
-                                readLines = bufferedReader.readLine();
-                                if(readLines == null) break;
-                                getScenario = getScenario + readLines + "\n";
-                            }
-                            scenarios.add(new ReflexScenario(getScenario));
-                        }
-                        catch(Exception e)
-                        {
-                            if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
-                        }
-                        finally
-                        {
-                            try
-                            {
-                                decoder.close();
-                            }
-                            catch(Exception e){}
-                            try
-                            {
-                                inputStream.close();
-                            }
-                            catch(Exception e){}
-                        }
-                    }
+                	finally
+                	{
+                		try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
+                        try { if(inputReader    != null) inputReader.close();    inputReader    = null; } catch(Exception exc) {}
+                        try { if(inputStream    != null) inputStream.close();    inputStream    = null; } catch(Exception exc) {}
+                	}
                 }
             }
             
@@ -2709,8 +2651,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             try
             {
                 webTarget = new URL(sets.get("ServerURL1") + "reflex_scenlist.txt");
-                inputStream = webTarget.openStream();
-                inputReader = new InputStreamReader(inputStream);
+                inputStream    = webTarget.openStream();
+                inputReader    = new InputStreamReader(inputStream, "UTF-8");
                 bufferedReader = new BufferedReader(inputReader);
                 while(true)
                 {
@@ -2718,7 +2660,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     {
                         readLines = bufferedReader.readLine();
                         if(readLines == null) break;
-                        webList = webList + readLines + "||";    
+                        webList = webList + readLines + "\n";    
                     } 
                     catch (Exception e)
                     {
@@ -2730,55 +2672,39 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             {
                 if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
             }
-            try
-            {
-                bufferedReader.close();
-            }
-            catch(Exception e){}
-            try
-            {
-                inputReader.close();
-            }
-            catch(Exception e){}
-            try
-            {
-                inputStream.close();
-            }
-            catch(Exception e){}
+            try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
+            try { if(inputReader    != null) inputReader.close();    inputReader    = null; } catch(Exception exc) {}
+            try { if(inputStream    != null) inputStream.close();    inputStream    = null; } catch(Exception exc) {}
             
             if(! webList.startsWith("<"))
             {
-            	StringTokenizer tokens = new StringTokenizer(webList, "||");
-                String tokenGet = "", lineGets = "", accum = "";
+            	StringTokenizer tokens = new StringTokenizer(webList, "\n");
+                String url;
+                
                 while(tokens.hasMoreTokens())
                 {
                     try
                     {
-                        tokenGet = tokens.nextToken();
-                        webTarget = new URL(tokenGet);
-                        inputStream = webTarget.openStream();
-                        if(tokenGet.endsWith(".rfst"))
-                        {
-                            inputReader = new InputStreamReader(inputStream);
-                            bufferedReader = new BufferedReader(inputReader);
-                            while(true)
-                            {
-                                lineGets = bufferedReader.readLine();
-                                if(lineGets == null) break;
-                                accum = accum + lineGets + "\n";
-                            }
-                            loadScen = new ReflexScenario(accum);
-                        }
-                        else
-                        {
-                            decoder = new XMLDecoder(inputStream);
-                            loadScen = (ReflexScenario) decoder.readObject();
-                        }
+                        url = tokens.nextToken();
                         
-                        if(loadScen != null)
+                        String lines = "";
+                    	StringBuilder accum = new StringBuilder("");
+                    	
+                    	inputStream    = new URL(url.toString()).openStream();
+                		inputReader    = new InputStreamReader(inputStream, "UTF-8");
+                		bufferedReader = new BufferedReader(inputReader);
+                        while(true)
                         {
-                            scenarios.add(loadScen);
+                            lines = bufferedReader.readLine();
+                            if(lines == null) break;
+                            accum = accum.append(lines).append("\n");
                         }
+                        bufferedReader.close(); bufferedReader = null;
+                        inputReader.close();    inputReader    = null;
+                        inputStream.close();    inputStream    = null;
+                        ReflexScenario scen = new ReflexScenario(accum.toString().trim());
+                        accum = null;
+                        if(! scenarios.contains(scen)) scenarios.add(scen);
                     }
                     catch(Exception e)
                     {
@@ -2786,26 +2712,9 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     }
                     finally
                     {
-                        try
-                        {
-                            decoder.close();
-                        }
-                        catch(Exception e){}
-                        try
-                        {
-                            bufferedReader.close();
-                        }
-                        catch(Exception e){}
-                        try
-                        {
-                            inputReader.close();
-                        }
-                        catch(Exception e){}
-                        try
-                        {
-                            inputStream.close();
-                        }
-                        catch(Exception e){}
+                    	try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
+                        try { if(inputReader    != null) inputReader.close();    inputReader    = null; } catch(Exception exc) {}
+                        try { if(inputStream    != null) inputStream.close();    inputStream    = null; } catch(Exception exc) {}
                     }
                 }
             }
@@ -3946,7 +3855,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         int not_infinite_loop = 0;
         try
         {
-            inputStream = new URL(RunManager.r65279(download_url1 + "reflex_imagepack_license.txt")).openStream();
+            inputStream = new URL(RunManager.r65279(download_url1 + "reflex_asset_license.txt")).openStream();
         }
         catch(Exception e)
         {
@@ -3960,7 +3869,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
             try
             {
-                inputStream = new URL(RunManager.r65279(download_url2 + "reflex_imagepack_license.txt")).openStream();
+                inputStream = new URL(RunManager.r65279(download_url2 + "reflex_asset_license.txt")).openStream();
             } 
             catch (Exception e1)
             {
