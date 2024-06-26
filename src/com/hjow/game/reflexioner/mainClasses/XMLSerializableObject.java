@@ -54,10 +54,13 @@ public class XMLSerializableObject implements XMLSerializable {
             {
                 Element child;
                 List<?> listObj = (List<?>) this;
+                int i = 0;
                 for(Object obj : listObj)
                 {
                     child = createXMLChild(doc, obj);
+                    child.setAttribute("listindex", String.valueOf(i));
                     if(child != null) root.appendChild(child);
+                    i++;
                 }
             }
             else if(ismap)
@@ -69,6 +72,7 @@ public class XMLSerializableObject implements XMLSerializable {
                 {
                     Object obj = mapObj.get(k);
                     child = createXMLChild(doc, obj);
+                    child.setAttribute("mapkey", String.valueOf(k));
                     if(child != null) root.appendChild(child);
                 }
             }
