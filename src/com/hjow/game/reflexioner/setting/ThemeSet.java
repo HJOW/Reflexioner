@@ -1,9 +1,10 @@
 package com.hjow.game.reflexioner.setting;
 
 import java.awt.Color;
-import java.io.Serializable;
 
-public class ThemeSet implements Serializable
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
+
+public class ThemeSet extends XMLSerializableObject
 {
     private static final long serialVersionUID = -4468086207113862283L;
     private Color selected_back, selected_fore, selected_inside, selected_button, unselected_back, unselected_fore, unselected_inside, unselected_button;

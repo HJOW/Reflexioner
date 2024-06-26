@@ -1,12 +1,12 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 import com.hjow.game.reflexioner.setting.Lint;
 
-public class ReflexSave implements Serializable
+public class ReflexSave extends XMLSerializableObject
 {
     private static final long serialVersionUID = -2815301101980193764L;
     private Long version_difference = new Long(3219984983516L);

@@ -17,11 +17,11 @@ public class AUserDefinedShip extends UserDefinedShip
     {
         super();
     }
-    public AUserDefinedShip(String name, List<Enemy> enemies, Weapon[] weapons)
+    public AUserDefinedShip(String name, List<Enemy> enemies, List<Weapon> weapons)
     {
         super(name, enemies, weapons);
     }
-    public AUserDefinedShip(String name, List<Enemy> enemies, Weapon[] weapons, int hp_capacity, int energy_capacity, double speed_capacity)
+    public AUserDefinedShip(String name, List<Enemy> enemies, List<Weapon> weapons, int hp_capacity, int energy_capacity, double speed_capacity)
     {
         super(name, enemies, weapons, hp_capacity, energy_capacity, speed_capacity);
     }

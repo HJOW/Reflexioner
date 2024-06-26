@@ -359,22 +359,22 @@ public class ReflexScenarioSetter
         File scnPath = null;
         try
         {
-        	Setting sets = Setting.load();
+            Setting sets = Setting.load();
             File defPath = new File(sets.getDefaultPath());
             if(! defPath.exists()) defPath.mkdirs();
             scnPath = new File(defPath.getAbsolutePath() + File.separator + "scenarios");
             if(! scnPath.exists()) scnPath.mkdirs();
             
             File[] files = scnPath.listFiles(new FileFilter() 
-            {	
-				@Override
-				public boolean accept(File pathname) {
-					if(! pathname.exists()) return false;
-					if(pathname.isDirectory()) return false;
-					String name = pathname.getName().toLowerCase();
-					return name.endsWith(".rscn");
-				}
-			});
+            {    
+                @Override
+                public boolean accept(File pathname) {
+                    if(! pathname.exists()) return false;
+                    if(pathname.isDirectory()) return false;
+                    String name = pathname.getName().toLowerCase();
+                    return name.endsWith(".rscn");
+                }
+            });
             
             FileInputStream stream = null;
             InputStreamReader reader = null;
@@ -382,11 +382,11 @@ public class ReflexScenarioSetter
             String lines = "", accum = "";
             for(File f : files)
             {
-            	lines = "";
-            	accum = "";
-            	try
-            	{
-            		stream = new FileInputStream(f);
+                lines = "";
+                accum = "";
+                try
+                {
+                    stream = new FileInputStream(f);
                     reader = new InputStreamReader(stream, "UTF-8");
                     buffered = new BufferedReader(reader);
                     while(true)
@@ -400,17 +400,17 @@ public class ReflexScenarioSetter
                     stream.close();   stream   = null;
                     ReflexScenario scen = new ReflexScenario(accum);
                     if(! scenarios.contains(scen)) scenarios.add(scen);
-            	}
-            	catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     ex.printStackTrace();
                 }
-            	finally
-            	{
-            		try { if(buffered != null) buffered.close(); buffered = null; } catch(Exception exc) {}
+                finally
+                {
+                    try { if(buffered != null) buffered.close(); buffered = null; } catch(Exception exc) {}
                     try { if(reader   != null) reader.close();   reader   = null; } catch(Exception exc) {}
                     try { if(stream   != null) stream.close();   stream   = null; } catch(Exception exc) {}
-            	}
+                }
             }
         }
         catch (Exception e)
@@ -422,7 +422,7 @@ public class ReflexScenarioSetter
         {
             try
             {
-            	if(path == null && scnPath != null) path = scnPath.getAbsolutePath();
+                if(path == null && scnPath != null) path = scnPath.getAbsolutePath();
                 File folder = new File(path);
                 if(! folder.exists()) folder.mkdir();
                 File target;
@@ -448,8 +448,8 @@ public class ReflexScenarioSetter
                     }    
                     finally
                     {
-                    	try { writer.close();    } catch (Exception e) {}
-                    	try { outWriter.close(); } catch (Exception e) {}
+                        try { writer.close();    } catch (Exception e) {}
+                        try { outWriter.close(); } catch (Exception e) {}
                         try { fout.close();      } catch (Exception e) {}
                     }
                 }

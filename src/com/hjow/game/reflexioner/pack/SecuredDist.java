@@ -27,18 +27,18 @@ public class SecuredDist implements Serializable {
     
     public List<Language> getLanguagePacks()
     {
-    	// This value will be changed on release version
-    	return new ArrayList<Language>();
+        // This value will be changed on release version
+        return new ArrayList<Language>();
     }
     
     public String getName()
     {
-    	return "BASIC";
+        return "BASIC";
     }
     
     public Color getColor()
     {
-    	return Color.GRAY;
+        return Color.GRAY;
     }
     
     // This function will be changed on release version

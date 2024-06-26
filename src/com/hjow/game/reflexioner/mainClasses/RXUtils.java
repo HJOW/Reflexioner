@@ -110,18 +110,18 @@ public class RXUtils {
         GZIPOutputStream gzipper = null;
         try
         {
-        	if(gzip)
-        	{
-        		gzipper = new GZIPOutputStream(coll);
+            if(gzip)
+            {
+                gzipper = new GZIPOutputStream(coll);
                 prop.storeToXML(gzipper, "");
                 
                 gzipper.close();
                 gzipper = null;
-        	}
-        	else
-        	{
-        		prop.storeToXML(coll, "");
-        	}
+            }
+            else
+            {
+                prop.storeToXML(coll, "");
+            }
         }
         catch(Exception exc)
         { throw new RuntimeException(exc.getMessage(), exc); }
@@ -132,17 +132,17 @@ public class RXUtils {
         }
         
         if(gzip) return RXUtils.hexString(coll.toByteArray());
-		else try { return new String(coll.toByteArray(), "UTF-8"); } catch (UnsupportedEncodingException e) { throw new RuntimeException(e.getMessage(), e); }
+        else try { return new String(coll.toByteArray(), "UTF-8"); } catch (UnsupportedEncodingException e) { throw new RuntimeException(e.getMessage(), e); }
     }
     
     public static String serializeProperty(Properties prop)
     {
-    	return serializeProperty(prop, true);
+        return serializeProperty(prop, true);
     }
     
     public static Properties extractProperty(String serialized)
     {
-    	return extractProperty(serialized, true);
+        return extractProperty(serialized, true);
     }
     
     public static Properties extractProperty(String serialized, boolean gzip)
@@ -155,19 +155,19 @@ public class RXUtils {
             
             if(gzip)
             {
-            	coll = new ByteArrayInputStream(RXUtils.hexBytes(serialized));
+                coll = new ByteArrayInputStream(RXUtils.hexBytes(serialized));
                 serialized = null;
                 
-            	gzipper = new GZIPInputStream(coll);
+                gzipper = new GZIPInputStream(coll);
                 prop.loadFromXML(gzipper);
                 gzipper.close(); gzipper = null;
             }
             else
             {
-            	coll = new ByteArrayInputStream(serialized.getBytes("UTF-8"));
+                coll = new ByteArrayInputStream(serialized.getBytes("UTF-8"));
                 serialized = null;
                 
-            	prop.loadFromXML(coll);
+                prop.loadFromXML(coll);
             }
             
             

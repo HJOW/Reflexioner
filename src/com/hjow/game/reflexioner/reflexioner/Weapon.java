@@ -1,11 +1,12 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class Weapon implements Serializable
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
+
+public class Weapon extends XMLSerializableObject
 {
     private static final long serialVersionUID = -6352492028137047417L;
     public static final int MISSILE_NORMAL = 0;
@@ -17,23 +18,23 @@ public class Weapon implements Serializable
     public static final int MISSILE_HELPER = 6;
     public static final int MISSILE_RASER = 7;
     public static final int MISSILE_FORMULA = 8;
-    private int missile_type = 0;
-    private int max_missile = 0;
-    private int min_missile = 0;
+    private int missileType = 0;
+    private int maxMissile = 0;
+    private int minMissile = 0;
     private int interval = 0;
-    private int missile_hp = 0;
-    private int need_e = 0;
+    private int missileHp = 0;
+    private int needEnergy = 0;
     private int delay = Arena.getGfireDelay();
-    private double damage_ratio = 0.0;
+    private double damageRatio = 0.0;
     private double size = 0.0;
     private double speed = 0.0;
-    private int helper_count = 1, helper_type = 0;
+    private int helperCount = 1, helperType = 0;
     private double progress = 0.0, max_progress = 1000.0;
     private String formula = "";
-    private double range_unit = 1000.0;
-    private double min_x = -Arena.maxWidth() * 16, max_x = Arena.maxWidth() * 16, min_y = -Arena.maxHeight() * 16, max_y = Arena.maxHeight() * 16;
-    private boolean range_absolute = false;
-    protected transient int fire_missiles;
+    private double rangeUnit = 1000.0;
+    private double minX = -Arena.maxWidth() * 16, maxX = Arena.maxWidth() * 16, minY = -Arena.maxHeight() * 16, maxY = Arena.maxHeight() * 16;
+    private boolean rangeAbsolute = false;
+    protected transient int fireMissiles;
     protected transient double center;
     protected transient int getTarget; 
     protected transient Missile newMissile;
@@ -80,49 +81,49 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget = Integer.parseInt(contents);
-                            this.missile_type = getTarget;
+                            this.missileType = getTarget;
                         }
                         catch(NumberFormatException e)
                         {
                             if(contents.equalsIgnoreCase("normal"))
                             {
-                                this.missile_type = MISSILE_NORMAL;
+                                this.missileType = MISSILE_NORMAL;
                             }
                             else if(contents.equalsIgnoreCase("guide"))
                             {
-                                this.missile_type = MISSILE_GUIDE;
+                                this.missileType = MISSILE_GUIDE;
                             }
                             else if(contents.equalsIgnoreCase("reflex"))
                             {
-                                this.missile_type = MISSILE_REFLEX;
+                                this.missileType = MISSILE_REFLEX;
                             }
                             else if(contents.equalsIgnoreCase("reflex_perfect"))
                             {
-                                this.missile_type = MISSILE_REFLEX_P;
+                                this.missileType = MISSILE_REFLEX_P;
                             }
                             else if(contents.equalsIgnoreCase("beam"))
                             {
-                                this.missile_type = MISSILE_BEAM;
+                                this.missileType = MISSILE_BEAM;
                             }
                             else if(contents.equalsIgnoreCase("super"))
                             {
-                                this.missile_type = MISSILE_SUPER;
+                                this.missileType = MISSILE_SUPER;
                             }
                             else if(contents.equalsIgnoreCase("helper"))
                             {
-                                this.missile_type = MISSILE_HELPER;
+                                this.missileType = MISSILE_HELPER;
                             }
                             else if(contents.equalsIgnoreCase("raser"))
                             {
-                                this.missile_type = MISSILE_RASER;
+                                this.missileType = MISSILE_RASER;
                             }
                             else if(contents.equalsIgnoreCase("formula"))
                             {
-                                this.missile_type = MISSILE_FORMULA;
+                                this.missileType = MISSILE_FORMULA;
                             }
                             else
                             {
-                                this.missile_type = MISSILE_NORMAL;
+                                this.missileType = MISSILE_NORMAL;
                             }
                         }
                     }
@@ -131,7 +132,7 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget = Integer.parseInt(contents);
-                            this.max_missile = getTarget;
+                            this.maxMissile = getTarget;
                         }
                         catch(Exception e)
                         {
@@ -143,7 +144,7 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget = Integer.parseInt(contents);
-                            this.min_missile = getTarget;
+                            this.minMissile = getTarget;
                         }
                         catch(Exception e)
                         {
@@ -167,7 +168,7 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget = Integer.parseInt(contents);
-                            this.missile_hp = getTarget;
+                            this.missileHp = getTarget;
                         }
                         catch(Exception e)
                         {
@@ -179,7 +180,7 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget = Integer.parseInt(contents);
-                            this.need_e = getTarget;
+                            this.needEnergy = getTarget;
                         }
                         catch(Exception e)
                         {
@@ -227,7 +228,7 @@ public class Weapon implements Serializable
                         try
                         {
                             getTarget2 = Double.parseDouble(contents);
-                            this.damage_ratio = getTarget2;
+                            this.damageRatio = getTarget2;
                         }
                         catch(Exception e)
                         {
@@ -236,12 +237,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("helper_type"))
                     {
-                        if(this.missile_type == MISSILE_HELPER)
+                        if(this.missileType == MISSILE_HELPER)
                         {                            
                             try
                             {
                                 getTarget = Integer.parseInt(contents);
-                                this.helper_type = getTarget;
+                                this.helperType = getTarget;
                             }
                             catch(Exception e)
                             {
@@ -251,12 +252,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("helper_count"))
                     {
-                        if(this.missile_type == MISSILE_HELPER)
+                        if(this.missileType == MISSILE_HELPER)
                         {                            
                             try
                             {
                                 getTarget = Integer.parseInt(contents);
-                                this.helper_count = getTarget;
+                                this.helperCount = getTarget;
                             }
                             catch(Exception e)
                             {
@@ -266,7 +267,7 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_progress"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
@@ -281,7 +282,7 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_max_progress"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
@@ -296,12 +297,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_range_unit"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
                                 getTarget2 = Double.parseDouble(contents);
-                                this.range_unit = getTarget2;
+                                this.rangeUnit = getTarget2;
                             }
                             catch(Exception e)
                             {
@@ -311,11 +312,11 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_range_absolute"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
-                                this.range_absolute = Boolean.parseBoolean(contents);
+                                this.rangeAbsolute = Boolean.parseBoolean(contents);
                             }
                             catch(Exception e)
                             {
@@ -325,12 +326,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_min_x"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
                                 getTarget2 = Double.parseDouble(contents);
-                                this.min_x = getTarget2;
+                                this.minX = getTarget2;
                             }
                             catch(Exception e)
                             {
@@ -340,12 +341,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_min_y"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
                                 getTarget2 = Double.parseDouble(contents);
-                                this.min_y = getTarget2;
+                                this.minY = getTarget2;
                             }
                             catch(Exception e)
                             {
@@ -355,12 +356,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_max_x"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
                                 getTarget2 = Double.parseDouble(contents);
-                                this.max_x = getTarget2;
+                                this.maxX = getTarget2;
                             }
                             catch(Exception e)
                             {
@@ -370,12 +371,12 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula_max_y"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
                                 getTarget2 = Double.parseDouble(contents);
-                                this.max_y = getTarget2;
+                                this.maxY = getTarget2;
                             }
                             catch(Exception e)
                             {
@@ -385,7 +386,7 @@ public class Weapon implements Serializable
                     }
                     else if(option.equalsIgnoreCase("formula"))
                     {
-                        if(this.missile_type == MISSILE_RASER || this.missile_type == MISSILE_FORMULA)
+                        if(this.missileType == MISSILE_RASER || this.missileType == MISSILE_FORMULA)
                         {
                             try
                             {
@@ -414,20 +415,20 @@ public class Weapon implements Serializable
             owner_ref.setEnergy(owner_ref.getEnergy() - getNeed_e());
         }
         
-        fire_missiles = missiles;
-        if(fire_missiles < min_missile)
+        fireMissiles = missiles;
+        if(fireMissiles < minMissile)
         {
-            fire_missiles = min_missile;
+            fireMissiles = minMissile;
         }
-        else if(fire_missiles > max_missile)
+        else if(fireMissiles > maxMissile)
         {
-            fire_missiles = max_missile;
+            fireMissiles = maxMissile;
         }
-        center = fire_missiles / 2.0;
-        for(int i=0; i<fire_missiles; i++)
+        center = fireMissiles / 2.0;
+        for(int i=0; i<fireMissiles; i++)
         {
             newMissile = null;
-            switch (missile_type)
+            switch (missileType)
             {
                 case MISSILE_NORMAL:
                     newMissile = new Missile(Reflexioner.getFile_path(), Missile.SPACESHIP);
@@ -475,8 +476,8 @@ public class Weapon implements Serializable
             
             if(newMissile != null)
             {
-                newMissile.setDamage(Math.round(this.damage_ratio * damage));
-                newMissile.setHp(this.missile_hp);
+                newMissile.setDamage(Math.round(this.damageRatio * damage));
+                newMissile.setHp(this.missileHp);
                 newMissile.setW((int) Math.round(this.size * getTarget));
                 newMissile.setOwner(owner);
                 newMissile.setLaunched(true);                
@@ -515,16 +516,16 @@ public class Weapon implements Serializable
                 }
                 if(newMissile instanceof HelperSpread)
                 {
-                    ((HelperSpread) newMissile).setHelper_type(helper_type);
-                    ((HelperSpread) newMissile).setHelper_count(helper_count);
+                    ((HelperSpread) newMissile).setHelper_type(helperType);
+                    ((HelperSpread) newMissile).setHelper_count(helperCount);
                 }
                 if(newMissile instanceof FormulaUsedMissile)
                 {
                     ((FormulaUsedMissile) newMissile).setFormula(formula);
                     ((FormulaUsedMissile) newMissile).setMax_progress(max_progress);
                     ((FormulaUsedMissile) newMissile).setProgress(progress);
-                    ((FormulaUsedMissile) newMissile).setRange_absolute(range_absolute);
-                    ((FormulaUsedMissile) newMissile).setRange_unit(range_unit);
+                    ((FormulaUsedMissile) newMissile).setRange_absolute(rangeAbsolute);
+                    ((FormulaUsedMissile) newMissile).setRange_unit(rangeUnit);
                 }
                 result_missiles.add(newMissile);
             }
@@ -533,35 +534,35 @@ public class Weapon implements Serializable
     }
     public int getMissile_type()
     {
-        return missile_type;
+        return missileType;
     }
     public void setMissile_type(int missile_type)
     {
-        this.missile_type = missile_type;
+        this.missileType = missile_type;
     }
     public int getMax_missile()
     {
-        return max_missile;
+        return maxMissile;
     }
     public void setMax_missile(int max_missile)
     {
-        this.max_missile = max_missile;
+        this.maxMissile = max_missile;
     }
     public int getMin_missile()
     {
-        return min_missile;
+        return minMissile;
     }
     public void setMin_missile(int min_missile)
     {
-        this.min_missile = min_missile;
+        this.minMissile = min_missile;
     }
     public int getMissile_hp()
     {
-        return missile_hp;
+        return missileHp;
     }
     public void setMissile_hp(int missile_hp)
     {
-        this.missile_hp = missile_hp;
+        this.missileHp = missile_hp;
     }
     public double getSize()
     {
@@ -589,19 +590,19 @@ public class Weapon implements Serializable
     }
     public double getDamage_ratio()
     {
-        return damage_ratio;
+        return damageRatio;
     }
     public void setDamage_ratio(double damage_ratio)
     {
-        this.damage_ratio = damage_ratio;
+        this.damageRatio = damage_ratio;
     }
     public int getNeed_e()
     {
-        return need_e;
+        return needEnergy;
     }
     public void setNeed_e(int need_e)
     {
-        this.need_e = need_e;
+        this.needEnergy = need_e;
     }
     public void setSpaceShip(SpaceShip owner)
     {
@@ -617,19 +618,19 @@ public class Weapon implements Serializable
     }
     public int getHelper_count()
     {
-        return helper_count;
+        return helperCount;
     }
     public void setHelper_count(int helper_count)
     {
-        this.helper_count = helper_count;
+        this.helperCount = helper_count;
     }
     public int getHelper_type()
     {
-        return helper_type;
+        return helperType;
     }
     public void setHelper_type(int helper_type)
     {
-        this.helper_type = helper_type;
+        this.helperType = helper_type;
     }
     public double getProgress()
     {
@@ -657,50 +658,134 @@ public class Weapon implements Serializable
     }
     public double getRange_unit()
     {
-        return range_unit;
+        return rangeUnit;
     }
     public void setRange_unit(double range_unit)
     {
-        this.range_unit = range_unit;
+        this.rangeUnit = range_unit;
     }
     public double getMin_x()
     {
-        return min_x;
+        return minX;
     }
     public void setMin_x(double min_x)
     {
-        this.min_x = min_x;
+        this.minX = min_x;
     }
     public double getMax_x()
     {
-        return max_x;
+        return maxX;
     }
     public void setMax_x(double max_x)
     {
-        this.max_x = max_x;
+        this.maxX = max_x;
     }
     public double getMin_y()
     {
-        return min_y;
+        return minY;
     }
     public void setMin_y(double min_y)
     {
-        this.min_y = min_y;
+        this.minY = min_y;
     }
     public double getMax_y()
     {
-        return max_y;
+        return maxY;
     }
     public void setMax_y(double max_y)
     {
-        this.max_y = max_y;
+        this.maxY = max_y;
     }
     public boolean isRange_absolute()
     {
-        return range_absolute;
+        return rangeAbsolute;
     }
     public void setRange_absolute(boolean range_absolute)
     {
-        this.range_absolute = range_absolute;
+        this.rangeAbsolute = range_absolute;
+    }
+    public int getMissileType() {
+        return missileType;
+    }
+    public void setMissileType(int missileType) {
+        this.missileType = missileType;
+    }
+    public int getMaxMissile() {
+        return maxMissile;
+    }
+    public void setMaxMissile(int maxMissile) {
+        this.maxMissile = maxMissile;
+    }
+    public int getMinMissile() {
+        return minMissile;
+    }
+    public void setMinMissile(int minMissile) {
+        this.minMissile = minMissile;
+    }
+    public int getMissileHp() {
+        return missileHp;
+    }
+    public void setMissileHp(int missileHp) {
+        this.missileHp = missileHp;
+    }
+    public int getNeedEnergy() {
+        return needEnergy;
+    }
+    public void setNeedEnergy(int needEnergy) {
+        this.needEnergy = needEnergy;
+    }
+    public double getDamageRatio() {
+        return damageRatio;
+    }
+    public void setDamageRatio(double damageRatio) {
+        this.damageRatio = damageRatio;
+    }
+    public int getHelperCount() {
+        return helperCount;
+    }
+    public void setHelperCount(int helperCount) {
+        this.helperCount = helperCount;
+    }
+    public int getHelperType() {
+        return helperType;
+    }
+    public void setHelperType(int helperType) {
+        this.helperType = helperType;
+    }
+    public double getRangeUnit() {
+        return rangeUnit;
+    }
+    public void setRangeUnit(double rangeUnit) {
+        this.rangeUnit = rangeUnit;
+    }
+    public double getMinX() {
+        return minX;
+    }
+    public void setMinX(double minX) {
+        this.minX = minX;
+    }
+    public double getMaxX() {
+        return maxX;
+    }
+    public void setMaxX(double maxX) {
+        this.maxX = maxX;
+    }
+    public double getMinY() {
+        return minY;
+    }
+    public void setMinY(double minY) {
+        this.minY = minY;
+    }
+    public double getMaxY() {
+        return maxY;
+    }
+    public void setMaxY(double maxY) {
+        this.maxY = maxY;
+    }
+    public boolean isRangeAbsolute() {
+        return rangeAbsolute;
+    }
+    public void setRangeAbsolute(boolean rangeAbsolute) {
+        this.rangeAbsolute = rangeAbsolute;
     }    
 }

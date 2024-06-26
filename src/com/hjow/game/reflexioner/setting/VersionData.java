@@ -1,10 +1,9 @@
 package com.hjow.game.reflexioner.setting;
 
-import java.io.Serializable;
-
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 import com.hjow.game.reflexioner.reflexioner.Reflexioner;
 
-public class VersionData implements Serializable
+public class VersionData extends XMLSerializableObject
 {
     private static final long serialVersionUID = -144348653263971863L;
     private Integer v_m, v_1, v_2;

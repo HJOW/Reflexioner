@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -19,7 +20,7 @@ public class UserDefinedShip extends SpaceShip
     private String player_name = "";
     private Integer hp_capacity, speed_capacity, energy_capacity;
     private Long authCode;
-    private Weapon[] weapons;
+    private List<Weapon> weapons = new ArrayList<Weapon>();
     private DetailedVersionData version;
     private Integer shape;
     private Double w2_advantage_bossExist, w2_advantage_enemies9, w2_advantage_enemies8, w2_advantage_enemies7, w2_advantage_enemies6, w2_advantage_underOnes3, w2_advantage_underOnes2, w2_advantage_starts;
@@ -37,7 +38,7 @@ public class UserDefinedShip extends SpaceShip
         authCode = new Long(0);
         init();
     }
-    public UserDefinedShip(String name, List<Enemy> enemies, Weapon[] weapons)
+    public UserDefinedShip(String name, List<Enemy> enemies, List<Weapon> weapons)
     {
         super(enemies);
         this.player_name = name;        
@@ -49,7 +50,7 @@ public class UserDefinedShip extends SpaceShip
         authCode = new Long(0);
         init();
     }
-    public UserDefinedShip(String name, List<Enemy> enemies, Weapon[] weapons, int hp_capacity, int energy_capacity, double speed_capacity)
+    public UserDefinedShip(String name, List<Enemy> enemies, List<Weapon> weapons, int hp_capacity, int energy_capacity, double speed_capacity)
     {
         super(enemies);
         this.player_name = name;        
@@ -79,7 +80,7 @@ public class UserDefinedShip extends SpaceShip
         missile3 = "";
         shape = new Integer(0);
         authCode = new Long(0);
-        weapons = new Weapon[3];
+        weapons = new ArrayList<Weapon>();
         while(lineToken.hasMoreTokens())
         {
             lineTarget = lineToken.nextToken();
@@ -493,20 +494,23 @@ public class UserDefinedShip extends SpaceShip
         }
         if(! missile1.equals(""))
         {
-            weapons[0] = new Weapon(missile1, this);
-            setW1_fireDelay(weapons[0].getDelay());
+        	Weapon w = new Weapon(missile1, this);
+            weapons.add(w);
+            setW1_fireDelay(w.getDelay());
             //System.out.println(weapons[0]);
         }
         if(! missile2.equals(""))
         {
-            weapons[1] = new Weapon(missile2, this);
-            setW2_fireDelay(weapons[1].getDelay());
+        	Weapon w = new Weapon(missile2, this);
+            weapons.add(w);
+            setW2_fireDelay(w.getDelay());
             //System.out.println(weapons[1]);
         }
         if(! missile3.equals(""))
         {
-            weapons[2] = new Weapon(missile3, this);
-            setW3_fireDelay(weapons[2].getDelay());
+        	Weapon w = new Weapon(missile3, this);
+            weapons.add(w);
+            setW3_fireDelay(w.getDelay());
             //System.out.println(weapons[2]);
         }
         init();
@@ -571,17 +575,17 @@ public class UserDefinedShip extends SpaceShip
             
             if(weapons != null)
             {
-                for(int i=0; i<weapons.length; i++)
+                for(int i=0; i<weapons.size(); i++)
                 {
-                    calced_auth = calced_auth + weapons[i].getNeed_e();
-                    calced_auth = calced_auth + weapons[i].getMissile_type();
-                    calced_auth = calced_auth + weapons[i].getMissile_hp();
-                    calced_auth = calced_auth + weapons[i].getMin_missile();
-                    calced_auth = calced_auth + weapons[i].getMax_missile();
-                    calced_auth = calced_auth + weapons[i].getInterval();
-                    calced_auth = calced_auth + (long) weapons[i].getDamage_ratio();
-                    calced_auth = calced_auth + (long) weapons[i].getSize();
-                    calced_auth = calced_auth + (long) weapons[i].getSpeed();
+                    calced_auth = calced_auth + weapons.get(i).getNeed_e();
+                    calced_auth = calced_auth + weapons.get(i).getMissile_type();
+                    calced_auth = calced_auth + weapons.get(i).getMissile_hp();
+                    calced_auth = calced_auth + weapons.get(i).getMin_missile();
+                    calced_auth = calced_auth + weapons.get(i).getMax_missile();
+                    calced_auth = calced_auth + weapons.get(i).getInterval();
+                    calced_auth = calced_auth + (long) weapons.get(i).getDamage_ratio();
+                    calced_auth = calced_auth + (long) weapons.get(i).getSize();
+                    calced_auth = calced_auth + (long) weapons.get(i).getSpeed();
                     if(i % 5 == 0) calced_auth = calced_auth / 5;
                     else if(i % 3 == 0) calced_auth = calced_auth / 3;
                 }
@@ -661,25 +665,34 @@ public class UserDefinedShip extends SpaceShip
             switch(getMode())
             {
                 case 1:
-                    if(weapons[0].getNeed_e() <= getEnergy())
-                    {
-                        setEnergy(getEnergy() - weapons[0].getNeed_e());
-                        return weapons[0].fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                    }    
+                	if(weapons.size() >= 1)
+                	{
+                		if(weapons.get(0).getNeed_e() <= getEnergy())
+                        {
+                            setEnergy(getEnergy() - weapons.get(0).getNeed_e());
+                            return weapons.get(0).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                        }
+                	}    
                     break;
                 case 2:
-                    if(weapons[1].getNeed_e() <= getEnergy())
-                    {
-                        setEnergy(getEnergy() - weapons[0].getNeed_e());
-                        return weapons[1].fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                    }
+                	if(weapons.size() >= 2)
+                	{
+                		if(weapons.get(1).getNeed_e() <= getEnergy())
+                        {
+                            setEnergy(getEnergy() - weapons.get(1).getNeed_e());
+                            return weapons.get(1).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                        }
+                	}
                     break;
                 case 3:
-                    if(weapons[2].getNeed_e() <= getEnergy())
-                    {
-                        setEnergy(getEnergy() - weapons[0].getNeed_e());
-                        return weapons[2].fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                    }
+                	if(weapons.size() >= 3)
+                	{
+                		if(weapons.get(2).getNeed_e() <= getEnergy())
+                        {
+                            setEnergy(getEnergy() - weapons.get(2).getNeed_e());
+                            return weapons.get(2).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                        }
+                	}
                     break;
                 default:
                     setMode(1);
@@ -723,11 +736,11 @@ public class UserDefinedShip extends SpaceShip
     {
         this.energy_capacity = energy_capacity;
     }
-    public Weapon[] getWeapons()
+    public List<Weapon> getWeapons()
     {
         return weapons;
     }
-    public void setWeapons(Weapon[] weapons)
+    public void setWeapons(List<Weapon> weapons)
     {
         this.weapons = weapons;
     }
@@ -753,11 +766,11 @@ public class UserDefinedShip extends SpaceShip
         super.setEnemyList(enemyList);
         if(weapons != null)
         {
-            for(int i=0; i<weapons.length; i++)
+            for(int i=0; i<weapons.size(); i++)
             {
-                if(weapons[i] != null)
+                if(weapons.get(i) != null)
                 {
-                    weapons[i].setSpaceShip(this);
+                    weapons.get(i).setSpaceShip(this);
                 }
             }
         }

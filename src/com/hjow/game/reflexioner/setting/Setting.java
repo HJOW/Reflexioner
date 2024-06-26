@@ -98,7 +98,7 @@ public class Setting implements CanBeClone
         String colors = get(key);
         if(colors == null)
         {
-        	return null;
+            return null;
         }
         StringTokenizer commaTokenizer = new StringTokenizer(colors, ",");
         int i = 0;
@@ -137,8 +137,8 @@ public class Setting implements CanBeClone
         
         if(val instanceof Properties)
         {
-        	property.setProperty(key, RXUtils.serializeProperty((Properties) val));
-        	return;
+            property.setProperty(key, RXUtils.serializeProperty((Properties) val));
+            return;
         }
         
         if(val instanceof Color)
@@ -158,16 +158,16 @@ public class Setting implements CanBeClone
     
     public String gets(String ... keys)
     {
-    	Properties prop = property;
-    	String currentKey = null;
-    	for(int idx=0; idx<keys.length; idx++)
-    	{
-    		currentKey = keys[idx];
-    		String val = prop.getProperty(currentKey);
-    		if(idx == keys.length - 1) return val;
-    		prop = RXUtils.extractProperty(val);
-    	}
-    	return null;
+        Properties prop = property;
+        String currentKey = null;
+        for(int idx=0; idx<keys.length; idx++)
+        {
+            currentKey = keys[idx];
+            String val = prop.getProperty(currentKey);
+            if(idx == keys.length - 1) return val;
+            prop = RXUtils.extractProperty(val);
+        }
+        return null;
     }
     
     public String trans(String english)
@@ -175,8 +175,8 @@ public class Setting implements CanBeClone
         String contents = language.getProperty(english);
         if(contents == null)
         {
-        	System.out.println("[LANG] " + english);
-        	language.setProperty(english, english);
+            System.out.println("[LANG] " + english);
+            language.setProperty(english, english);
             return english;
         }
         return contents;
@@ -252,40 +252,40 @@ public class Setting implements CanBeClone
         return caller;
     }
     
-	public boolean isAuthorizedSetting() 
+    public boolean isAuthorizedSetting() 
     {
-    	if(firsts) return true;
-    	if(! contains("SettingAuthCode")) return false;
-    	
-    	StringBuilder collects = new StringBuilder("");
-    	for(String k : keys())
-    	{
-    		if(k.equals("SettingAuthCode")) continue;
-    		collects = collects.append(k).append(":").append(get(k)).append("\n");
+        if(firsts) return true;
+        if(! contains("SettingAuthCode")) return false;
+        
+        StringBuilder collects = new StringBuilder("");
+        for(String k : keys())
+        {
+            if(k.equals("SettingAuthCode")) continue;
+            collects = collects.append(k).append(":").append(get(k)).append("\n");
         }
-    	String c = collects.toString();
-    	collects = null;
-    	c = c.trim();
-    	
-    	SecuredDist sp = new SecuredDist();
+        String c = collects.toString();
+        collects = null;
+        c = c.trim();
+        
+        SecuredDist sp = new SecuredDist();
         String svm = get("VersionMain");
         String sv1 = get("VersionSub1");
         String sv2 = get("VersionSub2");
         
-    	try 
-    	{ 
-    		int vm, v1, v2;
-    		vm = Integer.parseInt(svm);
-    		v1 = Integer.parseInt(sv1);
-    		v2 = Integer.parseInt(sv2);
-    		if(get("SettingAuthCode").equals(sp.getLeftPad(vm, v1, v2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(vm, v1, v2))) return true; 
-    	} catch(Exception ex) { ex.printStackTrace(); }
-    	return false;
+        try 
+        { 
+            int vm, v1, v2;
+            vm = Integer.parseInt(svm);
+            v1 = Integer.parseInt(sv1);
+            v2 = Integer.parseInt(sv2);
+            if(get("SettingAuthCode").equals(sp.getLeftPad(vm, v1, v2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(vm, v1, v2))) return true; 
+        } catch(Exception ex) { ex.printStackTrace(); }
+        return false;
     }
     
     public static Setting load()
     {
-    	return load(RunManager.getIndexClass());
+        return load(RunManager.getIndexClass());
     }
 
     public static Setting load(Class<?> caller)
@@ -410,17 +410,17 @@ public class Setting implements CanBeClone
         
         if(isAuthorizedSetting())
         {
-        	StringBuilder collects = new StringBuilder("");
-        	for(String k : keys())
-        	{
-        		if(k.equals("SettingAuthCode")) continue;
-        		collects = collects.append(k).append(":").append(get(k)).append("\n");
+            StringBuilder collects = new StringBuilder("");
+            for(String k : keys())
+            {
+                if(k.equals("SettingAuthCode")) continue;
+                collects = collects.append(k).append(":").append(get(k)).append("\n");
             }
-        	String c = collects.toString();
-        	collects = null;
-        	c = c.trim();
-        	
-        	try { set("SettingAuthCode", sp.getLeftPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) ); } catch(Exception ex) { ex.printStackTrace(); }
+            String c = collects.toString();
+            collects = null;
+            c = c.trim();
+            
+            try { set("SettingAuthCode", sp.getLeftPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) + RXUtils.hexString(RXUtils.hash(c.getBytes("UTF-8"))) + sp.getRightPad(Reflexioner.version_main, Reflexioner.version_sub_1, Reflexioner.version_sub_2) ); } catch(Exception ex) { ex.printStackTrace(); }
         }
         
         File target;
@@ -542,7 +542,7 @@ public class Setting implements CanBeClone
             inp1 = caller.getClassLoader().getResourceAsStream("resources/font/font.ttf");
             if(inp1 != null)
             {
-            	inp2 = new BufferedInputStream(inp1);
+                inp2 = new BufferedInputStream(inp1);
                 usingFont = Font.createFont(Font.TRUETYPE_FONT, inp2);
                 inp2.close(); inp2 = null;
                 inp1.close(); inp1 = null;
@@ -556,7 +556,7 @@ public class Setting implements CanBeClone
             }
             else
             {
-            	usingFont = new Font("Courier", Font.PLAIN, getInt("FontSize"));
+                usingFont = new Font("Courier", Font.PLAIN, getInt("FontSize"));
                 usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
                 usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
                 usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
@@ -569,13 +569,13 @@ public class Setting implements CanBeClone
         
         if(contains("FontFamily"))
         {
-        	if(bundledFamily != null && get("FontFamily").equals(bundledFamily))
-        	{
-        		usingFont = new Font(get("FontFamily"), Font.PLAIN, getInt("FontSize"));
+            if(bundledFamily != null && get("FontFamily").equals(bundledFamily))
+            {
+                usingFont = new Font(get("FontFamily"), Font.PLAIN, getInt("FontSize"));
                 usingFont2  = usingFont.deriveFont(Font.PLAIN, getInt("FontSizeBig"));
                 usingFontB  = usingFont.deriveFont(Font.BOLD , getInt("FontSize"));
                 usingFont2B = usingFont.deriveFont(Font.BOLD , getInt("FontSizeBig"));
-        	}
+            }
         }
         
         set("LookAndFeel", "javax.swing.plaf.metal.MetalLookAndFeel");
@@ -623,10 +623,10 @@ public class Setting implements CanBeClone
         
         for(Language l : languagePacks)
         {
-        	if(syslocale.equals(l.language()))
-        	{
-        		language.putAll(l.properties());
-        	}
+            if(syslocale.equals(l.language()))
+            {
+                language.putAll(l.properties());
+            }
         }
     }
 }

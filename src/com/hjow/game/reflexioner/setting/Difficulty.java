@@ -1,7 +1,7 @@
 package com.hjow.game.reflexioner.setting;
-import java.io.Serializable;
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 
-public class Difficulty implements Serializable
+public class Difficulty extends XMLSerializableObject
 {    
     private static final long serialVersionUID = -3786474189851313009L;
     public static final double DEFAULT_UNIT_VALUE = 5.0;

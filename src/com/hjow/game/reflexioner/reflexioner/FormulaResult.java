@@ -2,10 +2,11 @@ package com.hjow.game.reflexioner.reflexioner;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.io.Serializable;
 import java.util.StringTokenizer;
 
-public class FormulaResult implements Serializable
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
+
+public class FormulaResult extends XMLSerializableObject
 {
     private static final long serialVersionUID = 5850564477894900475L;
     private Point2D p1, p2;

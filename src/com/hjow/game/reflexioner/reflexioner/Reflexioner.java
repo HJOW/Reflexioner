@@ -2599,26 +2599,26 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             if(loads.exists())
             {
                 lists = loads.listFiles(new java.io.FileFilter() 
-                {	
-    				@Override
-    				public boolean accept(File pathname) {
-    					if(! pathname.exists()) return false;
-    					if(pathname.isDirectory()) return false;
-    					String name = pathname.getName().toLowerCase();
-    					return name.endsWith(".rscn");
-    				}
-    			});
+                {    
+                    @Override
+                    public boolean accept(File pathname) {
+                        if(! pathname.exists()) return false;
+                        if(pathname.isDirectory()) return false;
+                        String name = pathname.getName().toLowerCase();
+                        return name.endsWith(".rscn");
+                    }
+                });
                 for(int i=0; i<lists.length; i++)
                 {
                     loads = lists[i];
                     
                     String lines = "";
-                	StringBuilder accum = new StringBuilder("");
-                	try
-                	{
-                		inputStream = new FileInputStream(loads);
-                		inputReader = new InputStreamReader(inputStream, "UTF-8");
-                		bufferedReader = new BufferedReader(inputReader);
+                    StringBuilder accum = new StringBuilder("");
+                    try
+                    {
+                        inputStream = new FileInputStream(loads);
+                        inputReader = new InputStreamReader(inputStream, "UTF-8");
+                        bufferedReader = new BufferedReader(inputReader);
                         while(true)
                         {
                             lines = bufferedReader.readLine();
@@ -2631,17 +2631,17 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                         ReflexScenario scen = new ReflexScenario(accum.toString().trim());
                         accum = null;
                         if(! scenarios.contains(scen)) scenarios.add(scen);
-                	}
-                	catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         ex.printStackTrace();
                     }
-                	finally
-                	{
-                		try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
+                    finally
+                    {
+                        try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
                         try { if(inputReader    != null) inputReader.close();    inputReader    = null; } catch(Exception exc) {}
                         try { if(inputStream    != null) inputStream.close();    inputStream    = null; } catch(Exception exc) {}
-                	}
+                    }
                 }
             }
             
@@ -2677,7 +2677,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             
             if(! webList.startsWith("<"))
             {
-            	StringTokenizer tokens = new StringTokenizer(webList, "\n");
+                StringTokenizer tokens = new StringTokenizer(webList, "\n");
                 String url;
                 
                 while(tokens.hasMoreTokens())
@@ -2689,11 +2689,11 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                         message(sets.trans("Access") + " " + url);
                         
                         String lines = "";
-                    	StringBuilder accum = new StringBuilder("");
-                    	
-                    	inputStream    = new URL(url.toString()).openStream();
-                		inputReader    = new InputStreamReader(inputStream, "UTF-8");
-                		bufferedReader = new BufferedReader(inputReader);
+                        StringBuilder accum = new StringBuilder("");
+                        
+                        inputStream    = new URL(url.toString()).openStream();
+                        inputReader    = new InputStreamReader(inputStream, "UTF-8");
+                        bufferedReader = new BufferedReader(inputReader);
                         while(true)
                         {
                             lines = bufferedReader.readLine();
@@ -2713,7 +2713,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     }
                     finally
                     {
-                    	try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
+                        try { if(bufferedReader != null) bufferedReader.close(); bufferedReader = null; } catch(Exception exc) {}
                         try { if(inputReader    != null) inputReader.close();    inputReader    = null; } catch(Exception exc) {}
                         try { if(inputStream    != null) inputStream.close();    inputStream    = null; } catch(Exception exc) {}
                     }
@@ -2960,13 +2960,13 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         
         if(arena.getScenario() != null && (! arena.getScenario().equals(ReflexScenario.defaultScenario)) && (! Arena.isAutoControlMode()))
         {
-        	try
+            try
             {
                 refreshScenario(false);
             }
             catch(Exception e)
             {
-            	e.printStackTrace();
+                e.printStackTrace();
             }
         }
         SwingUtilities.invokeLater(new Runnable()
@@ -3856,7 +3856,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         int not_infinite_loop = 0;
         try
         {
-        	message(sets.trans("Access") + " " + RunManager.r65279(download_url1 + "reflex_asset_license.txt"));
+            message(sets.trans("Access") + " " + RunManager.r65279(download_url1 + "reflex_asset_license.txt"));
             inputStream = new URL(RunManager.r65279(download_url1 + "reflex_asset_license.txt")).openStream();
         }
         catch(Exception e)
@@ -3871,7 +3871,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
             try
             {
-            	message(sets.trans("Access") + " " + download_url2 + "reflex_asset_license.txt");
+                message(sets.trans("Access") + " " + download_url2 + "reflex_asset_license.txt");
                 inputStream = new URL(RunManager.r65279(download_url2 + "reflex_asset_license.txt")).openStream();
             } 
             catch (Exception e1)
@@ -3958,7 +3958,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             } 
             catch (Exception e1)
             {
-            	if(sets.getBool("ErrorStackTraceConsole")) e1.printStackTrace();
+                if(sets.getBool("ErrorStackTraceConsole")) e1.printStackTrace();
                 return;
             }
         }
@@ -3970,7 +3970,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         }
         catch(Exception e)
         {
-        	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
+            if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
         }
         if(inputStream != null)
         {
@@ -3997,7 +3997,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                     }
                     catch(Exception e)
                     {
-                    	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
+                        if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
                     }
                 }
             }
@@ -4039,7 +4039,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }
             catch(Exception e)
             {
-            	if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
+                if(sets.getBool("ErrorStackTraceConsole")) e.printStackTrace();
             }
             try
             {            
@@ -4058,7 +4058,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 }
                 if(download_url != null)
                 {                    
-                	message(sets.trans("Access") + " " + download_url);
+                    message(sets.trans("Access") + " " + download_url);
                     connection = (HttpURLConnection) download_url.openConnection();
                     inputStream = connection.getInputStream();   
                     bufferedStream = new BufferedInputStream(inputStream);
@@ -4088,7 +4088,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             }        
             finally
             {
-            	try { if(saveBufferedStream != null) { saveBufferedStream.close(); } } catch(Exception ex) {}
+                try { if(saveBufferedStream != null) { saveBufferedStream.close(); } } catch(Exception ex) {}
                 try { if(saveStream         != null) { saveStream.close();         } } catch(Exception ex) {}
                 try { if(bufferedStream     != null) { bufferedStream.close();     } } catch(Exception ex) {}
                 try { if(inputStream        != null) { inputStream.close();        } } catch(Exception ex) {}
@@ -4898,7 +4898,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
                 }
                 if(start_scenario_selectShipCombo != null)
                 {
-                	if(scenarios.get(sels).getSpaceShipSelectable() != null)
+                    if(scenarios.get(sels).getSpaceShipSelectable() != null)
                     {
                         if(scenarios.get(sels).getSpaceShipSelectable().booleanValue())
                         {

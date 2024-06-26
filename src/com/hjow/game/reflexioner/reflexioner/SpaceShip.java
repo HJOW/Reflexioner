@@ -1965,7 +1965,7 @@ class Clipper extends SpaceShip
     @Override
     public String getName(Setting sets)
     {
-    	return sets.trans("Clipper");
+        return sets.trans("Clipper");
     }
     public SpaceShip clone()
     {
@@ -2219,7 +2219,7 @@ class Warship extends Clipper
     @Override
     public String getName(Setting sets)
     {
-    	return sets.trans("Warship");
+        return sets.trans("Warship");
     }
     public SpaceShip clone()
     {
@@ -2491,7 +2491,7 @@ class Chaser extends Warship
     @Override
     public String getName(Setting sets)
     {
-    	return sets.trans("Chaser");
+        return sets.trans("Chaser");
     }
     @Override
     public double ai_advantage_mode2(int enemies, int max_enemy_limit, int underOnes, boolean boss_exist)
@@ -2784,7 +2784,7 @@ class Carrier extends Warship
     @Override
     public String getName(Setting sets)
     {
-    	return sets.trans("Carrier");
+        return sets.trans("Carrier");
     }
     public SpaceShip clone()
     {
@@ -3073,7 +3073,7 @@ class Satellite extends SpaceShip
     @Override
     public String getName(Setting sets)
     {
-    	return sets.trans("Satellite");
+        return sets.trans("Satellite");
     }
     public SpaceShip clone()
     {

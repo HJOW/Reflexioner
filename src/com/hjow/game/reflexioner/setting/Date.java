@@ -1,9 +1,10 @@
 package com.hjow.game.reflexioner.setting;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
-public class Date implements Serializable
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
+
+public class Date extends XMLSerializableObject
 {
     private static final long serialVersionUID = -5617089384835824513L;
     private int year, month, day, hour, minute, second;

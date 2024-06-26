@@ -105,7 +105,7 @@ public class Korean implements Language
         prop.setProperty("Input your point authorized code here."                                                                  , "이 곳에 인증 코드 입력"                                                                                  );
         prop.setProperty("Continue (without Points)"                                                                               , "계속하기 (점수 초기화)"                                                                                  );
         prop.setProperty("Download Additional Assets"                                                                              , "추가 파일 다운로드");
-    	/*
+        /*
         title = "Calc";
         x = "X";
         file_created = "다음과 같은 파일들이 생성되었습니다.";
@@ -538,21 +538,21 @@ public class Korean implements Language
         */
     }
 
-	@Override
-	public String language() {
-		return "ko";
-	}
+    @Override
+    public String language() {
+        return "ko";
+    }
 
-	@Override
-	public Properties properties() {
-		return prop;
-	}
+    @Override
+    public Properties properties() {
+        return prop;
+    }
 
-	public Properties getProp() {
-		return prop;
-	}
+    public Properties getProp() {
+        return prop;
+    }
 
-	public void setProp(Properties prop) {
-		this.prop = prop;
-	}     
+    public void setProp(Properties prop) {
+        this.prop = prop;
+    }     
 }

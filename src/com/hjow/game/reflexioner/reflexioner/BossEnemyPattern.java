@@ -25,9 +25,9 @@ public class BossEnemyPattern extends EnemyPattern
     }
     public BossEnemyPattern(String str)
     {
-    	Properties prop = RXUtils.extractProperty(str);
-    	setEnemy(null);
-    	setMin_delay(new Long(prop.getProperty("MinDelay")));
+        Properties prop = RXUtils.extractProperty(str);
+        setEnemy(null);
+        setMin_delay(new Long(prop.getProperty("MinDelay")));
         setMax_delay(new Long(prop.getProperty("MaxDelay")));
         setRatio(new Double(prop.getProperty("Ratio")));
         setAddDamageRatio(new Double(prop.getProperty("AddDamageRatio")));
@@ -37,14 +37,14 @@ public class BossEnemyPattern extends EnemyPattern
     @Override
     public Properties convertProp()
     {
-    	Properties prop = new Properties();
-    	prop.setProperty("MinDelay"      , "" + getMin_delay()     );
-    	prop.setProperty("MaxDelay"      , "" + getMax_delay()     );
-    	prop.setProperty("Ratio"         , "" + getRatio()         );
-    	prop.setProperty("AddDamageRatio", "" + getAddDamageRatio());
-    	prop.setProperty("AddHPRatio"    , "" + getAddHPRatio()    );
-    	prop.setProperty("Unique"        , "" + getUnique()    );
-    	return prop;
+        Properties prop = new Properties();
+        prop.setProperty("MinDelay"      , "" + getMin_delay()     );
+        prop.setProperty("MaxDelay"      , "" + getMax_delay()     );
+        prop.setProperty("Ratio"         , "" + getRatio()         );
+        prop.setProperty("AddDamageRatio", "" + getAddDamageRatio());
+        prop.setProperty("AddHPRatio"    , "" + getAddHPRatio()    );
+        prop.setProperty("Unique"        , "" + getUnique()    );
+        return prop;
     }
     @Override
     public Enemy createEnemy(String path, long difficulty)

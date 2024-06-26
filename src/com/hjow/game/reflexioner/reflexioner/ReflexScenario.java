@@ -1,6 +1,5 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -10,16 +9,17 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.hjow.game.reflexioner.mainClasses.RXUtils;
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 import com.hjow.game.reflexioner.reflexioner.Arena.ArenaThread;
 import com.hjow.game.reflexioner.setting.Lint;
 
-public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
+public class ReflexScenario extends XMLSerializableObject implements Comparable<ReflexScenario>
 {
     private static final long serialVersionUID = 872068919420124788L;
     public static ReflexScenario defaultScenario = new ReflexScenario();
     static
     {
-    	defaultScenario.setSerials(872068919420124789L);
+        defaultScenario.setSerials(872068919420124789L);
     }
     
     private long serials = 0L;
@@ -65,11 +65,11 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         defaultPattern = new EnemyPattern();
         
         Enemy newEnemy = new Enemy();
-		newEnemy.setColor(Reflexioner.color_enemy);
-		newEnemy.setMax_energy(200);
-		newEnemy.setMax_hp(500);
-		newEnemy.setDamage(50);
-		newEnemy.init();
+        newEnemy.setColor(Reflexioner.color_enemy);
+        newEnemy.setMax_energy(200);
+        newEnemy.setMax_hp(500);
+        newEnemy.setDamage(50);
+        newEnemy.init();
         defaultPattern.setEnemy(newEnemy);
         defaultPattern.setRatio(0.1);
         
@@ -82,13 +82,13 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         newEnemyPattern.setAddHPRatio(new Double(0.01));
         newEnemyPattern.setRatio(0.001);
         newEnemy = new Boss();
-		newEnemy.setColor(Reflexioner.color_enemy);
-		newEnemy.setMax_energy(200);
-		newEnemy.setMax_hp(5000);		
-		((Boss)newEnemy).setBeam_energy(300);
-		((Boss)newEnemy).setRatio(0.99);
-		((Boss)newEnemy).setUnique(false);
-		newEnemy.init();
+        newEnemy.setColor(Reflexioner.color_enemy);
+        newEnemy.setMax_energy(200);
+        newEnemy.setMax_hp(5000);        
+        ((Boss)newEnemy).setBeam_energy(300);
+        ((Boss)newEnemy).setRatio(0.99);
+        ((Boss)newEnemy).setUnique(false);
+        newEnemy.init();
         newEnemyPattern.setEnemy(newEnemy);
         pats.add(newEnemyPattern);
         
@@ -113,111 +113,111 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         patterns = new EnemyPattern[pats.size()];
         for(int idx=0; idx<patterns.length; idx++)
         {
-        	patterns[idx] = pats.get(idx);
+            patterns[idx] = pats.get(idx);
         }
         
         deadLine = BigInteger.ZERO;
     }
     public ReflexScenario(String serialized)
     {
-    	this(RXUtils.extractProperty(serialized));
+        this(RXUtils.extractProperty(serialized));
     }
     public ReflexScenario(String serialized, boolean gzip)
     {
-    	this(RXUtils.extractProperty(serialized, gzip));
+        this(RXUtils.extractProperty(serialized, gzip));
     }
     public ReflexScenario(Properties serialized)
     {
-    	this();
-    	setSerials(Long.parseLong(serialized.getProperty("Serial")));
-    	setName(serialized.getProperty("Name"));
-    	setDescription(serialized.getProperty("Description"));
-    	setKoreanDescription(serialized.getProperty("KoreanDescription"));
-    	setSpaceShip(serialized.getProperty("SpaceShip"));
-    	setSpaceShipSelectable(RXUtils.parseBoolean(serialized.getProperty("SpaceShipSelectable")));
-    	setStartItemM(Integer.parseInt(serialized.getProperty("StartItemM")));
-    	setStartItemD(Integer.parseInt(serialized.getProperty("StartItemD")));
-    	setStartItemS(Integer.parseInt(serialized.getProperty("StartItemS")));
-    	setStartItemA(Integer.parseInt(serialized.getProperty("StartItemA")));
-    	setStartItemK(Integer.parseInt(serialized.getProperty("StartItemK")));
-    	setStartItemE(Integer.parseInt(serialized.getProperty("StartItemE")));
-    	setStartItemG(Integer.parseInt(serialized.getProperty("StartItemG")));
-    	setDifficulty(Integer.parseInt(serialized.getProperty("Difficulty")));
-    	setEnemyLimit(Integer.parseInt(serialized.getProperty("EnemyLimit")));
-    	setDiffDelay(Long.parseLong(serialized.getProperty("DifficultDelay")));
-    	setDeadLine(new BigInteger(serialized.getProperty("DeadLine").replace(",", "").replace(" ", "")));
-    	setCustomPhase(RXUtils.parseBoolean(serialized.get("CustomPhase")));
-    	
-    	List<EnemyPattern> pts = new ArrayList<EnemyPattern>();
-    	String patternx = serialized.getProperty("EnemyPatterns");
-    	StringTokenizer ptTokenizer = new StringTokenizer(patternx, "||");
-    	while(ptTokenizer.hasMoreTokens())
-    	{
-    		String one = ptTokenizer.nextToken().trim();
-    		if(one.equals("")) continue;
-    		pts.add(new EnemyPattern(one));
-    	}
-    	EnemyPattern[] patterns = new EnemyPattern[pts.size()];
-    	for(int idx=0; idx<patterns.length; idx++)
-    	{
-    	    patterns[idx] = pts.get(idx);
+        this();
+        setSerials(Long.parseLong(serialized.getProperty("Serial")));
+        setName(serialized.getProperty("Name"));
+        setDescription(serialized.getProperty("Description"));
+        setKoreanDescription(serialized.getProperty("KoreanDescription"));
+        setSpaceShip(serialized.getProperty("SpaceShip"));
+        setSpaceShipSelectable(RXUtils.parseBoolean(serialized.getProperty("SpaceShipSelectable")));
+        setStartItemM(Integer.parseInt(serialized.getProperty("StartItemM")));
+        setStartItemD(Integer.parseInt(serialized.getProperty("StartItemD")));
+        setStartItemS(Integer.parseInt(serialized.getProperty("StartItemS")));
+        setStartItemA(Integer.parseInt(serialized.getProperty("StartItemA")));
+        setStartItemK(Integer.parseInt(serialized.getProperty("StartItemK")));
+        setStartItemE(Integer.parseInt(serialized.getProperty("StartItemE")));
+        setStartItemG(Integer.parseInt(serialized.getProperty("StartItemG")));
+        setDifficulty(Integer.parseInt(serialized.getProperty("Difficulty")));
+        setEnemyLimit(Integer.parseInt(serialized.getProperty("EnemyLimit")));
+        setDiffDelay(Long.parseLong(serialized.getProperty("DifficultDelay")));
+        setDeadLine(new BigInteger(serialized.getProperty("DeadLine").replace(",", "").replace(" ", "")));
+        setCustomPhase(RXUtils.parseBoolean(serialized.get("CustomPhase")));
+        
+        List<EnemyPattern> pts = new ArrayList<EnemyPattern>();
+        String patternx = serialized.getProperty("EnemyPatterns");
+        StringTokenizer ptTokenizer = new StringTokenizer(patternx, "||");
+        while(ptTokenizer.hasMoreTokens())
+        {
+            String one = ptTokenizer.nextToken().trim();
+            if(one.equals("")) continue;
+            pts.add(new EnemyPattern(one));
         }
-    	pts.clear();
-    	setPatterns(patterns);
-    	
-    	setDefaultPattern(new EnemyPattern(serialized.getProperty("DefaultEnemyPattern")));
-    	setAvailableContinues(Integer.parseInt(serialized.getProperty("AvailableContinues")));
-    	setContinueType(Integer.parseInt(serialized.getProperty("ContinueType")));
+        EnemyPattern[] patterns = new EnemyPattern[pts.size()];
+        for(int idx=0; idx<patterns.length; idx++)
+        {
+            patterns[idx] = pts.get(idx);
+        }
+        pts.clear();
+        setPatterns(patterns);
+        
+        setDefaultPattern(new EnemyPattern(serialized.getProperty("DefaultEnemyPattern")));
+        setAvailableContinues(Integer.parseInt(serialized.getProperty("AvailableContinues")));
+        setContinueType(Integer.parseInt(serialized.getProperty("ContinueType")));
     }
     private Properties serializeTo(boolean withAuthCode)
     {
-    	Properties serialized = new Properties();
-    	serialized.setProperty("Serial", "" + getSerials());
-    	serialized.setProperty("Name", getName());
-    	serialized.setProperty("Description", getDescription());
-    	serialized.setProperty("KoreanDescription", getKoreanDescription());
-    	serialized.setProperty("SpaceShip", getSpaceShip());
-    	serialized.setProperty("SpaceShipSelectable", "" + getSpaceShipSelectable());
-    	
-    	serialized.setProperty("StartItemM", "" + getStartItemM());
-    	serialized.setProperty("StartItemD", "" + getStartItemD());
-    	serialized.setProperty("StartItemS", "" + getStartItemS());
-    	serialized.setProperty("StartItemA", "" + getStartItemA());
-    	serialized.setProperty("StartItemK", "" + getStartItemK());
-    	serialized.setProperty("StartItemE", "" + getStartItemE());
-    	serialized.setProperty("StartItemG", "" + getStartItemG());
-    	serialized.setProperty("Difficulty", "" + getDifficulty());
-    	serialized.setProperty("EnemyLimit", "" + getEnemyLimit());
-    	serialized.setProperty("DifficultDelay", "" + getDiffDelay());
-    	serialized.setProperty("DeadLine", "" + getDeadLine());
-    	serialized.setProperty("CustomPhase", "" + isCustomPhase());
-    	
-    	StringBuilder res = new StringBuilder("");
-    	boolean firsts = true;
-    	for(EnemyPattern p : getPatterns())
-    	{
-    		if(! firsts) res = res.append("||");
-    		res = res.append(p.convertStr());
-    		firsts = false;
-    	}
-    	serialized.setProperty("EnemyPatterns", res.toString());
-    	res = null;
-    	
-    	serialized.setProperty("DefaultEnemyPattern", getDefaultPattern().convertStr());
-    	serialized.setProperty("AvailableContinues", "" + getAvailableContinues());
-    	serialized.setProperty("ContinueType", "" + getContinueType());
-    	
-    	if(withAuthCode)
-    	{
-    		createAuthorize();
-        	serialized.setProperty("AuthorizeCode", getAuthorizeCode());
-    	}
-    	
-    	return serialized;
+        Properties serialized = new Properties();
+        serialized.setProperty("Serial", "" + getSerials());
+        serialized.setProperty("Name", getName());
+        serialized.setProperty("Description", getDescription());
+        serialized.setProperty("KoreanDescription", getKoreanDescription());
+        serialized.setProperty("SpaceShip", getSpaceShip());
+        serialized.setProperty("SpaceShipSelectable", "" + getSpaceShipSelectable());
+        
+        serialized.setProperty("StartItemM", "" + getStartItemM());
+        serialized.setProperty("StartItemD", "" + getStartItemD());
+        serialized.setProperty("StartItemS", "" + getStartItemS());
+        serialized.setProperty("StartItemA", "" + getStartItemA());
+        serialized.setProperty("StartItemK", "" + getStartItemK());
+        serialized.setProperty("StartItemE", "" + getStartItemE());
+        serialized.setProperty("StartItemG", "" + getStartItemG());
+        serialized.setProperty("Difficulty", "" + getDifficulty());
+        serialized.setProperty("EnemyLimit", "" + getEnemyLimit());
+        serialized.setProperty("DifficultDelay", "" + getDiffDelay());
+        serialized.setProperty("DeadLine", "" + getDeadLine());
+        serialized.setProperty("CustomPhase", "" + isCustomPhase());
+        
+        StringBuilder res = new StringBuilder("");
+        boolean firsts = true;
+        for(EnemyPattern p : getPatterns())
+        {
+            if(! firsts) res = res.append("||");
+            res = res.append(p.convertStr());
+            firsts = false;
+        }
+        serialized.setProperty("EnemyPatterns", res.toString());
+        res = null;
+        
+        serialized.setProperty("DefaultEnemyPattern", getDefaultPattern().convertStr());
+        serialized.setProperty("AvailableContinues", "" + getAvailableContinues());
+        serialized.setProperty("ContinueType", "" + getContinueType());
+        
+        if(withAuthCode)
+        {
+            createAuthorize();
+            serialized.setProperty("AuthorizeCode", getAuthorizeCode());
+        }
+        
+        return serialized;
     }
     public Properties serializeTo()
     {
-    	return serializeTo(true);
+        return serializeTo(true);
     }
     public final void createAuthorize()
     {
@@ -226,42 +226,42 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         StringBuilder coll = new StringBuilder("");
         
         coll = coll.append(serialized.getProperty("Serial"             )).append("|"); 
-    	coll = coll.append(serialized.getProperty("Name"               )).append("|"); 
-    	coll = coll.append(serialized.getProperty("Description"        )).append("|"); 
-    	coll = coll.append(serialized.getProperty("KoreanDescription"  )).append("|"); 
-    	coll = coll.append(serialized.getProperty("SpaceShip"          )).append("|"); 
-    	coll = coll.append(serialized.getProperty("SpaceShipSelectable")).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemM"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemD"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemS"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemA"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemK"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemE"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("StartItemG"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("Difficulty"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("EnemyLimit"         )).append("|"); 
-    	coll = coll.append(serialized.getProperty("DifficultDelay"     )).append("|"); 
-    	coll = coll.append(serialized.getProperty("DeadLine"           )).append("|"); 
-    	coll = coll.append(serialized.getProperty("CustomPhase"        )).append("|"); 
-    	coll = coll.append(serialized.getProperty("EnemyPatterns"      )).append("|"); 
-    	coll = coll.append(serialized.getProperty("DefaultEnemyPattern")).append("|"); 
-    	coll = coll.append(serialized.getProperty("AvailableContinues" )).append("|"); 
-    	coll = coll.append(serialized.getProperty("ContinueType"       )).append("|"); 
+        coll = coll.append(serialized.getProperty("Name"               )).append("|"); 
+        coll = coll.append(serialized.getProperty("Description"        )).append("|"); 
+        coll = coll.append(serialized.getProperty("KoreanDescription"  )).append("|"); 
+        coll = coll.append(serialized.getProperty("SpaceShip"          )).append("|"); 
+        coll = coll.append(serialized.getProperty("SpaceShipSelectable")).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemM"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemD"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemS"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemA"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemK"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemE"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("StartItemG"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("Difficulty"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("EnemyLimit"         )).append("|"); 
+        coll = coll.append(serialized.getProperty("DifficultDelay"     )).append("|"); 
+        coll = coll.append(serialized.getProperty("DeadLine"           )).append("|"); 
+        coll = coll.append(serialized.getProperty("CustomPhase"        )).append("|"); 
+        coll = coll.append(serialized.getProperty("EnemyPatterns"      )).append("|"); 
+        coll = coll.append(serialized.getProperty("DefaultEnemyPattern")).append("|"); 
+        coll = coll.append(serialized.getProperty("AvailableContinues" )).append("|"); 
+        coll = coll.append(serialized.getProperty("ContinueType"       )).append("|"); 
         
-    	try
-    	{
-			setAuthorizeCode(RXUtils.hexString(RXUtils.hash(coll.toString().getBytes("UTF-8"))));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+        try
+        {
+            setAuthorizeCode(RXUtils.hexString(RXUtils.hash(coll.toString().getBytes("UTF-8"))));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
     public String stringData(boolean gzip)
     {
-    	return RXUtils.serializeProperty(serializeTo(), gzip);
+        return RXUtils.serializeProperty(serializeTo(), gzip);
     }
     public String stringData()
     {
-    	return stringData(true);
+        return stringData(true);
     }
     public String getName()
     {
@@ -307,7 +307,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     
     public final boolean isAuthorized()
     {
-    	if(defaultScenario.equals(this)) return true;
+        if(defaultScenario.equals(this)) return true;
         return false;      
     }
     
@@ -322,13 +322,13 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
     }
     public Integer getEnemyLimit()
     {
-		return enemyLimit;
-	}
-	public void setEnemyLimit(Integer enemyLimit)
-	{
-		this.enemyLimit = enemyLimit;
-	}
-	public String getDescription()
+        return enemyLimit;
+    }
+    public void setEnemyLimit(Integer enemyLimit)
+    {
+        this.enemyLimit = enemyLimit;
+    }
+    public String getDescription()
     {
         return description;
     }
@@ -345,95 +345,95 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
         this.koreanDescription = koreanDescription;
     }
     public Integer getStartItemM() {
-		return startItemM;
-	}
-	public void setStartItemM(Integer startItemM) {
-		this.startItemM = startItemM;
-	}
-	public Integer getStartItemD() {
-		return startItemD;
-	}
-	public void setStartItemD(Integer startItemD) {
-		this.startItemD = startItemD;
-	}
-	public Integer getStartItemS() {
-		return startItemS;
-	}
-	public void setStartItemS(Integer startItemS) {
-		this.startItemS = startItemS;
-	}
-	public Integer getStartItemA() {
-		return startItemA;
-	}
-	public void setStartItemA(Integer startItemA) {
-		this.startItemA = startItemA;
-	}
-	public Integer getStartItemK() {
-		return startItemK;
-	}
-	public void setStartItemK(Integer startItemK) {
-		this.startItemK = startItemK;
-	}
-	public Integer getStartItemE() {
-		return startItemE;
-	}
-	public void setStartItemE(Integer startItemE) {
-		this.startItemE = startItemE;
-	}
-	public Integer getStartItemG() {
-		return startItemG;
-	}
-	public void setStartItemG(Integer startItemG) {
-		this.startItemG = startItemG;
-	}
-	public Integer getAvailableContinues() {
-		return availableContinues;
-	}
-	public void setAvailableContinues(Integer availableContinues) {
-		this.availableContinues = availableContinues;
-	}
-	public Integer getContinueType() {
-		return continueType;
-	}
-	public void setContinueType(Integer continueType) {
-		this.continueType = continueType;
-	}
-	public Boolean getSpaceShipSelectable() {
-		return spaceShipSelectable;
-	}
-	public void setSpaceShipSelectable(Boolean spaceShipSelectable) {
-		this.spaceShipSelectable = spaceShipSelectable;
-	}
-	public BigInteger getDeadLine() {
-		return deadLine;
-	}
-	public void setDeadLine(BigInteger deadLine) {
-		this.deadLine = deadLine;
-	}
-	@Override
-	public int compareTo(ReflexScenario scen)
+        return startItemM;
+    }
+    public void setStartItemM(Integer startItemM) {
+        this.startItemM = startItemM;
+    }
+    public Integer getStartItemD() {
+        return startItemD;
+    }
+    public void setStartItemD(Integer startItemD) {
+        this.startItemD = startItemD;
+    }
+    public Integer getStartItemS() {
+        return startItemS;
+    }
+    public void setStartItemS(Integer startItemS) {
+        this.startItemS = startItemS;
+    }
+    public Integer getStartItemA() {
+        return startItemA;
+    }
+    public void setStartItemA(Integer startItemA) {
+        this.startItemA = startItemA;
+    }
+    public Integer getStartItemK() {
+        return startItemK;
+    }
+    public void setStartItemK(Integer startItemK) {
+        this.startItemK = startItemK;
+    }
+    public Integer getStartItemE() {
+        return startItemE;
+    }
+    public void setStartItemE(Integer startItemE) {
+        this.startItemE = startItemE;
+    }
+    public Integer getStartItemG() {
+        return startItemG;
+    }
+    public void setStartItemG(Integer startItemG) {
+        this.startItemG = startItemG;
+    }
+    public Integer getAvailableContinues() {
+        return availableContinues;
+    }
+    public void setAvailableContinues(Integer availableContinues) {
+        this.availableContinues = availableContinues;
+    }
+    public Integer getContinueType() {
+        return continueType;
+    }
+    public void setContinueType(Integer continueType) {
+        this.continueType = continueType;
+    }
+    public Boolean getSpaceShipSelectable() {
+        return spaceShipSelectable;
+    }
+    public void setSpaceShipSelectable(Boolean spaceShipSelectable) {
+        this.spaceShipSelectable = spaceShipSelectable;
+    }
+    public BigInteger getDeadLine() {
+        return deadLine;
+    }
+    public void setDeadLine(BigInteger deadLine) {
+        this.deadLine = deadLine;
+    }
+    @Override
+    public int compareTo(ReflexScenario scen)
     {
         return new Long(getSerials()).compareTo(new Long(scen.getSerials()));
     }
-	public boolean customPhase(Arena arena, ArenaThread t)
-	{
-		return true;
-	}
-	public final void actPhase(Arena arena, ArenaThread t)
-	{
-		if(isCustomPhase())
-		{
-			if(customPhase(arena, t)) return;
-		}
-		
-		Missile target_missile = null;
+    public boolean customPhase(Arena arena, ArenaThread t)
+    {
+        return true;
+    }
+    public final void actPhase(Arena arena, ArenaThread t)
+    {
+        if(isCustomPhase())
+        {
+            if(customPhase(arena, t)) return;
+        }
+        
+        Missile target_missile = null;
         Item target_item = null, newItem = null;
         Enemy target_enemy = null, newEnemy = null;
         BigEnemy newBigEnemy = null;
         Boss newBoss = null;
         Boom newBoom = null;
         Boom target_boom = null;
-		try
+        try
         {
             arena.setBoss_exist(false);
             arena.setUnique_exist(false);
@@ -614,7 +614,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 }
                 if(arena.getMissile().get(k) instanceof EnemyMissile)
                 {
-                	List<Enemy> getEnemies = ((EnemyMissile) arena.getMissile().get(k)).getEnemies();
+                    List<Enemy> getEnemies = ((EnemyMissile) arena.getMissile().get(k)).getEnemies();
                     try
                     {
                         while(getEnemies.size() + arena.getEnemies().size() > Arena.getGmaxEnemies())
@@ -630,7 +630,7 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 }
                 else if(arena.getMissile().get(k) instanceof HelperSpread)
                 {
-                	List<Enemy> getEnemies = ((HelperSpread) arena.getMissile().get(k)).open(arena.getSpaceShip(), arena.getDifficulty_mode(), arena.getFile_path());
+                    List<Enemy> getEnemies = ((HelperSpread) arena.getMissile().get(k)).open(arena.getSpaceShip(), arena.getDifficulty_mode(), arena.getFile_path());
                     try
                     {
                         while(getEnemies.size() + arena.getOurEnemy().size() > Arena.getGmaxEnemies())
@@ -1373,30 +1373,30 @@ public class ReflexScenario implements Serializable, Comparable<ReflexScenario>
                 e.printStackTrace();
             }
         }
-	}
-	public final boolean isCustomPhase() {
-		return customPhase;
-	}
-	public final void setCustomPhase(boolean customPhase) {
-		this.customPhase = customPhase;
-	}
-	public final long getSerials() {
-		return serials;
-	}
-	public final void setSerials(long serials) {
-		if(serials == defaultScenario.getSerials())
-		{
-			if(! defaultScenario.equals(this))
-			{
-				throw new RuntimeException("Cannot use this serial number.");
-			}
-		}
-		this.serials = serials;
-	}
-	public final String getAuthorizeCode() {
-		return authorizeCode;
-	}
-	public final void setAuthorizeCode(String authorizeCode) {
-		this.authorizeCode = authorizeCode;
-	}
+    }
+    public final boolean isCustomPhase() {
+        return customPhase;
+    }
+    public final void setCustomPhase(boolean customPhase) {
+        this.customPhase = customPhase;
+    }
+    public final long getSerials() {
+        return serials;
+    }
+    public final void setSerials(long serials) {
+        if(serials == defaultScenario.getSerials())
+        {
+            if(! defaultScenario.equals(this))
+            {
+                throw new RuntimeException("Cannot use this serial number.");
+            }
+        }
+        this.serials = serials;
+    }
+    public final String getAuthorizeCode() {
+        return authorizeCode;
+    }
+    public final void setAuthorizeCode(String authorizeCode) {
+        this.authorizeCode = authorizeCode;
+    }
 }

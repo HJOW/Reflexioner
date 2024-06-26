@@ -4,8 +4,8 @@ import java.util.Properties;
 
 public class English implements Language
 {
-	private static final long serialVersionUID = -1735529442672601231L;
-	Properties prop = new Properties();
+    private static final long serialVersionUID = -1735529442672601231L;
+    Properties prop = new Properties();
     
     public English()
     {
@@ -102,21 +102,21 @@ public class English implements Language
         prop.setProperty("Standard"                                                                                                , "Standard"                                                                                                );
     }
 
-	@Override
-	public String language() {
-		return "en";
-	}
+    @Override
+    public String language() {
+        return "en";
+    }
 
-	@Override
-	public Properties properties() {
-		return prop;
-	}
+    @Override
+    public Properties properties() {
+        return prop;
+    }
 
-	public Properties getProp() {
-		return prop;
-	}
+    public Properties getProp() {
+        return prop;
+    }
 
-	public void setProp(Properties prop) {
-		this.prop = prop;
-	}     
+    public void setProp(Properties prop) {
+        this.prop = prop;
+    }     
 }

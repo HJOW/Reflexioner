@@ -197,11 +197,11 @@ public class Raser extends Missile implements Boom, FormulaUsedMissile
         // Convert
         for(int idx=0; idx<xs.length; idx++)
         {
-        	xs[idx] = Arena.convertX(xs[idx], a);
+            xs[idx] = Arena.convertX(xs[idx], a);
         }
         for(int idx=0; idx<ys.length; idx++)
         {
-        	ys[idx] = Arena.convertY(ys[idx], a);
+            ys[idx] = Arena.convertY(ys[idx], a);
         }
         
         // Draw

@@ -1,11 +1,11 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.io.Serializable;
 import java.util.Properties;
 
 import com.hjow.game.reflexioner.mainClasses.RXUtils;
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 
-public class EnemyPattern implements Serializable
+public class EnemyPattern extends XMLSerializableObject
 {
     private static final long serialVersionUID = 685579182641435599L;
     private Enemy enemy;
@@ -28,10 +28,10 @@ public class EnemyPattern implements Serializable
     }
     public EnemyPattern(String str)
     {
-    	Properties prop = RXUtils.extractProperty(str, false);
-    	String strEnemy     = prop.getProperty("Enemy");
-    	this.enemy          = Enemy.stringToEnemy(strEnemy);
-    	this.min_delay      = new Long(prop.getProperty("MinDelay"));
+        Properties prop = RXUtils.extractProperty(str, false);
+        String strEnemy     = prop.getProperty("Enemy");
+        this.enemy          = Enemy.stringToEnemy(strEnemy);
+        this.min_delay      = new Long(prop.getProperty("MinDelay"));
         this.max_delay      = new Long(prop.getProperty("MaxDelay"));
         this.ratio          = new Double(prop.getProperty("Ratio"));
         this.addDamageRatio = new Double(prop.getProperty("AddDamageRatio"));
@@ -50,19 +50,19 @@ public class EnemyPattern implements Serializable
     }
     public Properties convertProp()
     {
-    	Properties prop = new Properties();
-    	prop.setProperty("Enemy", Enemy.enemyToString(enemy));
-    	prop.setProperty("MinDelay", "" + min_delay);
-    	prop.setProperty("MaxDelay", "" + max_delay);
-    	prop.setProperty("Ratio"         , "" + ratio);
-    	prop.setProperty("AddDamageRatio", "" + addDamageRatio);
-    	prop.setProperty("AddHPRatio"    , "" + addHPRatio);
-    	return prop;
+        Properties prop = new Properties();
+        prop.setProperty("Enemy", Enemy.enemyToString(enemy));
+        prop.setProperty("MinDelay", "" + min_delay);
+        prop.setProperty("MaxDelay", "" + max_delay);
+        prop.setProperty("Ratio"         , "" + ratio);
+        prop.setProperty("AddDamageRatio", "" + addDamageRatio);
+        prop.setProperty("AddHPRatio"    , "" + addHPRatio);
+        return prop;
     }
     public String convertStr()
     {
-    	Properties prop = convertProp();
-    	return RXUtils.serializeProperty(prop, false);
+        Properties prop = convertProp();
+        return RXUtils.serializeProperty(prop, false);
     }
     public Enemy createEnemy(String path, long difficulty)
     {

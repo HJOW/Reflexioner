@@ -325,12 +325,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         return null;
     }
     public String getFile_path() {
-		return file_path;
-	}
-	public void setFile_path(String file_path) {
-		this.file_path = file_path;
-	}
-	public void setScenario(ReflexScenario scen)
+        return file_path;
+    }
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
+    }
+    public void setScenario(ReflexScenario scen)
     {
         this.scenario = scen;
     }
@@ -507,18 +507,18 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         return catchEnemies;
     }
     public long getBossCount() {
-		return bossCount;
-	}
-	public void setBossCount(long bossCount) {
-		this.bossCount = bossCount;
-	}
-	public boolean isAutoFire() {
-		return autoFire;
-	}
-	public void setAutoFire(boolean autoFire) {
-		this.autoFire = autoFire;
-	}
-	public BigInteger getPoint()
+        return bossCount;
+    }
+    public void setBossCount(long bossCount) {
+        this.bossCount = bossCount;
+    }
+    public boolean isAutoFire() {
+        return autoFire;
+    }
+    public void setAutoFire(boolean autoFire) {
+        this.autoFire = autoFire;
+    }
+    public BigInteger getPoint()
     {
         return spaceShip.getPoint();
     }
@@ -556,12 +556,12 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         return difficulty_mode;
     }
     public List<Enemy> getTestEnemy() {
-		return testEnemy;
-	}
-	public void setTestEnemy(List<Enemy> testEnemy) {
-		this.testEnemy = testEnemy;
-	}
-	public void reset()
+        return testEnemy;
+    }
+    public void setTestEnemy(List<Enemy> testEnemy) {
+        this.testEnemy = testEnemy;
+    }
+    public void reset()
     {
         pause();
         enemies.clear();
@@ -666,7 +666,7 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         difficulty_delay = scenario.getDiffDelay();
         if(authority_mode)
         {
-        	authority_mode = scenario.isAuthorized();
+            authority_mode = scenario.isAuthorized();
         }
         
         if(scenario.getAvailableContinues() != null)
@@ -1358,36 +1358,36 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         private int unique_index = 0;      
         
         public Missile getTarget_missile() {
-			return target_missile;
-		}
-		public void setTarget_missile(Missile target_missile) {
-			this.target_missile = target_missile;
-		}
-		public Item getTarget_item() {
-			return target_item;
-		}
-		public void setTarget_item(Item target_item) {
-			this.target_item = target_item;
-		}
-		public Enemy getTarget_enemy() {
-			return target_enemy;
-		}
-		public void setTarget_enemy(Enemy target_enemy) {
-			this.target_enemy = target_enemy;
-		}
-		public Boom getTarget_boom() {
-			return target_boom;
-		}
-		public void setTarget_boom(Boom target_boom) {
-			this.target_boom = target_boom;
-		}
-		public int getUnique_index() {
-			return unique_index;
-		}
-		public void setUnique_index(int unique_index) {
-			this.unique_index = unique_index;
-		}
-		public ArenaThread()
+            return target_missile;
+        }
+        public void setTarget_missile(Missile target_missile) {
+            this.target_missile = target_missile;
+        }
+        public Item getTarget_item() {
+            return target_item;
+        }
+        public void setTarget_item(Item target_item) {
+            this.target_item = target_item;
+        }
+        public Enemy getTarget_enemy() {
+            return target_enemy;
+        }
+        public void setTarget_enemy(Enemy target_enemy) {
+            this.target_enemy = target_enemy;
+        }
+        public Boom getTarget_boom() {
+            return target_boom;
+        }
+        public void setTarget_boom(Boom target_boom) {
+            this.target_boom = target_boom;
+        }
+        public int getUnique_index() {
+            return unique_index;
+        }
+        public void setUnique_index(int unique_index) {
+            this.unique_index = unique_index;
+        }
+        public ArenaThread()
         {
             super();
         }
@@ -1611,18 +1611,18 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         this.boss_exist = boss_exist;
     }
     public boolean isUnique_exist() {
-		return unique_exist;
-	}
-	public void setUnique_exist(boolean unique_exist) {
-		this.unique_exist = unique_exist;
-	}
-	public UserDefinedShip getUserDefinedShip() {
-		return userDefinedShip;
-	}
-	public void setUserDefinedShip(UserDefinedShip userDefinedShip) {
-		this.userDefinedShip = userDefinedShip;
-	}
-	public String getAuthcode()
+        return unique_exist;
+    }
+    public void setUnique_exist(boolean unique_exist) {
+        this.unique_exist = unique_exist;
+    }
+    public UserDefinedShip getUserDefinedShip() {
+        return userDefinedShip;
+    }
+    public void setUserDefinedShip(UserDefinedShip userDefinedShip) {
+        this.userDefinedShip = userDefinedShip;
+    }
+    public String getAuthcode()
     {
         return authcode;
     }
@@ -1647,132 +1647,132 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         this.difficulty_delay = difficulty_delay;
     }
     public List<ReflexDecorate> getDecorates() {
-		return decorates;
-	}
-	public void setDecorates(List<ReflexDecorate> decorates) {
-		this.decorates = decorates;
-	}
-	public List<Enemy> getOurEnemy() {
-		return ourEnemy;
-	}
-	public void setOurEnemy(List<Enemy> ourEnemy) {
-		this.ourEnemy = ourEnemy;
-	}
-	public Vector<String> getMessages() {
-		return messages;
-	}
-	public void setMessages(Vector<String> messages) {
-		this.messages = messages;
-	}
-	public boolean isHud() {
-		return hud;
-	}
-	public void setHud(boolean hud) {
-		this.hud = hud;
-	}
-	public int getMessage_delay() {
-		return message_delay;
-	}
-	public void setMessage_delay(int message_delay) {
-		this.message_delay = message_delay;
-	}
-	public int getGame_xspeed() {
-		return game_xspeed;
-	}
-	public void setGame_xspeed(int game_xspeed) {
-		this.game_xspeed = game_xspeed;
-	}
-	public int getGetKeyCode() {
-		return getKeyCode;
-	}
-	public void setGetKeyCode(int getKeyCode) {
-		this.getKeyCode = getKeyCode;
-	}
-	public int getDecorationMax() {
-		return decorationMax;
-	}
-	public void setDecorationMax(int decorationMax) {
-		this.decorationMax = decorationMax;
-	}
-	public BigInteger getDecorationPointUnit() {
-		return decorationPointUnit;
-	}
-	public void setDecorationPointUnit(BigInteger decorationPointUnit) {
-		this.decorationPointUnit = decorationPointUnit;
-	}
-	public boolean isAuthority_mode() {
-		return authority_mode;
-	}
-	public void setAuthority_mode(boolean authority_mode) {
-		this.authority_mode = authority_mode;
-	}
-	public static boolean isAutoControl() {
-		return autoControl;
-	}
-	public static void setAutoControl(boolean autoControl) {
-		Arena.autoControl = autoControl;
-	}
-	public BufferedImage getBackgroundImage() {
-		return backgroundImage;
-	}
-	public void setBackgroundImage(BufferedImage backgroundImage) {
-		this.backgroundImage = backgroundImage;
-	}
-	public BigInteger getCatchEnemies() {
-		return catchEnemies;
-	}
-	public void setCatchEnemies(BigInteger catchEnemies) {
-		this.catchEnemies = catchEnemies;
-	}
-	public BigInteger getCatchItems() {
-		return catchItems;
-	}
-	public void setCatchItems(BigInteger catchItems) {
-		this.catchItems = catchItems;
-	}
-	public int getPlayer_type() {
-		return player_type;
-	}
-	public void setPlayer_type(int player_type) {
-		this.player_type = player_type;
-	}
-	public List<Missile> getFired_missile() {
-		return fired_missile;
-	}
-	public void setFired_missile(List<Missile> fired_missile) {
-		this.fired_missile = fired_missile;
-	}
-	public long getFinish_count() {
-		return finish_count;
-	}
-	public void setFinish_count(long finish_count) {
-		this.finish_count = finish_count;
-	}
-	public static int getSwift_delay() {
-		return swift_delay;
-	}
-	public static void setSwift_delay(int swift_delay) {
-		Arena.swift_delay = swift_delay;
-	}
-	public int getAutoControlDelay() {
-		return autoControlDelay;
-	}
-	public void setAutoControlDelay(int autoControlDelay) {
-		this.autoControlDelay = autoControlDelay;
-	}
-	public int[] getStartItems() {
-		return startItems;
-	}
-	public void setStartItems(int[] startItems) {
-		this.startItems = startItems;
-	}
-	public AReflexReplay getReplay() {
-		return replay;
-	}
-	public void setReplay(AReflexReplay replay) {
-		this.replay = replay;
-	}
-	public void applyState(ReflexReplay loadReplay, int index)
+        return decorates;
+    }
+    public void setDecorates(List<ReflexDecorate> decorates) {
+        this.decorates = decorates;
+    }
+    public List<Enemy> getOurEnemy() {
+        return ourEnemy;
+    }
+    public void setOurEnemy(List<Enemy> ourEnemy) {
+        this.ourEnemy = ourEnemy;
+    }
+    public Vector<String> getMessages() {
+        return messages;
+    }
+    public void setMessages(Vector<String> messages) {
+        this.messages = messages;
+    }
+    public boolean isHud() {
+        return hud;
+    }
+    public void setHud(boolean hud) {
+        this.hud = hud;
+    }
+    public int getMessage_delay() {
+        return message_delay;
+    }
+    public void setMessage_delay(int message_delay) {
+        this.message_delay = message_delay;
+    }
+    public int getGame_xspeed() {
+        return game_xspeed;
+    }
+    public void setGame_xspeed(int game_xspeed) {
+        this.game_xspeed = game_xspeed;
+    }
+    public int getGetKeyCode() {
+        return getKeyCode;
+    }
+    public void setGetKeyCode(int getKeyCode) {
+        this.getKeyCode = getKeyCode;
+    }
+    public int getDecorationMax() {
+        return decorationMax;
+    }
+    public void setDecorationMax(int decorationMax) {
+        this.decorationMax = decorationMax;
+    }
+    public BigInteger getDecorationPointUnit() {
+        return decorationPointUnit;
+    }
+    public void setDecorationPointUnit(BigInteger decorationPointUnit) {
+        this.decorationPointUnit = decorationPointUnit;
+    }
+    public boolean isAuthority_mode() {
+        return authority_mode;
+    }
+    public void setAuthority_mode(boolean authority_mode) {
+        this.authority_mode = authority_mode;
+    }
+    public static boolean isAutoControl() {
+        return autoControl;
+    }
+    public static void setAutoControl(boolean autoControl) {
+        Arena.autoControl = autoControl;
+    }
+    public BufferedImage getBackgroundImage() {
+        return backgroundImage;
+    }
+    public void setBackgroundImage(BufferedImage backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+    public BigInteger getCatchEnemies() {
+        return catchEnemies;
+    }
+    public void setCatchEnemies(BigInteger catchEnemies) {
+        this.catchEnemies = catchEnemies;
+    }
+    public BigInteger getCatchItems() {
+        return catchItems;
+    }
+    public void setCatchItems(BigInteger catchItems) {
+        this.catchItems = catchItems;
+    }
+    public int getPlayer_type() {
+        return player_type;
+    }
+    public void setPlayer_type(int player_type) {
+        this.player_type = player_type;
+    }
+    public List<Missile> getFired_missile() {
+        return fired_missile;
+    }
+    public void setFired_missile(List<Missile> fired_missile) {
+        this.fired_missile = fired_missile;
+    }
+    public long getFinish_count() {
+        return finish_count;
+    }
+    public void setFinish_count(long finish_count) {
+        this.finish_count = finish_count;
+    }
+    public static int getSwift_delay() {
+        return swift_delay;
+    }
+    public static void setSwift_delay(int swift_delay) {
+        Arena.swift_delay = swift_delay;
+    }
+    public int getAutoControlDelay() {
+        return autoControlDelay;
+    }
+    public void setAutoControlDelay(int autoControlDelay) {
+        this.autoControlDelay = autoControlDelay;
+    }
+    public int[] getStartItems() {
+        return startItems;
+    }
+    public void setStartItems(int[] startItems) {
+        this.startItems = startItems;
+    }
+    public AReflexReplay getReplay() {
+        return replay;
+    }
+    public void setReplay(AReflexReplay replay) {
+        this.replay = replay;
+    }
+    public void applyState(ReflexReplay loadReplay, int index)
     {
         pause();
         try
@@ -2087,58 +2087,58 @@ public class Arena extends JPanel implements KeyListener, ControllableShip
         if(getScenario() != null) return getScenario().getDiffDelay().longValue();
         return 0;
     }
-	public static int getGspeed() {
-		return gspeed;
-	}
-	public static void setGspeed(int gspeed) {
-		Arena.gspeed = gspeed;
-	}
-	public static int getGreactDelay() {
-		return greactDelay;
-	}
-	public static void setGreactDelay(int greactDelay) {
-		Arena.greactDelay = greactDelay;
-	}
-	public static int getGbossDelay() {
-		return gbossDelay;
-	}
-	public static void setGbossDelay(int gbossDelay) {
-		Arena.gbossDelay = gbossDelay;
-	}
-	public static int getGdifficultyDelay() {
-		return gdifficultyDelay;
-	}
-	public static void setGdifficultyDelay(int gdifficultyDelay) {
-		Arena.gdifficultyDelay = gdifficultyDelay;
-	}
-	public static int getGbossBeamDelay() {
-		return gbossBeamDelay;
-	}
-	public static void setGbossBeamDelay(int gbossBeamDelay) {
-		Arena.gbossBeamDelay = gbossBeamDelay;
-	}
-	public static int getGspaceShipR() {
-		return gspaceShipR;
-	}
-	public static void setGspaceShipR(int gspaceShipR) {
-		Arena.gspaceShipR = gspaceShipR;
-	}
-	public static int getGenemyR() {
-		return genemyR;
-	}
-	public static void setGenemyR(int genemyR) {
-		Arena.genemyR = genemyR;
-	}
-	public static int getGmaxEnemies() {
-		return gmaxEnemies;
-	}
-	public static void setGmaxEnemies(int gmaxEnemies) {
-		Arena.gmaxEnemies = gmaxEnemies;
-	}
-	public static int getGfireDelay() {
-		return gfireDelay;
-	}
-	public static void setGfireDelay(int gfireDelay) {
-		Arena.gfireDelay = gfireDelay;
-	}
+    public static int getGspeed() {
+        return gspeed;
+    }
+    public static void setGspeed(int gspeed) {
+        Arena.gspeed = gspeed;
+    }
+    public static int getGreactDelay() {
+        return greactDelay;
+    }
+    public static void setGreactDelay(int greactDelay) {
+        Arena.greactDelay = greactDelay;
+    }
+    public static int getGbossDelay() {
+        return gbossDelay;
+    }
+    public static void setGbossDelay(int gbossDelay) {
+        Arena.gbossDelay = gbossDelay;
+    }
+    public static int getGdifficultyDelay() {
+        return gdifficultyDelay;
+    }
+    public static void setGdifficultyDelay(int gdifficultyDelay) {
+        Arena.gdifficultyDelay = gdifficultyDelay;
+    }
+    public static int getGbossBeamDelay() {
+        return gbossBeamDelay;
+    }
+    public static void setGbossBeamDelay(int gbossBeamDelay) {
+        Arena.gbossBeamDelay = gbossBeamDelay;
+    }
+    public static int getGspaceShipR() {
+        return gspaceShipR;
+    }
+    public static void setGspaceShipR(int gspaceShipR) {
+        Arena.gspaceShipR = gspaceShipR;
+    }
+    public static int getGenemyR() {
+        return genemyR;
+    }
+    public static void setGenemyR(int genemyR) {
+        Arena.genemyR = genemyR;
+    }
+    public static int getGmaxEnemies() {
+        return gmaxEnemies;
+    }
+    public static void setGmaxEnemies(int gmaxEnemies) {
+        Arena.gmaxEnemies = gmaxEnemies;
+    }
+    public static int getGfireDelay() {
+        return gfireDelay;
+    }
+    public static void setGfireDelay(int gfireDelay) {
+        Arena.gfireDelay = gfireDelay;
+    }
 }

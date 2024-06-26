@@ -247,7 +247,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         menu_file_sample.setForeground(sets.getColor("ColorSelectedFore"));
         if(Reflexioner.usingFont != null)
         {
-        	menu_file_sample.setFont(Reflexioner.usingFont);
+            menu_file_sample.setFont(Reflexioner.usingFont);
         }
         menu_file.add(menu_file_sample);
         
@@ -312,32 +312,32 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         }
         else if(ob == menu_file_sample)
         {
-        	loadSamples();
+            loadSamples();
         }
         else if(ob == bt_play)
         {
-        	try
-        	{
-        		sp.playScenario(new ReflexScenario(contents.getText(), false));
-        	}
-        	catch(Exception ex)
-        	{
-        		ex.printStackTrace();
-        		JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
-        	}
+            try
+            {
+                sp.playScenario(new ReflexScenario(contents.getText(), false));
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
+            }
             
         }
         else if(ob == bt_add)
         {
-        	try
-        	{
-        		sp.inputScenario(new ReflexScenario(contents.getText(), false));
-        	}
-        	catch(Exception ex)
-        	{
-        		ex.printStackTrace();
-        		JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
-        	}
+            try
+            {
+                sp.inputScenario(new ReflexScenario(contents.getText(), false));
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, sets.trans("Error") + " : " + ex.getMessage());
+            }
         }
         else if(ob == bt_close)
         {
@@ -347,7 +347,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         {
             try
             {
-            	ReflexScenario bf = new ReflexScenario(contents.getText());
+                ReflexScenario bf = new ReflexScenario(contents.getText());
                 bf.createAuthorize();
                 contents.setText(bf.stringData());
             }
@@ -364,7 +364,7 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
         BufferedWriter buffered = null;
         try
         {
-        	ReflexScenario sc = new ReflexScenario(contents.getText());
+            ReflexScenario sc = new ReflexScenario(contents.getText());
             stream = new FileOutputStream(file);
             writer = new OutputStreamWriter(stream, "UTF-8");
             buffered = new BufferedWriter(writer);
@@ -510,15 +510,15 @@ public class ReflexScenarioEditor extends JDialog implements Openable, ActionLis
     }
     public void loadSamples()
     {
-    	List<ReflexScenario> samples = ReflexScenarioSetter.standards();
-    	for(ReflexScenario sm : samples)
-    	{
-    		if(sm.getSerials() == 3259827698746282L)
-    		{
-    			setScenario(sm);
-    			break;
-    		}
-    	}
+        List<ReflexScenario> samples = ReflexScenarioSetter.standards();
+        for(ReflexScenario sm : samples)
+        {
+            if(sm.getSerials() == 3259827698746282L)
+            {
+                setScenario(sm);
+                break;
+            }
+        }
     }
     @Override
     public void open()

@@ -5,11 +5,12 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Area;
-import java.io.Serializable;
 
 import javax.swing.JPanel;
 
-public abstract class GraphicObject implements Serializable
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
+
+public abstract class GraphicObject extends XMLSerializableObject
 {
     private static final long serialVersionUID = -8975895635519622658L;
     private int x = 0, y = 0;

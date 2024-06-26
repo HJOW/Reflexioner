@@ -1,14 +1,14 @@
 package com.hjow.game.reflexioner.reflexioner;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
+import com.hjow.game.reflexioner.mainClasses.XMLSerializableObject;
 import com.hjow.game.reflexioner.setting.Lint;
 
-public class ReflexReplay implements Serializable
+public class ReflexReplay extends XMLSerializableObject
 {
     private static final long serialVersionUID = 2379574302155122416L;
     private List<ReflexSave> scenes;

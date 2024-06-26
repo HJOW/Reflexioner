@@ -373,65 +373,65 @@ public class Enemy extends OvalObject implements HaveEnergy
     {
         this.own_unique = own_unique;
     }
-	public static String enemyToString(Enemy enemy)
-	{
-	    Properties prop = new Properties();
-	    prop.setProperty("Type", "normal");
-	    
-	    if(enemy instanceof BigEnemy)
-	    {
-	    	prop.setProperty("Guide", "" + ((BigEnemy) enemy).isGuide());
-	    	prop.setProperty("Missiles", "" + ((Boss) enemy).getMissiles());
-	    	
-	    	if(enemy instanceof Boss)
-	    	{
-	    		prop.setProperty("BeamDelay"  , "" + ((Boss) enemy).getBeam_std());
-	    		prop.setProperty("AttackRatio", "" + ((Boss) enemy).getRatio());
-	    		prop.setProperty("Unique"     , "" + ((Boss) enemy).isUnique());
-	    	}
-	    }
-	    if(enemy instanceof HyperBoss)
-	    {
-	    	prop.setProperty("Type", "boss_3");
-	    }
-	    else if(enemy instanceof ExtremeBoss)
-	    {
-	    	prop.setProperty("Type", "boss_2");
-	    }
-	    else if(enemy instanceof Boss)
-	    {
-	    	prop.setProperty("Type", "boss");
-	    }
-	    else if(enemy instanceof BigEnemy)
-	    {
-	    	prop.setProperty("Type", "bigenemy");
-	    }
-	    prop.setProperty("HP"       , "" + enemy.getMax_hp()    );
-	    prop.setProperty("Size"     , "" + enemy.getR()         );
-	    prop.setProperty("SpeedX"   , "" + enemy.getDx()        );
-	    prop.setProperty("SpeedY"   , "" + enemy.getDy()        );
-	    prop.setProperty("FireDelay", "" + enemy.getMax_energy());
-	    prop.setProperty("Damage"   , "" + enemy.getDamage()    );       
-	    
-	    return RXUtils.serializeProperty(prop, false);
-	}
-	public static Enemy stringToEnemy(String str)
-	{
-	    Enemy enemy = new Enemy();
-	    enemy.setColor(Reflexioner.color_enemy);
-	    enemy.setX(Arena.maxWidth());
-	    enemy.setY(10);
-	    enemy.setR(Arena.getGenemyR());
-	    enemy.setColor(Reflexioner.color_enemy);
-	    enemy.setHp(500);
-	    enemy.setMax_hp(500);
-	    enemy.setDamage((enemy.getHp() / 10));
-	    
-	    Properties prop = RXUtils.extractProperty(str, false);
-	    String type = prop.getProperty("Type");
-	    if(type.equals("boss_3"))
-	    {
-	    	enemy = new HyperBoss();
+    public static String enemyToString(Enemy enemy)
+    {
+        Properties prop = new Properties();
+        prop.setProperty("Type", "normal");
+        
+        if(enemy instanceof BigEnemy)
+        {
+            prop.setProperty("Guide", "" + ((BigEnemy) enemy).isGuide());
+            prop.setProperty("Missiles", "" + ((Boss) enemy).getMissiles());
+            
+            if(enemy instanceof Boss)
+            {
+                prop.setProperty("BeamDelay"  , "" + ((Boss) enemy).getBeam_std());
+                prop.setProperty("AttackRatio", "" + ((Boss) enemy).getRatio());
+                prop.setProperty("Unique"     , "" + ((Boss) enemy).isUnique());
+            }
+        }
+        if(enemy instanceof HyperBoss)
+        {
+            prop.setProperty("Type", "boss_3");
+        }
+        else if(enemy instanceof ExtremeBoss)
+        {
+            prop.setProperty("Type", "boss_2");
+        }
+        else if(enemy instanceof Boss)
+        {
+            prop.setProperty("Type", "boss");
+        }
+        else if(enemy instanceof BigEnemy)
+        {
+            prop.setProperty("Type", "bigenemy");
+        }
+        prop.setProperty("HP"       , "" + enemy.getMax_hp()    );
+        prop.setProperty("Size"     , "" + enemy.getR()         );
+        prop.setProperty("SpeedX"   , "" + enemy.getDx()        );
+        prop.setProperty("SpeedY"   , "" + enemy.getDy()        );
+        prop.setProperty("FireDelay", "" + enemy.getMax_energy());
+        prop.setProperty("Damage"   , "" + enemy.getDamage()    );       
+        
+        return RXUtils.serializeProperty(prop, false);
+    }
+    public static Enemy stringToEnemy(String str)
+    {
+        Enemy enemy = new Enemy();
+        enemy.setColor(Reflexioner.color_enemy);
+        enemy.setX(Arena.maxWidth());
+        enemy.setY(10);
+        enemy.setR(Arena.getGenemyR());
+        enemy.setColor(Reflexioner.color_enemy);
+        enemy.setHp(500);
+        enemy.setMax_hp(500);
+        enemy.setDamage((enemy.getHp() / 10));
+        
+        Properties prop = RXUtils.extractProperty(str, false);
+        String type = prop.getProperty("Type");
+        if(type.equals("boss_3"))
+        {
+            enemy = new HyperBoss();
             enemy.setColor(Reflexioner.color_bigenemy);
             enemy.setX(Arena.maxWidth());
             enemy.setY(10);
@@ -442,10 +442,10 @@ public class Enemy extends OvalObject implements HaveEnergy
             enemy.setDamage((enemy.getHp() / 10));
             ((Boss) enemy).setBeam_energy(300);
             ((Boss) enemy).setRatio(0.9);
-	    }
-	    else if(type.equals("boss_2"))
-	    {
-	    	enemy = new ExtremeBoss();
+        }
+        else if(type.equals("boss_2"))
+        {
+            enemy = new ExtremeBoss();
             enemy.setColor(Reflexioner.color_bigenemy);
             enemy.setX(Arena.maxWidth());
             enemy.setY(10);
@@ -456,10 +456,10 @@ public class Enemy extends OvalObject implements HaveEnergy
             enemy.setDamage((enemy.getHp() / 10));
             ((Boss) enemy).setBeam_energy(300);
             ((Boss) enemy).setRatio(0.9);
-	    }
-	    else if(type.equals("boss"))
-	    {
-	    	enemy = new Boss();
+        }
+        else if(type.equals("boss"))
+        {
+            enemy = new Boss();
             enemy.setColor(Reflexioner.color_bigenemy);
             enemy.setX(Arena.maxWidth());
             enemy.setY(10);
@@ -470,10 +470,10 @@ public class Enemy extends OvalObject implements HaveEnergy
             enemy.setDamage((enemy.getHp() / 10));
             ((Boss) enemy).setBeam_energy(300);
             ((Boss) enemy).setRatio(0.9);
-	    }
-	    else if(type.equals("bigenemy"))
-	    {
-	    	enemy = new Boss();
+        }
+        else if(type.equals("bigenemy"))
+        {
+            enemy = new Boss();
             enemy.setColor(Reflexioner.color_bigenemy);
             enemy.setX(Arena.maxWidth());
             enemy.setY(10);
@@ -484,47 +484,47 @@ public class Enemy extends OvalObject implements HaveEnergy
             enemy.setDamage((enemy.getHp() / 10));
             ((Boss) enemy).setBeam_energy(300);
             ((Boss) enemy).setRatio(0.9);
-	    }
-	    
-	    if(prop.containsKey("HP"   ))
-	    {
-	    	enemy.setMax_hp(Long.parseLong(prop.getProperty("HP")));
-	    	enemy.setHp(enemy.getMax_hp());
-	    }
-	    
-	    if(prop.containsKey("FireDelay"))
-	    {
-	    	enemy.setMax_energy(Long.parseLong(prop.getProperty("FireDelay")));
-		    enemy.setEnergy(enemy.getMax_energy());
-	    }
-	    
-	    if(prop.containsKey("Size"  )) enemy.setR(Integer.parseInt(prop.getProperty("Size")));
-	    if(prop.containsKey("SpeedX")) enemy.setDx(Integer.parseInt(prop.getProperty("SpeedX")));
-	    if(prop.containsKey("SpeedY")) enemy.setDy(Integer.parseInt(prop.getProperty("SpeedY")));
-	    if(prop.containsKey("Damage")) enemy.setDamage(Long.parseLong(prop.getProperty("Damage")));
-	    
-	    if(prop.containsKey("Guide"))
-	    {
-	    	((BigEnemy) enemy).setGuide(RXUtils.parseBoolean(prop.getProperty("Guide")));
-	    }
-	    if(prop.containsKey("Missiles"))
-	    {
-	    	((BigEnemy) enemy).setMissiles(Integer.parseInt(prop.getProperty("Missiles")));
-	    }
-	    if(prop.containsKey("BeamDelay"))
-	    {
-	    	((Boss) enemy).setBeam_std(Integer.parseInt(prop.getProperty("BeamDelay")));
-	    	((Boss) enemy).setBeam_energy(0);
-	    }
-	    if(prop.containsKey("AttackRatio"))
-	    {
-	    	((Boss) enemy).setRatio(Double.parseDouble(prop.getProperty("AttackRatio")));
-	    }
-	    if(prop.containsKey("Unique"))
-	    {
-	    	((Boss) enemy).setUnique(RXUtils.parseBoolean(prop.getProperty("Unique")));
-	    }
-	    
-	    return enemy;
-	}
+        }
+        
+        if(prop.containsKey("HP"   ))
+        {
+            enemy.setMax_hp(Long.parseLong(prop.getProperty("HP")));
+            enemy.setHp(enemy.getMax_hp());
+        }
+        
+        if(prop.containsKey("FireDelay"))
+        {
+            enemy.setMax_energy(Long.parseLong(prop.getProperty("FireDelay")));
+            enemy.setEnergy(enemy.getMax_energy());
+        }
+        
+        if(prop.containsKey("Size"  )) enemy.setR(Integer.parseInt(prop.getProperty("Size")));
+        if(prop.containsKey("SpeedX")) enemy.setDx(Integer.parseInt(prop.getProperty("SpeedX")));
+        if(prop.containsKey("SpeedY")) enemy.setDy(Integer.parseInt(prop.getProperty("SpeedY")));
+        if(prop.containsKey("Damage")) enemy.setDamage(Long.parseLong(prop.getProperty("Damage")));
+        
+        if(prop.containsKey("Guide"))
+        {
+            ((BigEnemy) enemy).setGuide(RXUtils.parseBoolean(prop.getProperty("Guide")));
+        }
+        if(prop.containsKey("Missiles"))
+        {
+            ((BigEnemy) enemy).setMissiles(Integer.parseInt(prop.getProperty("Missiles")));
+        }
+        if(prop.containsKey("BeamDelay"))
+        {
+            ((Boss) enemy).setBeam_std(Integer.parseInt(prop.getProperty("BeamDelay")));
+            ((Boss) enemy).setBeam_energy(0);
+        }
+        if(prop.containsKey("AttackRatio"))
+        {
+            ((Boss) enemy).setRatio(Double.parseDouble(prop.getProperty("AttackRatio")));
+        }
+        if(prop.containsKey("Unique"))
+        {
+            ((Boss) enemy).setUnique(RXUtils.parseBoolean(prop.getProperty("Unique")));
+        }
+        
+        return enemy;
+    }
 }
