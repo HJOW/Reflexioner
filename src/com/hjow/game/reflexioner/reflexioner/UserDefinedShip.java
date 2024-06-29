@@ -20,7 +20,6 @@ public class UserDefinedShip extends SpaceShip
     private String player_name = "";
     private Integer hp_capacity, speed_capacity, energy_capacity;
     private Long authCode;
-    private List<Weapon> weapons = new ArrayList<Weapon>();
     private DetailedVersionData version;
     private Integer shape;
     private Double w2_advantage_bossExist, w2_advantage_enemies9, w2_advantage_enemies8, w2_advantage_enemies7, w2_advantage_enemies6, w2_advantage_underOnes3, w2_advantage_underOnes2, w2_advantage_starts;
@@ -658,55 +657,6 @@ public class UserDefinedShip extends SpaceShip
         }    
     }
     @Override
-    public List<Missile> fire()
-    {
-        try
-        {
-            switch(getMode())
-            {
-                case 1:
-                	if(weapons.size() >= 1)
-                	{
-                		if(weapons.get(0).getNeed_e() <= getEnergy())
-                        {
-                            setEnergy(getEnergy() - weapons.get(0).getNeed_e());
-                            return weapons.get(0).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                        }
-                	}    
-                    break;
-                case 2:
-                	if(weapons.size() >= 2)
-                	{
-                		if(weapons.get(1).getNeed_e() <= getEnergy())
-                        {
-                            setEnergy(getEnergy() - weapons.get(1).getNeed_e());
-                            return weapons.get(1).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                        }
-                	}
-                    break;
-                case 3:
-                	if(weapons.size() >= 3)
-                	{
-                		if(weapons.get(2).getNeed_e() <= getEnergy())
-                        {
-                            setEnergy(getEnergy() - weapons.get(2).getNeed_e());
-                            return weapons.get(2).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
-                        }
-                	}
-                    break;
-                default:
-                    setMode(1);
-                    return fire();
-            }
-        } 
-        catch (Exception e)
-        {            
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
-    @Override
     public String getName(Setting sets)
     {
         return player_name;
@@ -735,14 +685,6 @@ public class UserDefinedShip extends SpaceShip
     public void setEnergy_capacity(Integer energy_capacity)
     {
         this.energy_capacity = energy_capacity;
-    }
-    public List<Weapon> getWeapons()
-    {
-        return weapons;
-    }
-    public void setWeapons(List<Weapon> weapons)
-    {
-        this.weapons = weapons;
     }
     public Long getAuthCode()
     {

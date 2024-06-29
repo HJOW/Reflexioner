@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,23 +26,25 @@ import com.hjow.game.reflexioner.setting.Setting;
 public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShip
 {
     private static final long serialVersionUID = 1250863114692291667L;
-    private long damage = 100;
-    private int missiles = 1;
-    private long energy = 1000;
-    private long max_energy = 1000;
-    private int energy_heal = 1;
-    private long max_hp_heal = 100;
-    private long max_energy_heal = 100;
-    private int accel = 1;
-    private int max_accel = 10;
-    private long max_damage = 1000;
-    private int mode = 1;
-    private int w1_fireDelay = Arena.getGfireDelay(), w2_fireDelay = Arena.getGfireDelay(), w3_fireDelay = Arena.getGfireDelay(), fire_delay = 0;
-    private transient int accel_x = 0, accel_y = 0, fire_missiles = 0, heal_delay = 0, getKeyCode;
-    private BigInteger point;
-    private boolean notOwn = false;
-    private boolean image_w1_exist = false, image_w2_exist = false, image_w3_exist = false;
-    private transient BufferedImage image_w1, image_w2, image_w3;
+    private   long       damage = 100;
+    private   int        missiles = 1;
+    private   long       energy = 1000;
+    private   long       maxEnergy = 1000;
+    private   int        energyHeal = 1;
+    private   long       maxHpHeal = 100;
+    private   long       maxEnergyHeal = 100;
+    private   int        accel = 1;
+    private   int        maxAccel = 10;
+    private   long       maxDamage = 1000;
+    private   int        mode = 1;
+    private   int        w1FireDelay = Arena.getGfireDelay(), w2FireDelay = Arena.getGfireDelay(), w3FireDelay = Arena.getGfireDelay(), fireDelay = 0;
+    private   BigInteger point;
+    private   boolean    notOwn = false;
+    private   boolean    imageW1Exist = false, imageW2Exist = false, imageW3Exist = false;
+    protected List<Weapon> weapons = new ArrayList<Weapon>();
+    private transient int accelX = 0, accelY = 0, fireMissiles = 0, healDelay = 0, getKeyCode;
+    private transient BufferedImage imageW1, imageW2, imageW3;
+    private transient String        soundW1, soundW2, soundW3;
     private transient List<Enemy> enemies;
     
     public static final int USERDEFINED = -1, FLEX = 1, BERSERK = 2, CLIPPER = 3, WARSHIP = 4, CHASER = 5, CARRIER = 6, SATELLITE = 7;
@@ -161,16 +164,16 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(weapon)
         {
             case 1:
-                image_w1 = img;
-                if(image_w1 != null) image_w1_exist = true;
+                imageW1 = img;
+                if(imageW1 != null) imageW1Exist = true;
                 break;
             case 2:
-                image_w2 = img;
-                if(image_w2 != null) image_w2_exist = true;
+                imageW2 = img;
+                if(imageW2 != null) imageW2Exist = true;
                 break;
             case 3:
-                image_w3 = img;
-                if(image_w3 != null) image_w3_exist = true;
+                imageW3 = img;
+                if(imageW3 != null) imageW3Exist = true;
                 break;
         }        
     }
@@ -180,22 +183,22 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(mode) // new Area(new Ellipse2D.Double((double) getX(), (double)getY(), (double)getR(), (double)getR()));
         {
             case 1:
-                if(image_w1_exist)
+                if(imageW1Exist)
                     return new Area(new Rectangle(getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), (int)(getR()), (int)(getR())));
                 else
                     return super.area();
             case 2:
-                if(image_w2_exist)
+                if(imageW2Exist)
                     return new Area(new Rectangle(getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), (int)(getR()), (int)(getR())));
                 else
                     return super.area();
             case 3:
-                if(image_w3_exist)
+                if(imageW3Exist)
                     return new Area(new Rectangle(getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), (int)(getR()), (int)(getR())));
                 else
                     return super.area();
             default:
-                if(image_w1_exist)
+                if(imageW1Exist)
                     return new Area(new Rectangle(getX() - (int)(getR() / 2.0), getY() - (int)(getR() / 2.0), (int)(getR()), (int)(getR())));
                 else
                     return super.area();
@@ -208,26 +211,26 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(mode)
         {
             case 1:
-                if(image_w1_exist)                
-                    g.drawImage(image_w1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);                
+                if(imageW1Exist)                
+                    g.drawImage(imageW1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);                
                 else
                     super.draw(g, a);
                 break;
             case 2:
-                if(image_w2_exist)
-                    g.drawImage(image_w2, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
+                if(imageW2Exist)
+                    g.drawImage(imageW2, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
                 else
                     super.draw(g, a);
                 break;
             case 3:
-                if(image_w3_exist)
-                    g.drawImage(image_w3, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
+                if(imageW3Exist)
+                    g.drawImage(imageW3, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
                 else
                     super.draw(g, a);
                 break;
             default:
-                if(image_w1_exist)
-                    g.drawImage(image_w1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
+                if(imageW1Exist)
+                    g.drawImage(imageW1, Arena.convertX(getX() - (int)(getR() / 2.0), a), Arena.convertY(getY() - (int)(getR() / 2.0), a), Arena.convertWidth(getR(), a), Arena.convertHeight(getR(), a), null);
                 else
                     super.draw(g, a);
                 break;
@@ -286,16 +289,16 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(weapon)
         {
             case 1:
-                image_w1 = null;
-                image_w1_exist = false;
+                imageW1 = null;
+                imageW1Exist = false;
                 break;
             case 2:
-                image_w2 = null;
-                image_w2_exist = false;
+                imageW2 = null;
+                imageW2Exist = false;
                 break;
             case 3:
-                image_w3 = null;
-                image_w3_exist = false;
+                imageW3 = null;
+                imageW3Exist = false;
                 break;
         }
     }
@@ -327,66 +330,66 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(ind)
         {
             case 1:            
-                image_w1_exist = false;
-                if(! image_w1_exist)
+                imageW1Exist = false;
+                if(! imageW1Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w1.png"));
                         if(w.exists())
                         {
-                            image_w1 = ImageIO.read(w);
-                            image_w1_exist = true;
+                            imageW1 = ImageIO.read(w);
+                            imageW1Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w1_exist = false;
+                            imageW1Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                 }
-                if(! image_w1_exist)
+                if(! imageW1Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w1.jpg"));
                         if(w.exists())
                         {
-                            image_w1 = ImageIO.read(w);
-                            image_w1_exist = true;
+                            imageW1 = ImageIO.read(w);
+                            imageW1Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w1_exist = false;
+                            imageW1Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                 }    
-                if(! image_w1_exist)
+                if(! imageW1Exist)
                 {
                     try
                     {
@@ -395,90 +398,90 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                         
                         if(w.exists())
                         {
-                            image_w1 = ImageIO.read(w);
-                            image_w1_exist = true;
+                            imageW1 = ImageIO.read(w);
+                            imageW1Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w1_exist = false;
+                            imageW1Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w1_exist = false;
+                        imageW1Exist = false;
                         results = false;
                     }
                 }
                 break;
             case 2:
-                image_w2_exist = false;
-                if(! image_w2_exist)
+                imageW2Exist = false;
+                if(! imageW2Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w2.png"));
                         if(w.exists())
                         {
-                            image_w2 = ImageIO.read(w);
-                            image_w2_exist = true;
+                            imageW2 = ImageIO.read(w);
+                            imageW2Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w2_exist = false;
+                            imageW2Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                 }
-                if(! image_w2_exist)
+                if(! imageW2Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w2.jpg"));
                         if(w.exists())
                         {
-                            image_w2 = ImageIO.read(w);
-                            image_w2_exist = true;
+                            imageW2 = ImageIO.read(w);
+                            imageW2Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w2_exist = false;
+                            imageW2Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                 }
-                if(! image_w2_exist)
+                if(! imageW2Exist)
                 {
                     try
                     {
@@ -486,90 +489,90 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                         if(! w.exists()) w = new File(RunManager.r65279(path + "default_space" + "_w2.jpg"));
                         if(w.exists())
                         {
-                            image_w2 = ImageIO.read(w);
-                            image_w2_exist = true;
+                            imageW2 = ImageIO.read(w);
+                            imageW2Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w2_exist = false;
+                            imageW2Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w2_exist = false;
+                        imageW2Exist = false;
                         results = false;
                     }
                 }
                 break;
             case 3:
-                image_w3_exist = false;
-                if(! image_w3_exist)
+                imageW3Exist = false;
+                if(! imageW3Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w3.png"));
                         if(w.exists())
                         {
-                            image_w3 = ImageIO.read(w);
-                            image_w3_exist = true;
+                            imageW3 = ImageIO.read(w);
+                            imageW3Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w3_exist = false;
+                            imageW3Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                 }
-                if(! image_w3_exist)
+                if(! imageW3Exist)
                 {
                     try
                     {
                         w = new File(RunManager.r65279(path + getKeyName() + "_w3.jpg"));
                         if(w.exists())
                         {
-                            image_w3 = ImageIO.read(w);
-                            image_w3_exist = true;
+                            imageW3 = ImageIO.read(w);
+                            imageW3Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w3_exist = false;
+                            imageW3Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                 }
-                if(! image_w3_exist)
+                if(! imageW3Exist)
                 {
                     try
                     {
@@ -577,25 +580,25 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                         if(! w.exists()) w = new File(RunManager.r65279(path + "default_space" + "_w3.jpg"));
                         if(w.exists())
                         {
-                            image_w3 = ImageIO.read(w);
-                            image_w3_exist = true;
+                            imageW3 = ImageIO.read(w);
+                            imageW3Exist = true;
                             results = true;
                         }
                         else
                         {
-                            image_w3_exist = false;
+                            imageW3Exist = false;
                             results = false;
                         }
                     } 
                     catch (FileNotFoundException e)
                     {
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                     catch (IOException e)
                     {
                         e.printStackTrace();
-                        image_w3_exist = false;
+                        imageW3Exist = false;
                         results = false;
                     }
                 }
@@ -613,39 +616,39 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                 target = ImageCache.img_flex_w1;
                 if(target != null)
                 {
-                    image_w1 = target;
-                    image_w1_exist = true;
+                    imageW1 = target;
+                    imageW1Exist = true;
                     return true;
                 }
                 else
                 {
-                    image_w1_exist = false;
+                    imageW1Exist = false;
                 }
                 break;
             case 2:
                 target = ImageCache.img_flex_w2;
                 if(target != null)
                 {
-                    image_w2 = target;
-                    image_w2_exist = true;
+                    imageW2 = target;
+                    imageW2Exist = true;
                     return true;
                 }
                 else
                 {
-                    image_w2_exist = false;
+                    imageW2Exist = false;
                 }
                 break;
             case 3:
                 target = ImageCache.img_flex_w3;
                 if(target != null)
                 {
-                    image_w3 = target;
-                    image_w3_exist = true;
+                    imageW3 = target;
+                    imageW3Exist = true;
                     return true;
                 }
                 else
                 {
-                    image_w3_exist = false;
+                    imageW3Exist = false;
                 }
                 break;
         }
@@ -665,15 +668,15 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
             {
                 results[i] = loadImage(path, i+1);
             }
-            image_w1_exist = results[0];
-            image_w2_exist = results[1];
-            image_w3_exist = results[2];
+            imageW1Exist = results[0];
+            imageW2Exist = results[1];
+            imageW3Exist = results[2];
         }
         else
         {
-            image_w1_exist = false;
-            image_w2_exist = false;
-            image_w3_exist = false;            
+            imageW1Exist = false;
+            imageW2Exist = false;
+            imageW3Exist = false;            
         }
         
         
@@ -688,13 +691,13 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(mode)
         {
             case 1:
-                return w1_fireDelay;
+                return w1FireDelay;
             case 2:
-                return w2_fireDelay;
+                return w2FireDelay;
             case 3:
-                return w3_fireDelay;
+                return w3FireDelay;
             default:
-                return w1_fireDelay;
+                return w1FireDelay;
         }
     }
     public List<Missile> fire()
@@ -705,29 +708,49 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
         switch(mode)
         {
             case 1:
-                fire_missiles = missiles;
-                if(fire_missiles >= 4) fire_missiles = 3;
-                centers = fire_missiles / 2.0;
-                for(int i=0; i<fire_missiles; i++)
+            	if(weapons != null && weapons.size() >= 1)
+            	{
+            		if(weapons.get(0).getNeed_e() <= getEnergy())
+                    {
+                        setEnergy(getEnergy() - weapons.get(0).getNeed_e());
+                        if(soundW1 != null) SoundCache.play(soundW1);
+                        return weapons.get(0).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                    }
+            	}
+            	
+                fireMissiles = missiles;
+                if(fireMissiles >= 4) fireMissiles = 3;
+                centers = fireMissiles / 2.0;
+                for(int i=0; i<fireMissiles; i++)
                 {
                     newMissile = new Missile(Reflexioner.getFile_path(), Missile.SPACESHIP);
                     newMissile.setX(getX() + (int) Math.round((centers - i - 0.5) * 30.0));
                     newMissile.setY(getY() - getR());
                     newMissile.setLaunched(true);
                     newMissile.setOwner(Missile.SPACESHIP);
-                    if(fire_missiles >= 1)
-                        newMissile.setDamage(Math.round(getDamage() / ((double) fire_missiles - ((fire_missiles - 1.0) / 2.0) ) ));
+                    if(fireMissiles >= 1)
+                        newMissile.setDamage(Math.round(getDamage() / ((double) fireMissiles - ((fireMissiles - 1.0) / 2.0) ) ));
                     newMissiles.add(newMissile);
                 }                
                 SoundCache.play("fire_missile");
                 break;
             case 2:
+            	if(weapons.size() >= 2)
+            	{
+            		if(weapons.get(1).getNeedEnergy() <= getEnergy())
+                    {
+                        setEnergy(getEnergy() - weapons.get(1).getNeed_e());
+                        if(soundW2 != null) SoundCache.play(soundW2);
+                        return weapons.get(1).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                    }
+            	}
+            	
                 if(getEnergy() >= 100)
                 {                    
-                    fire_missiles = missiles;
-                    if(fire_missiles >= 10) fire_missiles = 9;
-                    centers = fire_missiles / 2.0;
-                    for(int i=0; i<fire_missiles; i++)
+                    fireMissiles = missiles;
+                    if(fireMissiles >= 10) fireMissiles = 9;
+                    centers = fireMissiles / 2.0;
+                    for(int i=0; i<fireMissiles; i++)
                     {
                         newMissile = new GuidedMissile(enemies, this);
                         newMissile.setX(getX() + (int) Math.round((centers - i - 0.5) * 30));
@@ -735,12 +758,12 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                         ((GuidedMissile) newMissile).setSpeed(((GuidedMissile) newMissile).getSpeed() * 1);
                         newMissile.setLaunched(true);
                         newMissile.setOwner(Missile.SPACESHIP);
-                        if(fire_missiles >= 1)
-                            newMissile.setDamage(Math.round((getDamage() / 1.25) / ((double) fire_missiles - ((fire_missiles - 1.0) / 1.5    ) ) ));
+                        if(fireMissiles >= 1)
+                            newMissile.setDamage(Math.round((getDamage() / 1.25) / ((double) fireMissiles - ((fireMissiles - 1.0) / 1.5    ) ) ));
                         newMissiles.add(newMissile);
                     }    
                     setEnergy(getEnergy() - 100);
-                    if(fire_missiles <= 4)
+                    if(fireMissiles <= 4)
                     {
                         SoundCache.play("fire_missile");
                     }
@@ -752,6 +775,16 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                 
                 break;
             case 3:
+            	if(weapons.size() >= 3)
+            	{
+            		if(weapons.get(2).getNeedEnergy() <= getEnergy())
+                    {
+                        setEnergy(getEnergy() - weapons.get(2).getNeed_e());
+                        if(soundW3 != null) SoundCache.play(soundW3);
+                        return weapons.get(2).fire(getDamage(), getMissiles(), getX(), getY(), getR(), Missile.SPACESHIP, getX(), getY(), this);
+                    }
+            	}
+            	
                 if(getEnergy() >= 300)
                 {
                     newMissile = new Beam(11);
@@ -771,6 +804,7 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
                 
             default:
                 mode = 1;
+                return fire();
         }
         return newMissiles;
     }
@@ -977,28 +1011,28 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     @Override
     public void control_up()
     {        
-        accel_y = -accel;            
+        accelY = -accel;            
     }
     @Override
     public void control_down()
     {
-        accel_y = accel;
+        accelY = accel;
     }
     @Override
     public void control_left()
     {
-        accel_x = -accel;
+        accelX = -accel;
     }
     @Override
     public void control_right()
     {
-        accel_x = accel;
+        accelX = accel;
     }
     @Override
     public void control_break()
     {
-        accel_x = 0;
-        accel_y = 0;
+        accelX = 0;
+        accelY = 0;
     }
     @Override
     public void control_w()
@@ -1112,21 +1146,21 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     @Override
     public void update()
     {
-        heal_delay++;
-        if(heal_delay >= 10)
+        healDelay++;
+        if(healDelay >= 10)
         {
             if(getHp() < getMax_hp() - getHp_heal())
             {
                 setHp(getHp() + getHp_heal()); 
             }
-            heal_delay = 0;
+            healDelay = 0;
         }
         if(getEnergy() <= getMax_energy() - 1)
         {
             setEnergy(getEnergy() + getEnergy_heal());
         }
-        setX(getX() + accel_x);
-        setY(getY() + accel_y);
+        setX(getX() + accelX);
+        setY(getY() + accelY);
         if(getX() < getR()) 
         {
             setX(getR());
@@ -1201,51 +1235,51 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     }
     public long getMax_energy()
     {
-        return max_energy;
+        return maxEnergy;
     }
     public void setMax_energy(long max_energy)
     {
-        this.max_energy = max_energy;
+        this.maxEnergy = max_energy;
     }
     public int getEnergy_heal()
     {
-        return energy_heal;
+        return energyHeal;
     }
     public void setEnergy_heal(int energy_heal)
     {
-        this.energy_heal = energy_heal;
+        this.energyHeal = energy_heal;
     }
     public int getAccel_x()
     {
-        return accel_x;
+        return accelX;
     }
     public void setAccel_x(int accel_x)
     {
-        this.accel_x = accel_x;
+        this.accelX = accel_x;
     }
     public int getAccel_y()
     {
-        return accel_y;
+        return accelY;
     }
     public void setAccel_y(int accel_y)
     {
-        this.accel_y = accel_y;
+        this.accelY = accel_y;
     }
     public int getFire_missiles()
     {
-        return fire_missiles;
+        return fireMissiles;
     }
     public void setFire_missiles(int fire_missiles)
     {
-        this.fire_missiles = fire_missiles;
+        this.fireMissiles = fire_missiles;
     }
     public int getHeal_delay()
     {
-        return heal_delay;
+        return healDelay;
     }
     public void setHeal_delay(int heal_delay)
     {
-        this.heal_delay = heal_delay;
+        this.healDelay = heal_delay;
     }
     public int getGetKeyCode()
     {
@@ -1265,43 +1299,43 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     }
     public int getFire_delay()
     {
-        return fire_delay;
+        return fireDelay;
     }
     public void setFire_delay(int fire_delay)
     {
-        this.fire_delay = fire_delay;
+        this.fireDelay = fire_delay;
     }
     public int getMax_accel()
     {
-        return max_accel;
+        return maxAccel;
     }
     public void setMax_accel(int max_accel)
     {
-        this.max_accel = max_accel;
+        this.maxAccel = max_accel;
     }
     public long getMax_damage()
     {
-        return max_damage;
+        return maxDamage;
     }
     public void setMax_damage(long max_damage)
     {
-        this.max_damage = max_damage;
+        this.maxDamage = max_damage;
     }
     public long getMax_hp_heal()
     {
-        return max_hp_heal;
+        return maxHpHeal;
     }
     public void setMax_hp_heal(long max_hp_heal)
     {
-        this.max_hp_heal = max_hp_heal;
+        this.maxHpHeal = max_hp_heal;
     }
     public long getMax_energy_heal()
     {
-        return max_energy_heal;
+        return maxEnergyHeal;
     }
     public void setMax_energy_heal(long max_energy_heal)
     {
-        this.max_energy_heal = max_energy_heal;
+        this.maxEnergyHeal = max_energy_heal;
     }
     public String getName(Setting sets)
     {
@@ -1313,75 +1347,75 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     }
     public boolean isImage_w1_exist()
     {
-        return image_w1_exist;
+        return imageW1Exist;
     }
     public void setImage_w1_exist(boolean image_w1_exist)
     {
-        this.image_w1_exist = image_w1_exist;
+        this.imageW1Exist = image_w1_exist;
     }
     public boolean isImage_w2_exist()
     {
-        return image_w2_exist;
+        return imageW2Exist;
     }
     public void setImage_w2_exist(boolean image_w2_exist)
     {
-        this.image_w2_exist = image_w2_exist;
+        this.imageW2Exist = image_w2_exist;
     }
     public boolean isImage_w3_exist()
     {
-        return image_w3_exist;
+        return imageW3Exist;
     }
     public void setImage_w3_exist(boolean image_w3_exist)
     {
-        this.image_w3_exist = image_w3_exist;
+        this.imageW3Exist = image_w3_exist;
     }
     public BufferedImage getImage_w1()
     {
-        return image_w1;
+        return imageW1;
     }
     public void setImage_w1(BufferedImage image_w1)
     {
-        this.image_w1 = image_w1;
+        this.imageW1 = image_w1;
     }
     public BufferedImage getImage_w2()
     {
-        return image_w2;
+        return imageW2;
     }
     public void setImage_w2(BufferedImage image_w2)
     {
-        this.image_w2 = image_w2;
+        this.imageW2 = image_w2;
     }
     public BufferedImage getImage_w3()
     {
-        return image_w3;
+        return imageW3;
     }
     public void setImage_w3(BufferedImage image_w3)
     {
-        this.image_w3 = image_w3;
+        this.imageW3 = image_w3;
     }
     public int getW1_fireDelay()
     {
-        return w1_fireDelay;
+        return w1FireDelay;
     }
     public void setW1_fireDelay(int w1_fireDelay)
     {
-        this.w1_fireDelay = w1_fireDelay;
+        this.w1FireDelay = w1_fireDelay;
     }
     public int getW2_fireDelay()
     {
-        return w2_fireDelay;
+        return w2FireDelay;
     }
     public void setW2_fireDelay(int w2_fireDelay)
     {
-        this.w2_fireDelay = w2_fireDelay;
+        this.w2FireDelay = w2_fireDelay;
     }
     public int getW3_fireDelay()
     {
-        return w3_fireDelay;
+        return w3FireDelay;
     }
     public void setW3_fireDelay(int w3_fireDelay)
     {
-        this.w3_fireDelay = w3_fireDelay;
+        this.w3FireDelay = w3_fireDelay;
     }
     public boolean isNotOwn()
     {
@@ -1391,7 +1425,151 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     {
         this.notOwn = notOwn;
     }
-    public double ai_advantage_mode2(int enemies, int max_enemy_limit, int underOnes, boolean boss_exist)
+    public long getMaxEnergy() {
+		return maxEnergy;
+	}
+	public void setMaxEnergy(long maxEnergy) {
+		this.maxEnergy = maxEnergy;
+	}
+	public int getEnergyHeal() {
+		return energyHeal;
+	}
+	public void setEnergyHeal(int energyHeal) {
+		this.energyHeal = energyHeal;
+	}
+	public long getMaxHpHeal() {
+		return maxHpHeal;
+	}
+	public void setMaxHpHeal(long maxHpHeal) {
+		this.maxHpHeal = maxHpHeal;
+	}
+	public long getMaxEnergyHeal() {
+		return maxEnergyHeal;
+	}
+	public void setMaxEnergyHeal(long maxEnergyHeal) {
+		this.maxEnergyHeal = maxEnergyHeal;
+	}
+	public int getMaxAccel() {
+		return maxAccel;
+	}
+	public void setMaxAccel(int maxAccel) {
+		this.maxAccel = maxAccel;
+	}
+	public long getMaxDamage() {
+		return maxDamage;
+	}
+	public void setMaxDamage(long maxDamage) {
+		this.maxDamage = maxDamage;
+	}
+	public int getW1FireDelay() {
+		return w1FireDelay;
+	}
+	public void setW1FireDelay(int w1FireDelay) {
+		this.w1FireDelay = w1FireDelay;
+	}
+	public int getW2FireDelay() {
+		return w2FireDelay;
+	}
+	public void setW2FireDelay(int w2FireDelay) {
+		this.w2FireDelay = w2FireDelay;
+	}
+	public int getW3FireDelay() {
+		return w3FireDelay;
+	}
+	public void setW3FireDelay(int w3FireDelay) {
+		this.w3FireDelay = w3FireDelay;
+	}
+	public int getFireDelay() {
+		return fireDelay;
+	}
+	public void setFireDelay(int fireDelay) {
+		this.fireDelay = fireDelay;
+	}
+	public boolean isImageW1Exist() {
+		return imageW1Exist;
+	}
+	public void setImageW1Exist(boolean imageW1Exist) {
+		this.imageW1Exist = imageW1Exist;
+	}
+	public boolean isImageW2Exist() {
+		return imageW2Exist;
+	}
+	public void setImageW2Exist(boolean imageW2Exist) {
+		this.imageW2Exist = imageW2Exist;
+	}
+	public boolean isImageW3Exist() {
+		return imageW3Exist;
+	}
+	public void setImageW3Exist(boolean imageW3Exist) {
+		this.imageW3Exist = imageW3Exist;
+	}
+	public int getAccelX() {
+		return accelX;
+	}
+	public void setAccelX(int accelX) {
+		this.accelX = accelX;
+	}
+	public int getAccelY() {
+		return accelY;
+	}
+	public void setAccelY(int accelY) {
+		this.accelY = accelY;
+	}
+	public int getFireMissiles() {
+		return fireMissiles;
+	}
+	public void setFireMissiles(int fireMissiles) {
+		this.fireMissiles = fireMissiles;
+	}
+	public int getHealDelay() {
+		return healDelay;
+	}
+	public void setHealDelay(int healDelay) {
+		this.healDelay = healDelay;
+	}
+	public BufferedImage getImageW1() {
+		return imageW1;
+	}
+	public void setImageW1(BufferedImage imageW1) {
+		this.imageW1 = imageW1;
+	}
+	public BufferedImage getImageW2() {
+		return imageW2;
+	}
+	public void setImageW2(BufferedImage imageW2) {
+		this.imageW2 = imageW2;
+	}
+	public BufferedImage getImageW3() {
+		return imageW3;
+	}
+	public void setImageW3(BufferedImage imageW3) {
+		this.imageW3 = imageW3;
+	}
+	public String getSoundW1() {
+		return soundW1;
+	}
+	public void setSoundW1(String soundW1) {
+		this.soundW1 = soundW1;
+	}
+	public String getSoundW2() {
+		return soundW2;
+	}
+	public void setSoundW2(String soundW2) {
+		this.soundW2 = soundW2;
+	}
+	public String getSoundW3() {
+		return soundW3;
+	}
+	public void setSoundW3(String soundW3) {
+		this.soundW3 = soundW3;
+	}
+	public List<Weapon> getWeapons() {
+		return weapons;
+	}
+	public void setWeapons(List<Weapon> weapons) {
+		this.weapons = weapons;
+	}
+	public double ai_advantage_mode2(int enemies, int max_enemy_limit, int underOnes, boolean boss_exist)
     {
         double value = 0.3;
         if(boss_exist)
@@ -1470,15 +1648,15 @@ public class SpaceShip extends OvalObject implements HaveEnergy, ControllableShi
     }
     protected boolean img_w1_exist()
     {
-        return image_w1_exist;
+        return imageW1Exist;
     }
     protected boolean img_w2_exist()
     {
-        return image_w2_exist;
+        return imageW2Exist;
     }
     protected boolean img_w3_exist()
     {
-        return image_w3_exist;
+        return imageW3Exist;
     }    
 }
 class Cruiser extends SpaceShip
