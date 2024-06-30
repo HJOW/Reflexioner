@@ -608,7 +608,7 @@ public class ReflexReplayPlayer extends MouseDragCatcher implements ActionListen
         }
         else if(ob == menu_file_speed)
         {
-            String inputs, message;
+            String inputs;
             inputs = JOptionPane.showInputDialog(window, sets.trans("Set playing speed."), String.valueOf(speed));
             try
             {

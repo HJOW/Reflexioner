@@ -48,13 +48,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -87,6 +85,8 @@ import com.hjow.game.reflexioner.mainClasses.Uninstaller;
 import com.hjow.game.reflexioner.pack.SecuredDist;
 import com.hjow.game.reflexioner.setting.Difficulty;
 import com.hjow.game.reflexioner.setting.Setting;
+import com.hjow.game.reflexioner.ui.RComboBox;
+import com.hjow.game.reflexioner.ui.RList;
 
 public class Reflexioner extends MouseDragCatcher implements Openable, WindowListener, ActionListener, MessageShowable, ListSelectionListener, ChangeListener, ItemListener
 {
@@ -253,7 +253,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private JButton bt_stop;
     private boolean touchMode = true;
     private JButton bt_touch;
-    private JComboBox combo_ship;
+    private RComboBox combo_ship;
     private JPanel start_namePanel;
     private JLabel start_nameLabel;
     private JTextField start_nameField;
@@ -306,7 +306,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private JButton bt_start_userDefined;
     private JButton bt_close_userDefined;
     private JMenuItem menu_file_start_userDefined;
-    private JComboBox combo_dif;
+    private RComboBox combo_dif;
     private JTabbedPane mainTab;
     private JPanel start_standardPanel;
     private JPanel start_userDefinedPanel;
@@ -320,7 +320,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private JLabel start_userDefined_nameLabel;
     private JTextField start_userDefined_nameField;
     private JPanel start_scenarioPanel;
-    private JList start_scenarioList;
+    private RList start_scenarioList;
     private JScrollPane start_scenarioListScroll;
     private JPanel start_scenario_upPanel;
     private JPanel start_scenario_centerPanel;
@@ -336,7 +336,6 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private JButton bt_start_scenario;
     private JButton bt_exit3;
     private JCheckBox start_userDefined_isScenario;
-    private Color gradeColor;
     private JLabel start_verLabel;
     private JPanel start_noticePanel;
     private JPanel start_notice_upPanel;
@@ -403,7 +402,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     private FileFilter fileFilter_rp2;
     private String download_url1, download_url2;
     private JButton bt_setUrl;
-    private JComboBox start_scenario_selectShipCombo;
+    private RComboBox start_scenario_selectShipCombo;
     private String selected_scenario_ship;
     private JPanel start_notice_descPanel;
     private JPanel start_notice_titlePanel;
@@ -1050,7 +1049,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         start_scenarioPanel.add(start_scenario_centerPanel, BorderLayout.CENTER);
         start_scenarioPanel.add(start_scenario_downPanel, BorderLayout.SOUTH);
         start_scenario_centerPanel.setLayout(new BorderLayout());
-        start_scenarioList = new JList();
+        start_scenarioList = new RList();
         start_scenarioList.addListSelectionListener(this);
         start_scenarioList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         start_scenarioList.setBackground(sets.getColor("ColorSelectedInsideBack"));
@@ -1266,10 +1265,10 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
             difficultyModes[i] = Difficulty.intToString(dif_calc, 3.3);
         }
         
-        combo_dif = new JComboBox(difficultyModes);
+        combo_dif = new RComboBox(difficultyModes);
         combo_dif.setBackground(sets.getColor("ColorSelectedInsideBack"));
         combo_dif.setForeground(sets.getColor("ColorSelectedFore"));
-        combo_ship = new JComboBox(ships);
+        combo_ship = new RComboBox(ships);
         combo_ship.setBackground(sets.getColor("ColorSelectedInsideBack"));
         combo_ship.setForeground(sets.getColor("ColorSelectedFore"));
         if(usingFont != null)
@@ -1285,7 +1284,7 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         start_buttonPanel.add(bt_exit);
         
         
-        start_scenario_selectShipCombo = new JComboBox(ships);
+        start_scenario_selectShipCombo = new RComboBox(ships);
         start_scenario_selectShipCombo.setBackground(sets.getColor("ColorSelectedInsideBack"));
         start_scenario_selectShipCombo.setForeground(sets.getColor("ColorSelectedFore"));
         if(usingFont != null)
@@ -2551,7 +2550,8 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         replay_save = menu_manage_saveReplay.isSelected();
         start(scen, scen.getSpaceShip());
     }
-    private void refreshScenario(boolean delete_befores)
+    @SuppressWarnings("unchecked")
+	private void refreshScenario(boolean delete_befores)
     {
         loadScenarios(delete_befores);
         Vector<String> listData = new Vector<String>();
@@ -2584,14 +2584,13 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
         
         scenarios.addAll(dups);
 
-        ReflexScenario loadScen;
         File loads = null;
         File[] lists = null;
         BufferedReader bufferedReader = null;
         InputStreamReader inputReader = null;        
         InputStream inputStream = null;
         URL webTarget = null;
-        String webList, readLines, getScenario = "";
+        String webList, readLines;
         try
         {
             loads = new File(sets.getDefaultPath() + File.separator + "scenarios");
@@ -4370,25 +4369,23 @@ public class Reflexioner extends MouseDragCatcher implements Openable, WindowLis
     @Override
     public void mouseEntered(MouseEvent e)
     {
-        Object ob = e.getSource();
+        // Object ob = e.getSource();
         
     }
     @Override
     public void mouseExited(MouseEvent e)
     {
-        Object ob = e.getSource();
+        // Object ob = e.getSource();
         
     }
     @Override
     public void windowActivated(WindowEvent arg0)
     {
-        // TODO 자동 생성된 메소드 스텁
         
     }
     @Override
     public void windowClosed(WindowEvent arg0)
     {
-        // TODO 자동 생성된 메소드 스텁
         
     }
     @Override
